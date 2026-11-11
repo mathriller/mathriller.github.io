@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>최인용 · 서울교육대학교 수학교육과</title>
+  <meta name="description" content="서울교육대학교 수학교육과 최인용 교수의 홈페이지. 수업용 수학 앱과 연구를 소개합니다.">
+  <meta property="og:title" content="최인용 · 서울교육대학교 수학교육과">
+  <meta property="og:description" content="수업용 수학 앱과 연구 소개">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-head">
+    <div class="wrap">
+      <a class="brand" href="./"><b>최인용</b><span>서울교육대학교 수학교육과</span></a>
+      <nav class="nav">
+        <a href="./" aria-current="page">소개</a>
+        <a href="apps.html">수업용 앱</a>
+        <a href="research.html">연구</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <span class="eyebrow" id="p-affil">서울교육대학교</span>
+          <h1 id="p-name">최인용</h1>
+          <div class="en" id="p-name-en">Inyong Choi</div>
+          <div class="role" id="p-role"></div>
+          <p class="bio" id="p-bio"></p>
+          <div class="links" id="p-links">
+            <a class="btn" href="apps.html">수업용 앱 보기</a>
+            <a class="btn ghost" href="research.html">연구 목록</a>
+          </div>
+        </div>
+        <figure class="figure-box" style="margin:0">
+          <svg class="euclid" viewBox="0 60 380 260" role="img" aria-label="두 원을 이용한 정삼각형 작도">
+            <circle class="c draw" cx="130" cy="190" r="120" style="--len:754"/>
+            <circle class="c draw d2" cx="250" cy="190" r="120" style="--len:754"/>
+            <polygon class="t draw d3" points="130,190 250,190 190,86.08" style="--len:360"/>
+            <line class="s draw d4" x1="130" y1="190" x2="250" y2="190" style="--len:120"/>
+            <g class="fade">
+              <circle class="p" cx="130" cy="190" r="3.2"/>
+              <circle class="p" cx="250" cy="190" r="3.2"/>
+              <circle class="p" cx="190" cy="86.08" r="3.2"/>
+              <text x="108" y="212">A</text>
+              <text x="258" y="212">B</text>
+              <text x="184" y="74">C</text>
+            </g>
+          </svg>
+          <figcaption>Euclid, Elements I.1 — 주어진 선분 위에 정삼각형을 작도하기</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="section">
+        <div class="section-head">
+          <h2><span class="sec-no">1</span>수업용 앱</h2>
+          <a href="apps.html">전체 보기 →</a>
+        </div>
+        <div class="apps-grid" id="home-apps"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2><span class="sec-no">2</span>최근 연구</h2>
+          <a href="research.html">전체 목록 →</a>
+        </div>
+        <ul class="pub-list-simple" id="home-research"></ul>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2><span class="sec-no">3</span>연구 관심</h2>
+        </div>
+        <div class="about">
+          <ol class="interests" id="p-interests"></ol>
+          <div id="p-cv"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-foot" id="site-foot"></footer>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+  (async () => {
+    const [p, apps, res] = await Promise.all([loadJSON("profile"), loadJSON("apps"), loadJSON("research")]);
+
+    $("#p-affil").textContent = p.university || "";
+    $("#p-name").textContent = p.name;
+    $("#p-name-en").textContent = p.name_en || "";
+    $("#p-role").textContent = [p.department, p.position].filter(Boolean).join(" ");
+    $("#p-bio").textContent = p.bio || "";
+    const extra = (p.links || []).map((l) => `<a class="btn ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("");
+    $("#p-links").insertAdjacentHTML("beforeend", extra);
+    document.title = `${p.name} · ${p.university} ${p.department}`;
+
+    const visibleApps = apps.items.filter((a) => !a.hidden);
+    const homeApps = (visibleApps.filter((a) => a.featured).length ? visibleApps.filter((a) => a.featured) : visibleApps).slice(0, 3);
+    $("#home-apps").innerHTML = homeApps.length ? homeApps.map(appCard).join("") : `<div class="empty" style="grid-column:1/-1">아직 등록된 앱이 없습니다.</div>`;
+
+    const pubs = res.items.filter((r) => !r.hidden).slice(0, 5);
+    $("#home-research").innerHTML = pubs.map((r) => `<li>
+        <span class="y">${esc(r.year)}</span>
+        <div><a href="research.html#${esc(r.id)}">${esc(r.title)}</a>
+        <div class="v">${esc(r.journal || "")}${r.volume ? ` ${esc(r.volume)}${r.issue ? `(${esc(r.issue)})` : ""}` : ""}</div></div>
+      </li>`).join("") || `<li class="empty" style="display:block">아직 등록된 연구가 없습니다.</li>`;
+
+    $("#p-interests").innerHTML = (p.interests || []).map((t) => `<li>${esc(t)}</li>`).join("");
+    const tl = (title, rows) => rows && rows.length ? `<h3>${title}</h3><ul class="timeline">${rows.map((r) => {
+      const [when, ...rest] = String(r).split("|");
+      return rest.length ? `<li><span>${esc(when.trim())}</span><span>${esc(rest.join("|").trim())}</span></li>` : `<li><span></span><span>${esc(when)}</span></li>`;
+    }).join("")}</ul>` : "";
+    const photo = p.photo ? `<img class="profile-photo" src="${esc(p.photo)}" alt="${esc(p.name)} 사진">` : "";
+    $("#p-cv").innerHTML = photo + tl("학력", p.education) + tl("경력", p.career) + `<h3>연락처</h3><ul class="timeline">
+      ${p.email ? `<li><span>이메일</span><span><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></span></li>` : ""}
+      ${p.office ? `<li><span>연구실</span><span>${esc(p.office)}</span></li>` : ""}
+      <li><span>소속</span><span>${esc(p.university)} ${esc(p.department)}</span></li></ul>`;
+  })();
+  </script>
+</body>
+</html>

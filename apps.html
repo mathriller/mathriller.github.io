@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>수업용 앱 · 최인용</title>
+  <meta name="description" content="수학 수업에서 바로 쓸 수 있는 웹 앱 모음">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-head">
+    <div class="wrap">
+      <a class="brand" href="./"><b>최인용</b><span>서울교육대학교 수학교육과</span></a>
+      <nav class="nav">
+        <a href="./">소개</a>
+        <a href="apps.html" aria-current="page">수업용 앱</a>
+        <a href="research.html">연구</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="page-head">
+      <div class="wrap">
+        <span class="eyebrow">Apps for the classroom</span>
+        <h1>수업용 앱</h1>
+        <p>수학 수업에서 바로 열어 쓸 수 있도록 만든 웹 앱입니다. 설치나 로그인 없이 브라우저에서 실행됩니다.</p>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="apps-toolbar">
+        <div class="row"><span class="label">영역</span><div class="chips" id="f-area"></div></div>
+        <div class="row" id="f-grade-row"><span class="label">대상</span><div class="chips" id="f-grade"></div></div>
+      </div>
+      <div class="apps-grid" id="apps"></div>
+    </div>
+  </main>
+
+  <footer class="site-foot" id="site-foot"></footer>
+
+  <script src="assets/js/common.js"></script>
+  <script>
+  (async () => {
+    const data = await loadJSON("apps");
+    const apps = data.items.filter((a) => !a.hidden);
+    const state = { area: "", grade: "" };
+
+    // 대상은 "초등 3–4학년" → "초등"처럼 학교급으로 묶는다
+    const level = (g) => (String(g || "").match(/^(초등|중등|중학|고등|고교|교사|예비교사|대학)/) || [""])[0].replace("중학", "중등").replace("고교", "고등");
+
+    const count = (fn) => apps.filter(fn).length;
+    const areas = [...AREAS, ...new Set(apps.map((a) => a.area).filter((x) => x && !AREAS.includes(x)))].filter((x) => count((a) => a.area === x));
+    const grades = [...new Set(apps.map((a) => level(a.grade)).filter(Boolean))];
+
+    function chips(el, list, key) {
+      el.innerHTML = [`<button class="chip" data-v="">전체<span class="n">${apps.length}</span></button>`,
+        ...list.map((v) => `<button class="chip" data-v="${esc(v)}">${esc(v)}<span class="n">${count((a) => (key === "area" ? a.area : level(a.grade)) === v)}</span></button>`)].join("");
+      el.addEventListener("click", (e) => {
+        const b = e.target.closest(".chip"); if (!b) return;
+        state[key] = b.dataset.v; render();
+      });
+    }
+    chips($("#f-area"), areas, "area");
+    if (grades.length > 1) chips($("#f-grade"), grades, "grade"); else $("#f-grade-row").remove();
+
+    function render() {
+      $$("#f-area .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.area));
+      $$("#f-grade .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.grade));
+      const list = apps.filter((a) => (!state.area || a.area === state.area) && (!state.grade || level(a.grade) === state.grade));
+      $("#apps").innerHTML = list.length ? list.map(appCard).join("") : `<div class="empty" style="grid-column:1/-1">해당하는 앱이 없습니다.</div>`;
+    }
+    render();
+  })();
+  </script>
+</body>
+</html>

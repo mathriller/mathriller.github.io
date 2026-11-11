@@ -1,0 +1,1707 @@
+{
+  "items": [
+    {
+      "id": "ART003344543",
+      "type": "journal",
+      "title": "파인 튜닝 기반 수학 서술형 자동 채점: 학습 데이터 규모와 과제 특성의 영향을 중심으로",
+      "title_en": "Fine-tuning-based automated scoring of mathematical constructed-response items: Focusing on the effects of training data size and task characteristics",
+      "authors": [
+        {
+          "name": "김화경",
+          "name_en": "Kim, Hwakyung",
+          "role": "first",
+          "affiliation": "상명대학교",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "송민호",
+          "name_en": "Minho Song",
+          "role": "co",
+          "affiliation": "한국교육과정평가원",
+          "orcid": "0009-0003-5666-923X"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육",
+      "publisher": "한국수학교육학회",
+      "year": "2026",
+      "volume": "65",
+      "issue": "2",
+      "pages": "223–246",
+      "doi": "10.63311/mathedu.26.6521",
+      "keywords": [
+        "서술형 평가",
+        "자동 채점",
+        "인공지능",
+        "파인 튜닝",
+        "대규모 언어 모델"
+      ],
+      "keywords_en": [
+        "Descriptive assessment",
+        "Automated scoring",
+        "Artificial intelligence",
+        "Fine-tuning",
+        "Large language model (LLM)"
+      ],
+      "abstract": "본 연구는 대규모 언어 모델(LLM)의 파인 튜닝(fine-tuning)을 활용한 수학 서술형 자동 채점의 가능성을 탐색하는 것을목적으로 한다. 이를 위해 학습 데이터의 양을 변화시키며 파인 튜닝 성능을 분석하고, 그에 따른 시사점을 도출하였다. 먼저 서로 다른 세 영역의 수학 서술형 과제를 개발하고, 학생 답안을 수집한 뒤, 전문가 채점을 실시하였다. 이후 공개된 LLM 의 기본 모델에 문항과 채점 기준을 제시하여 자동 채점을 수행한 결과와, 파인 튜닝을 적용한 후 채점한 결과를 비교하였다. 연구 결과, 학습 데이터가 증가할수록 채점 성능이 향상되었으며, 특히 점수 범주별 30개 이상의 학습 데이터를 확보한경우 유의미한 성능 향상이 나타났다. 또한 과제의 특성에 따라 성능 향상의 정도에 차이가 있음을 확인하였다. 이러한 결과를 바탕으로 파인 튜닝의 수학교육적 활용 방안을 논의하였다.",
+      "abstract_en": "This study aims to explore the feasibility of automated scoring of mathematical constructed-response items using the fine-tuning of a large language model (LLM). To this end, the performance of fine-tuning was analyzed by varying the amount of training data, and implications were drawn accordingly. First, constructed-response tasks in three distinct areas of mathematics were developed, student responses were collected, and expert scoring was conducted. The results of automated scoring performed by a publicly available base LLM—provided with items and scoring rubrics—were then compared with those obtained after fine-tuning. The results indicated that scoring performance improved as the amount of training data increased, with a substantial improvement observed when at least 30 training samples per score category were secured. Furthermore, the degree of performance improvement varied depending on the characteristics of the task. Based on these findings, implications for the educational application of fine-tuning in mathematics education were discussed.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003344543",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003357053",
+      "type": "journal",
+      "title": "시선추적을 활용한 초등학생의 그래프 이해 과제 해결 과정과 오류 유형 분석",
+      "title_en": "An analysis of elementary students’ graph comprehension processes and error types using eye tracking",
+      "authors": [
+        {
+          "name": "박소희",
+          "name_en": "Park, Sohee",
+          "role": "first",
+          "affiliation": "서울원당초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육 논문집",
+      "publisher": "한국수학교육학회",
+      "year": "2026",
+      "volume": "40",
+      "issue": "2",
+      "pages": "387–414",
+      "doi": "",
+      "keywords": [
+        "시선추적",
+        "그래프 이해",
+        "막대그래프",
+        "꺾은선그래프",
+        "오류 유형"
+      ],
+      "keywords_en": [
+        "eye tracking",
+        "graph comprehension",
+        "bar graph",
+        "line graph",
+        "error types"
+      ],
+      "abstract": "본 연구는 초등학교 5학년 학생들의 막대그래프와 꺾은선그래프 이해 과정을 분석하고, 과제 해결 과정에서 나타나는 오류유형을탐색하는데목적이있다. 이를위해 초등학교5학년 학생7명을 대상으로그래프이해 과제를실시하고, 시선추적 자료와 회상면담 자료를 수집하여질적으로 분석하였다. 연구 결과, 학생들은 자료 읽기, 자료 사이의관계 찾기, 자료로 추론하기 과제 유형에 따라 서로 다른 시각적 탐색 양상을 보였으며, 막대그래프보다 꺾은선그래프에서 정답률이 낮게나타났다. 또한 문제이해의 오류, 핵심 용어해석의 오류, 눈금 단위해석의 오류, 점-구간해석의 오류가 확인되었다. 특히 시선추적 자료를 통해 학생들이 어떠한 정보를 탐색하였고, 어떤 탐색 과정이 누락되었으며, 탐색한 정보를 문제의 요구에 맞게 전환하는 과정에서 어떠한 어려움을 겪는지를 확인함으로써 오류의 발생과정과 원인을 보다 정확하게 진단할 수 있었다. 본 연구는 초등학생의 그래프 이해 과정과 오류를 과정 수준에서분석하였다는 점에서 의의가있다.",
+      "abstract_en": "This study aims to analyze fifth-grade elementary students’ graph comprehension processes for bar and line graphs, and to explore the types of errors that emerge during task performance. To this end, graph comprehension tasks were administered to seven fifth-grade students, and eye-tracking data and cued retrospective interview data were collected and qualitatively analyzed. The results showed that students exhibited different visual exploration patterns depending on the task type—reading the data, reading between the data, and reading beyond the data—and that their accuracy rates were lower for line graphs than for bar graphs. In addition, four types of errors were identified: errors in problem comprehension, interpreting key terms, interpreting scale units, and interpreting points and intervals. In particular, the eye-tracking data enabled the identification of what information students explored, which exploration steps were omitted, and what difficulties they encountered when processing the visual information to meet the task requirements. This allowed for a more precise diagnosis of how and why errors occurred. This study contributes to the literature by analyzing elementary students’ graph comprehension and errors at the process level rather than merely focusing on task outcomes.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003357053",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003382177",
+      "type": "journal",
+      "title": "체화된 도구화 관점에서 본 초등학생의 등호에 대한 관계적 이해 구성 과정: 디지털 평형 저울을 중심으로",
+      "title_en": "Elementary Students' Construction of Relational Understanding of the Equal Sign from an Embodied Instrumentation Perspective: Focusing on a Digital Balance Scale",
+      "authors": [
+        {
+          "name": "심재훈",
+          "name_en": "Jae-hoon Shim",
+          "role": "first",
+          "affiliation": "서울인헌초등학교"
+        },
+        {
+          "name": "이예진",
+          "name_en": "Ye-Jin Lee",
+          "role": "co",
+          "affiliation": "서울잠전초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육학연구",
+      "publisher": "대한수학교육학회",
+      "year": "2026",
+      "volume": "36",
+      "issue": "3",
+      "pages": "687–719",
+      "doi": "",
+      "keywords": [
+        "등호",
+        "동치 관계",
+        "디지털 평형 저울",
+        "체화된 도구화",
+        "체화된 설계",
+        "시선 추적"
+      ],
+      "keywords_en": [
+        "equal sign",
+        "equivalence relation",
+        "digital balance scale",
+        "embodied instrumentation",
+        "embodied design",
+        "eye-tracking"
+      ],
+      "abstract": "본 연구는 체화된 설계 원리에 따라 터치 기반 디지털 평형 저울(Em-DScale)을 개발하고, 체화된 도구화 관점에서 초등학교 3학년 학생들의 등호에 대한 관계적 이해 구성 과정을 탐구하였다. 등호에 대한 관계적 이해가 형성되지 않은 학생 3명을 대상으로, 감각–운동 과제, 반성적 과제, 수학적 과제의 3단계로 구성된 체화 기반 활동을 실시하였으며, 시선추적 데이터를 통합한 다중 사례 분석을 수행하였다. 연구 결과, 학생들은 동일한 피드백 환경에서도 서로 다른 주의 앵커를 통해 각자 고유한 스킴을 구성하였으며, 이러한 체화된 경험은 이후 등호에 대한 관계적 해석으로 자연스럽게 전이되었다. 특히 지각–행동 루프의 반복적 정교화를 통해 형성된 평형 스킴은 점차 내면화되어, 사후 검사에서 세 학생 모두 등호를 관계적 의미로 해석하는 유의미한 변화를 나타냈다. 이러한 결과는 수학적 개념이 신체, 도구, 환경의 역동적 상호작용 속에서 구성되는 관계적 산물임을 실증적으로 보여준다. 본 연구는 디지털 체화 환경에서 등호의 관계적 이해 지도의 새로운 가능성을 제시하며, 체화된 도구화 이론의 교육적 함의를 확장한다.",
+      "abstract_en": "Drawing on the principles of embodied design, this study developed a touch-based digital balance scale (Em-DScale) and, from an embodied instrumentation perspective, investigated the process through which third-grade elementary students construct a relational understanding of the equal sign. Three students who had not yet developed a relational understanding of the equal sign participated in an embodied learning activity consisting of three phases: sensorimotor tasks, reflective tasks, and mathematical tasks. A multiple-case analysis was conducted incorporating eye-tracking data. The findings revealed that, even within an identical feedback environment, each student formed a distinct scheme through different attentional anchors, and these embodied experiences subsequently transferred into relational interpretations of the equal sign. In particular, equilibrium schemes developed through the iterative refinement of perception-action loops became progressively internalized; on the post-assessment, all three students demonstrated meaningful shifts toward interpreting the equal sign in relational terms. These results provide empirical evidence that mathematical concepts are relational constructs that emerge from the dynamic interplay among the body, tools, and environment. This study offers new possibilities for teaching the equal sign relationally in digitally embodied environments and extends the educational implications of embodied instrumentation theory.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003382177",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003340498",
+      "type": "journal",
+      "title": "초등수학영재의 함정수열 생성 전략 분석",
+      "title_en": "An Analysis of Trap Sequence Generation Strategies of Mathematically Gifted Elementary Students",
+      "authors": [
+        {
+          "name": "김수진",
+          "name_en": "Kim, Soo Jin",
+          "role": "first",
+          "affiliation": "서울교육대학교 교육전문대학원"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "한국초등수학교육학회지",
+      "publisher": "한국초등수학교육학회",
+      "year": "2026",
+      "volume": "30",
+      "issue": "2",
+      "pages": "205–225",
+      "doi": "",
+      "keywords": [
+        "초등수학영재",
+        "함정수열",
+        "수열 생성",
+        "일반화"
+      ],
+      "keywords_en": [
+        "mathematically gifted elementary students",
+        "trap sequence",
+        "sequence generation",
+        "generalization"
+      ],
+      "abstract": "본 연구는 초등수학영재들이 함정수열을 생성하는 과정에서 나타나는 전략과 특성을 분석하는 데 목적이 있다. 이를 위해 대학 부설 과학영재원 소속 초등수학영재 17명을 대상으로 소집단별 함정수열 생성 및 해결 활동을 수행하였으며, 학생들의 산출물과 발화 내용을 귀납적으로 분석하였다. 연구 결과, 초등수학영재들은 단순한 수치 나열을 넘어 경험적 탐색, 재귀적 변조, 함수적 구조화, 비수치적 표상 전환, 기존 수학적 모델 변형이라는 5가지 핵심 전략 범주를 복합적으로 활용하여 수열을 생성하는 것으로 나타났다. 특히 영재들은 수학적 완결성을 유지하면서도 타인의 추론 경로를 예측하여 인지적 불투명성을 의도적으로 설계하는 능력을 보였으며, 교육과정의 범위를 확장한 수학적 도구나 비수치적 상징을 수열의 구조 내로 통합하는 등 유연한 사고 양상을 발현하였다. 이러한 결과는 함정수열 생성이 영재를 규칙의 단순 수용자에서 능동적인 설계자로 전환시키며, 대수적 통찰력, 메타인지적 조망 능력, 수학적 창의성을 통합적으로 함양할 수 있는 유의미한 활동임을 시사한다.",
+      "abstract_en": "This study aimed to analyze the strategies and characteristics demonstrated by mathematically gifted elementary students in the process of generating trap sequences. To this end, 17 mathematically gifted sixth-grade students enrolled in a university-affiliated science gifted education center participated in small-group activities involving trap sequence generation and solving, and their written outputs and verbal utterances were inductively analyzed. The findings revealed that the students employed five core strategy categories in complex and multilayered ways beyond simple numerical listing: empirical exploration, recursive modulation, functional structuring, non-numerical representational transformation, and modification of existing mathematical models. Notably, the gifted students demonstrated the ability to anticipate observers' reasoning pathways while maintaining mathematical completeness, and to deliberately design cognitive opacity into their sequences. They also exhibited flexible thinking by integrating mathematical tools beyond the scope of the curriculum and non-numerical symbols into the structural logic of their sequences. These results suggest that trap sequence generation serves as a meaningful pedagogical activity that transforms gifted students from passive recipients of rules into active designers, fostering algebraic insight, metacognitive perspective-taking ability, and mathematical creativity in an integrated manner.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003340498",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003340503",
+      "type": "journal",
+      "title": "통계적 문제해결 과정에서 초등학교4학년의 공학 도구 활용 분석:자료 분석 단계를 중심으로",
+      "title_en": "An Analysis of 4th-Grade Students' Use of Technological Tools in Statistical Problem Solving: Focusing on the Data Analysis Stage",
+      "authors": [
+        {
+          "name": "이명찬",
+          "name_en": "Lee, Myeongchan",
+          "role": "first",
+          "affiliation": "서울양목초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "한국초등수학교육학회지",
+      "publisher": "한국초등수학교육학회",
+      "year": "2026",
+      "volume": "30",
+      "issue": "2",
+      "pages": "307–335",
+      "doi": "",
+      "keywords": [
+        "공학 도구",
+        "초등 통계 교육",
+        "자료 분석",
+        "통계적 문제해결"
+      ],
+      "keywords_en": [
+        "technological tools",
+        "elementary statistics education",
+        "data analysis",
+        "statistical problem solving"
+      ],
+      "abstract": "지능 정보화 사회에서 통계적 소양과 공학 도구 활용의 중요성이 강조되고 있으나, 실제 초등 통계 수업에서 학생들의 실질적인 도구 활용 과정을 심층적으로 분석한 연구는 부족하다. 이에 본 연구는 초등학교 4학년 학생을 대상으로 공학 도구를 활용한 통계 수업을 실시하고, 통계적 문제해결 과정의 자료 분석 단계에서 나타난 학생들의 공학 도구 활용 양상을 분석하였다. 이를 위해 수업에서 학생 발화, 화면 기록, 활동 결과물 등을 수집·분석하였다. 분석 결과, 학생들의 공학 도구 활용 양상은 초기 구성, 탐색적 조작, 표상 재구성, 도구 기반 추론, 도구 제약 인식, 협력적 도구 활용의 여섯 범주로 나타났다. 특히 학생들은 공학 도구를 단순한 그래프 작성 도구로 사용하는 데 그치지 않고, 축과 눈금을 조정하거나 그래프 유형을 전환하며 자료를 탐색적으로 해석하였으며, 도구의 기능적 한계를 인식하고 이를 보완하려는 모습도 보였다. 이러한 결과는 초등 통계 수업에서 공학 도구가 시각화 도구를 넘어 자료 탐색과 해석을 매개하는 탐구 도구로 기능할 수 있음을 시사한다.",
+      "abstract_en": "Although the importance of statistical literacy and the use of technological tools have been emphasized in the intelligent information society, there is still a lack of research that closely examines students’ actual processes of using tools in elementary statistics classrooms. Accordingly, this study implemented a technology-integrated statistics lesson for fourth-grade elementary students and analyzed the patterns of students’ use of technological tools that appeared in the data analysis stage of the statistical problem-solving process. For this purpose, students’ utterances, screen recordings, and activity outcomes were collected and analyzed during the lesson. The results showed that students’ use of technological tools could be categorized into initial construction, exploratory manipulation, representational reconstruction, tool-based inference, recognition of tool constraints, and collaborative tool use. In particular, students did not merely use technological tools as tools to draw graphs; rather, they interpreted data in an exploratory manner by adjusting axes and scales or changing graph types, and they also showed attempts to recognize and compensate for the functional limitations of the tools. These results suggest that, in elementary statistics classrooms, technological tools can function not only as visualization tools but also as inquiry tools that mediate the processes of data exploration and interpretation.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003340503",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003302672",
+      "type": "journal",
+      "title": "이주배경 초등학생의 수학 기초학력 및 배경 요인 분석",
+      "title_en": "An analysis on the basic mathematical abilities and background factors of elementary school students with immigrant backgrounds",
+      "authors": [
+        {
+          "name": "박만구",
+          "name_en": "PARK MAN GOO",
+          "role": "first",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0003-3302-7798"
+        },
+        {
+          "name": "임미인",
+          "name_en": "Lim Miin",
+          "role": "co",
+          "affiliation": "서울교육대학교",
+          "orcid": "0009-0009-5298-2441"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "김미영",
+          "name_en": "Kim, Miyoung",
+          "role": "co",
+          "affiliation": "서울용산초등학교"
+        },
+        {
+          "name": "도주원",
+          "name_en": "Do, Joowon",
+          "role": "corresponding",
+          "affiliation": "서울용암초등학교"
+        }
+      ],
+      "journal": "초등수학교육",
+      "publisher": "한국수학교육학회",
+      "year": "2026",
+      "volume": "29",
+      "issue": "1",
+      "pages": "67–83",
+      "doi": "",
+      "keywords": [
+        "이주배경 학생",
+        "수학 기초학력",
+        "개인 배경"
+      ],
+      "keywords_en": [
+        "immigrant background students",
+        "basic",
+        "mathematical achievement",
+        "personal background"
+      ],
+      "abstract": "이 연구의 목적은 이주배경 학생의 수학 기초학력 및개인 배경 요인을심층적으로 분석하여, 점차 증가하고 있는 이주배경 학생들의 기초학력을 신장하고 학교 적응을돕기 위한 시사점을 얻기 위함이다. 연구를 위해 S시 2개초등학교에서 4명(2학년 3명, 4학년 1명)의 이주배경 학생들을 대상으로 수학 기초학력과 개인 배경에 대한 심층면담을 실시하였다. 또한 이들의 담임교사 및 다문화특별학급 교사들을 대상으로 각 학생들의 특성 및 기초학력에대한 면담을 실시하였다. 학생들에 대한 면담을 통해 언어및 기초학력, 심리적 및 사회적 상태, 가정환경 및 가족관계, 또래관계 및 학교 적응, 기타 특성 및 제도적 요인 등을 조사하였다. 연구 결과, 이주배경 학생들의 수학 기초학력과 개인 배경은 밀접한 관련이 있으며 복합적인 요인이 작용하는 것으로 나타났다. 연구 결과로부터 이주배경학생의 기초학력을 신장시키고 학교 적응 및 대인관계를지원하기 위한 시사점을도출하였다.",
+      "abstract_en": "The purpose of this study was to deeply analyze the fundamental mathematics skills and personal background factors of students with immigrant backgrounds, thereby providing insights for improving their fundamental academic skills and facilitating their school adjustment. For this study, four students (three second graders and one fourth grader) from immigrant backgrounds at two elementary schools in Seoul were interviewed in depth regarding their fundamental academic skills and personal backgrounds. Furthermore, their homeroom teachers and multicultural special education teachers were interviewed to discuss each student's characteristics and fundamental academic skills. These interviews covered language and fundamental academic skills, psychological and social status, home environment and family relationships, peer relationships and school adjustment, and other characteristics and institutional factors. The results revealed a close relationship between the fundamental mathematics skills and personal backgrounds of students with immigrant backgrounds, with complex factors at play. The researchers proposed implications for enhancing the fundamental academic skills of students with immigrant backgrounds and improving their school and interpersonal relationships.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003302672",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003395277",
+      "type": "journal",
+      "title": "점의 이동에서 사상으로: 대상화 관점에서 본 초등학교 3학년의 대수적 일반화",
+      "title_en": "From Moving Points to Mapping: Third Graders' Algebraic Generalization from an Objectification Perspective",
+      "authors": [
+        {
+          "name": "이은지",
+          "name_en": "Eun Ji Lee",
+          "role": "first",
+          "affiliation": "서울인헌초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2026",
+      "volume": "28",
+      "issue": "3",
+      "pages": "321–347",
+      "doi": "",
+      "keywords": [
+        "초기 대수",
+        "대수적 일반화",
+        "대상화",
+        "점의 이동",
+        "사상"
+      ],
+      "keywords_en": [
+        "early algebra",
+        "algebraic generalization",
+        "objectification",
+        "point movement",
+        "mapping"
+      ],
+      "abstract": "본 연구는 초등학교 3학년 학생들이 점의 이동을 사상(mapping)으로 일반화하는 과정에서 변환의 대응 관계를 어떻게 대상화하는지 분석하는 데 목적을 두었다. 이를 위해 학생 6명을 대상으로 웹 기반 점의 이동 과제를 설계하고 수업을 실시하였으며, 수집된 화면 녹화 자료, 발화 전사 자료, 학생 활동지, 연구자의 성찰일지를 질적으로 분석하였다. 분석은 Radford의 일반화 층위를 사상 관점에서 재구성한 틀을 적용하였다. 분석 결과, 학생들은 초기 단계에서 드래깅, 손가락 계수, 리듬적 발화와 같은 감각-운동적 수단을 활용하여 점의 이동을 탐색하였다. 이후 자연어 명령어를 통해 대응 관계를 점차 언어적으로 조직해 나갔으며, 나아가 기호를 생성⋅재구성하여 새로운 점이나 여러 점에 적용함으로써 대응 관계의 적용 범위를 확장하고 이를 사고의 대상으로 다루는 모습이 관찰되었다. 다만, 이러한 대상화 과정은 본 연구 참여자들에게서 동일한 경로로 나타나기보다 기호의 생성과 안정화 측면에서 다소 비선형적으로 전개되는 특징을 보였다. 이는 대상화의 출현이 곧 안정적인 기호적 체계의 완성으로 이어지는 것은 아님을 보여준다. 이러한 결과는 점의 이동 탐구가 초등 수준에서 기하와 대수를 유기적으로 연결하는 유의미한 초기 대수 학습의 맥락이 될 수 있음을 시사한다.",
+      "abstract_en": "This study investigated how third-grade elementary students objectified the correspondence relation of transformations while generalizing point movement into a mapping. To this end, web-based point movement tasks were designed and implemented with six elementary students, and data—including screen recordings, verbal protocols, student worksheets, and the researcher's reflective journals—were analyzed qualitatively. The analysis employed a framework that reframed Radford's layers of algebraic generalization from a mapping perspective. The findings show that students initially explored the moving points through sensori-motor means such as dragging, finger counting, and rhythmic utterances. Subsequently, they gradually articulated the correspondence relation through natural-language commands. They then generated and reorganized symbolic representations and applied them to new or multiple points, thereby broadening the range of cases to which the correspondence was applied and coming to treat the correspondence itself as an object of thought. However, the processes of objectification did not unfold along a uniform path across the participants in this study; they developed in non-linear ways, particularly in relation to sign production and stabilization. This suggests that the emergence of objectification does not necessarily culminate in the immediate formation of a stable symbolic system. These findings indicate that inquiry into point movement can serve as a meaningful context for early algebra learning at the elementary level, productively linking geometry and algebra.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003395277",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003223119",
+      "type": "journal",
+      "title": "초등학교 6학년의 수학적 논증 활동에서 나타나는 반박 유형 및 대응 방안 분석",
+      "title_en": "Analysis of rebuttals and corresponding responses in sixth-grade students’ mathematical argumentation",
+      "authors": [
+        {
+          "name": "김민정",
+          "name_en": "Kim, Min Jeong",
+          "role": "first",
+          "affiliation": "위례중앙초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육 논문집",
+      "publisher": "한국수학교육학회",
+      "year": "2025",
+      "volume": "39",
+      "issue": "2",
+      "pages": "217–241",
+      "doi": "10.7468/jksmee.2025.39.2.217",
+      "keywords": [
+        "논증",
+        "반박"
+      ],
+      "keywords_en": [
+        "Verheij",
+        "Lakatos",
+        "Toulmin",
+        "argumentation",
+        "rebuttal"
+      ],
+      "abstract": "본 연구의 목적은 초등학교 6학년 학생들의 수학적 논증 활동에서 나타나는 반박 유형과 반박에 대한 대응 양상을분석하고, 이를 토대로 수학 수업에서의 논증 교육 실천 방안을 탐색하는 것이다. 이를 위해 직육면체의 부피 개념을주제로 Lakatos의 방법론에 따라 수업을 설계하고, 경기도 소재 초등학교 6학년 학생 8명을 대상으로 연구를 수행하였다. 학생들의 논증 활동 과정을 녹음·녹화 후 전사하여 질적으로 분석한 결과, Verheij의 다섯 가지 반박 유형 중보장에 대한 반박을 제외한 네 가지 유형이 확인되었다. 반박에 대한 대응은 (1) 추가 자료나 논거 제시, (2) 조건 제한을 통한 한정, (3) 주장 수정 또는 철회의 세 가지 방식으로 나타났다. 분석 결과를 바탕으로 초등 수학 수업에서 반박 중심 논증 활동의 적용 가능성과 시사점을 논의하였다.",
+      "abstract_en": "The 2022 revised mathematics curriculum emphasizes the development of students' abilities to communicate effectively about mathematical thinking and strategies, as well as to reason logically based on conjectures and justifications. Accordingly, the purpose of this study is to explore practical approaches to teaching mathematical argumentation in the classroom by analyzing the types of rebuttals and corresponding responses that appear during sixth-grade students' mathematical argumentation activities. For this purpose, a lesson was designed based on Lakatos’s methodology, focusing on the concept of the volume of rectangular prisms. The study was conducted with eight sixth-grade students from an elementary school located in Gyeonggi Province. Students’ activities were audio- and video-recorded, transcribed, and qualitatively analyzed. The results revealed that among the five types of rebuttals proposed by Verheij, four excluding rebuttals against the warrant were observed during the lessons. In response to rebuttals, students employed three major strategies: (1) presenting additional data or supporting arguments, (2) limiting claims through specifying conditions, and (3) modifying or withdrawing original claims. Based on these findings, this study proposes the applicability and educational implications of rebuttal-centered argumentation activities in elementary mathematics classrooms.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003223119",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003236033",
+      "type": "journal",
+      "title": "초등학교 5학년 수학 교과서의 도형 패턴 일반화 과제 분석",
+      "title_en": "An Analysis of Figural Pattern Generalization Tasks in 5th Grade Elementary Mathematics Textbooks",
+      "authors": [
+        {
+          "name": "이은지",
+          "name_en": "Lee, Eun Ji",
+          "role": "first",
+          "affiliation": "서울인헌초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "한국초등수학교육학회지",
+      "publisher": "한국초등수학교육학회",
+      "year": "2025",
+      "volume": "29",
+      "issue": "3",
+      "pages": "265–292",
+      "doi": "10.54340/kseme.2025.29.3.4",
+      "keywords": [
+        "규칙성",
+        "함수적 사고",
+        "대수적 사고",
+        "도형 패턴",
+        "패턴 일반화"
+      ],
+      "keywords_en": [
+        "regularity",
+        "functional thinking",
+        "algebraic thinking",
+        "figural patterns",
+        "pattern generalization"
+      ],
+      "abstract": "도형 패턴의 일반화는 학생의 함수적 사고를 신장시키는 데 효과적인 맥락을 제공한다. 특히 도형 패턴 일반화 과제의 발문 유형과 전개 순서는 학생의 일반화 과정을 유도하고 지원하는 데 중요한 역할을 한다. 그러나 교과서에 제시된 도형 패턴의 일반화 과제의 발문 유형과 구성에 대한 구체적인 분석은 부족한 실정이었다. 이에 본 연구는 초등학교 5학년 수학 검정 교과서의 ‘규칙과 대응’ 단원에 수록된 도형 패턴 일반화 과제의 단계별 구성과 지도 전략을 분석하였다. 분석 결과, 대부분의 도형 패턴 일반화 과제는 ‘관계의 특성 분석하기’와 ‘일반화하기’의 두 단계로 구성되었으며, 지도 전략 또한 전자의 단계에서는 ‘대응표 사용’, 후자의 단계에서는 ‘언어적 설명’에 편중된 경향을 보였다. 분석 결과를 토대로 향후 교과서의 도형 패턴 일반화 과제 구성에 대한 교육적 시사점을 제언하였다.",
+      "abstract_en": "Generalizing figural patterns is a valuable tool for promoting functional thinking. In particular, the types of prompts and the sequence of steps in figural pattern tasks play a key role in guiding and supporting students’ generalization processes. However, detailed analyses of such tasks in mathematics textbooks remain insufficient. This study analyzed the phase structure and instructional strategies of figural pattern tasks presented in the Patterns and Correspondence unit of fifth-grade authorized mathematics textbooks in Korea. The analysis focused on how the tasks were structured across phases and what teaching strategies were employed. The results showed that most figural pattern tasks followed a two-phase structure, consisting of Analyse the nature of the relationship and Generalize. In Analyse the nature of the relationship, using correspondence tables was the most frequently employed strategy, whereas in Generalize, verbal explanation was the most common strategy, indicating a strong reliance on particular instructional approaches. Based on these findings, the study discusses implications for improving the design of figural pattern generalization tasks in mathematics textbooks.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003236033",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003206351",
+      "type": "journal",
+      "title": "초등학교 5학년과 생성형 AI 기반 챗봇의 협력적 문제 해결 과정 분석",
+      "title_en": "An Analysis of the Collaborative Problem-Solving Process Between 5th Grade Students and a Generative AI-Based Chatbot",
+      "authors": [
+        {
+          "name": "김범진",
+          "name_en": "Kim, Beomjin",
+          "role": "first",
+          "affiliation": "서울강월초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "한국초등수학교육학회지",
+      "publisher": "한국초등수학교육학회",
+      "year": "2025",
+      "volume": "29",
+      "issue": "2",
+      "pages": "117–145",
+      "doi": "10.54340/kseme.2025.29.2.2",
+      "keywords": [
+        "생성형 AI",
+        "인공지능",
+        "챗봇",
+        "수학 문제 해결",
+        "협력적 문제 해결"
+      ],
+      "keywords_en": [
+        "generative AI",
+        "artificial intelligence",
+        "Chatbot",
+        "mathematical problem solving",
+        "collaborative problem solving"
+      ],
+      "abstract": "최근 생성형 인공지능의 등장으로 수학 교육에서 이를 활용하려는 시도가 활발히 이루어지고 있으나, 학생 중심의 활용 방식에 대한 실증적 연구는 아직 부족하다. 본 연구는 초등학교 5학년 수학 수업에서 조력자이자 협력자의 역할을 수행하는 생성형 AI 기반 챗봇과 학생 간의 협력적 문제 해결 과정을 분석하는 데 목적을 두었다. 이를 위해 생성형 AI 챗봇을 개발하고, 초등학교 5학년 학생 20명을 대상으로 수업을 실시한 후, 학생과 챗봇 간의 대화 내역을 수집·분석하였다. 분석 결과, 챗봇은 해결 계획 제안, 비계 제공, 학생 풀이의 점검, 긍정적 피드백 등의 발화를 통해 학생들의 개별화된 학습을 지원하였으며, 학습 참여도와 흥미를 높이는 데 기여하였다. 반면, 일부 응답에서는 부정확한 계산, 교육과정 외 개념 사용 등 오류가 나타나 교육적 활용 시 주의가 요구된다. 본 연구는 초등 수학 수업에서 생성형 AI의 가능성과 한계를 동시에 조명하며, 효과적인 활용을 위한 교육적 시사점을 제시하였다.",
+      "abstract_en": "With the emergence of generative artificial intelligence (AI), there has been growing interest in applying it to mathematics education. However, empirical research on student-centered uses of generative AI remains limited. This study aimed to analyze the process of collaborative problem solving between elementary students and a generative AI-based chatbot acting as both a facilitator and partner in a 5th-grade mathematics classroom. A generative AI chatbot was developed and implemented in lessons with 20 fifth-grade students. The interactions between students and the chatbot were collected and analyzed. The results revealed that the chatbot frequently engaged in utterances related to providing scaffolding, suggesting solution plans, checking students’ answers, and offering positive feedback. These interactions supported personalized learning and enhanced students’ engagement and interest. However, some responses included errors such as incorrect calculations and the use of concepts beyond the curriculum, indicating the need for caution in educational applications. This study highlights both the potential and limitations of generative AI in elementary mathematics instruction and offers educational implications for its effective integration.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003206351",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003206353",
+      "type": "journal",
+      "title": "시각적 표현을 활용하여 비례 관계를 강조한 수업이 6학년의 비례추론에 미치는 영향",
+      "title_en": "The Effects of Instruction Emphasizing Proportional Relationships through Visual Representations on Sixth Graders’ Proportional Reasoning",
+      "authors": [
+        {
+          "name": "임형민",
+          "name_en": "Lim, Hyung Min",
+          "role": "first",
+          "affiliation": "감일초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "한국초등수학교육학회지",
+      "publisher": "한국초등수학교육학회",
+      "year": "2025",
+      "volume": "29",
+      "issue": "2",
+      "pages": "171–200",
+      "doi": "10.54340/kseme.2025.29.2.4",
+      "keywords": [
+        "비례추론",
+        "시각적 표현",
+        "비례 관계",
+        "비례 문제 해결"
+      ],
+      "keywords_en": [
+        "proportional reasoning",
+        "visual representation",
+        "proportional relationships",
+        "proportional problem solving"
+      ],
+      "abstract": "비례추론은 초등 수학 교육에서 비와 비율 개념의 이해를 심화시키며, 이후 함수 및 대수 개념 학습의 토대를 마련하는 중요한 사고 과정이다. 그러나 많은 학생들이 비례 개념을 형식적인 알고리즘에만 의존하여 이해하고 있어, 개념적 이해를 촉진할 수 있는 교수·학습 전략의 도입이 필요하다. 이에 본 연구는 시각적 표현을 중심으로 비례 관계의 개념적 이해를 강조한 수업이 초등학교 6학년 학생의 비례추론 능력에 미치는 영향을 분석하였다. 이를 위해 2개 학급을 실험집단과 비교집단으로 나누어 사전·사후 검사를 실시하고, 양적·질적 분석을 병행하였다. 분석 결과, 시각적 표현을 활용한 실험집단의 비례추론 능력이 비교집단에 비해 유의미하게 향상되었으며, 특히 결측값 처리, 양적 비교, 비비례 상황 유형에서 큰 차이가 나타났다. 또한 실험집단 학생들은 다양한 비례 관련 문제 해결 과정에서 비형식적 전략을 효과적으로 활용하였고, 시각적 표현이 비례 관계 이해를 돕고 오류를 줄이며 문제 해결 전략의 다양성을 확장하는 데 기여함이 확인되었다. 이러한 결과를 바탕으로 비례 학습에서 시각적 표현 활용에 관한 시사점을 제시하였다.",
+      "abstract_en": "Proportional reasoning deepens elementary students’ understanding of ratio and proportion concepts while laying the foundation for subsequent studies in functions and algebra. However, many students struggle to clearly distinguish between proportional and non-proportional situations, often applying proportional formulas mechanically. This study aimed to address these learning limitations by examining the effect of an instruction that emphasizes the understanding of \"proportional relationships\" through visual representations on the proportional reasoning abilities of sixth-grade students. Two sixth-grade classes were divided into an experimental group and a control group, with pre- and post-tests conducted alongside both quantitative and qualitative analyses. The findings revealed that the experimental group significantly improved its overall proportional reasoning skills compared to the control group, with particularly marked differences observed in missing value processing, quantitative comparison, and non-proportional situation tasks. Moreover, students in the experimental group effectively employed informal strategies during various proportional problem-solving processes, confirming that visual representations help in understanding proportional relationships, reducing errors, and broadening the range of problem-solving strategies. Based on these results, the study presents educational implications for the use of visual representations in teaching proportional reasoning.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003206353",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003298061",
+      "type": "journal",
+      "title": "초등 수학 영재의 예 만들기 활동에서 나타난 도형 생성 전략과 기하 인식",
+      "title_en": "Geometric Construction Strategies and Geometric Perception in Example-Generating Tasks of Gifted Elementary Students",
+      "authors": [
+        {
+          "name": "민샬롬",
+          "name_en": "Shalom Min",
+          "role": "first",
+          "affiliation": "서울동교초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2025",
+      "volume": "27",
+      "issue": "4",
+      "pages": "829–850",
+      "doi": "10.57090/sm.2025.12.27.4.829",
+      "keywords": [
+        "예 만들기 활동",
+        "초등 수학 영재",
+        "기하 인식",
+        "동적 기하 환경"
+      ],
+      "keywords_en": [
+        "example-generating activity",
+        "mathematically gifted students",
+        "geometric perception",
+        "DGE"
+      ],
+      "abstract": "본 연구는 초등 수학 영재들이 외접사각형을 탐구하는 예 만들기 활동 과정에서 나타나는 도형 생성 전략과 기하 인식 특성을 심층적으로 분석하는 데 목적이 있다. 이를 위해 S시 소재 교육지원청 영재교육원 소속 초등 4학년 학생 79명을 대상으로 서면 활동과 동적 기하 환경(DGE)을 연계한 3단계 예 만들기 과제를 적용하였으며, 수집된 자료를 바탕으로 질적 분석을 수행하였다. 연구 결과, 학생들은 초기 탐색 단계에서 시각적 직관과 전형적인 도형 유형에 의존하여 예를 생성하였으나, 반례 검토와 조건 수정을 반복하는 과정에서 점차 도형의 구성 요소 간 관계에 주목하는 구조적 전략으로 발전하였다. 과제의 제약 조건 강화와 DGE의 활용은 학생들의 전략을 유연하고 복합적으로 진화시키는 핵심 기제로 작용하였으며, 특히 DGE의 동적 조작 및 측정 기능은 시각적 추측을 논리적 검증으로 전환시키며 조건의 구조적 일반화를 촉진하였다. 이러한 결과는 예 만들기 활동이 초등 수학 영재로 하여금 기하 개념의 경계와 구조를 능동적으로 구성하게 하는 유의미한 접근임을 시사한다.",
+      "abstract_en": "The purpose of this study is to provide an in-depth analysis of the geometric construction strategies and characteristics of geometric perception demonstrated by elementary gifted students during example-generating activities exploring tangential quadrilaterals. To this end, a qualitative case study was conducted with 79 fourth-grade students enrolled in a gifted education center in City S. A three-stage example-generating task integrating paper-and-pencil activities and a Dynamic Geometry Environment (DGE) was implemented. The results revealed that while students initially relied on visual intuition and prototypical shapes to construct examples, their strategies evolved into structural approaches focusing on the relationships among geometric elements through an iterative process of examining counter-examples and modifying conditions. The strengthening of task constraints and the utilization of DGE served as key mechanisms in facilitating the flexible and multifaceted evolution of students' strategies. Specifically, the dynamic manipulation and measurement features of the DGE transformed visual conjectures into logical verifications, thereby promoting the structural generalization of conditions. Overall, these results suggest that example-generating activities can serve as a meaningful approach to enable mathematically gifted elementary students to actively construct the boundaries and structures of geometric concepts.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003298061",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003087538",
+      "type": "journal",
+      "title": "랜덤 포레스트 알고리즘을 활용한 수학 서술형 자동 채점",
+      "title_en": "Automatic scoring of mathematics descriptive assessment using random forest algorithm",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Inyong Choi",
+          "role": "first",
+          "affiliation": "Seoul National University of Education",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "김화경",
+          "name_en": "Hwa Kyung Kim",
+          "role": "co",
+          "affiliation": "Sangmyung University",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "정인우",
+          "name_en": "In Woo Chung",
+          "role": "co",
+          "affiliation": "Seoul Global High School",
+          "orcid": "0009-0001-7589-4921"
+        },
+        {
+          "name": "송민호",
+          "name_en": "Min Ho Song",
+          "role": "corresponding",
+          "affiliation": "Korea Institute for Curriculum and Evaluation",
+          "orcid": "0009-0003-5666-923X"
+        }
+      ],
+      "journal": "수학교육",
+      "publisher": "한국수학교육학회",
+      "year": "2024",
+      "volume": "63",
+      "issue": "2",
+      "pages": "165–186",
+      "doi": "10.7468/mathedu.2024.63.2.165",
+      "keywords": [
+        "서술형 평가",
+        "자동 채점",
+        "인공지능",
+        "랜덤 포레스트"
+      ],
+      "keywords_en": [
+        "Descriptive assessment",
+        "Automatic scoring",
+        "Artificial intelligence",
+        "Random forest"
+      ],
+      "abstract": "학교 현장과 대규모 평가에서 서술형 문항 도입을 지원하기 위한 방안 중 하나로 인공지능 기반의 자동 채점 기술이 주목받고 있음에도 불구하고, 수학 교과에서는 타 교과에 비해 이에 대한 기초 연구가 부족한 상황이다. 이에 본 연구는 중학교 1 학년 수학 서술형 문항 두 개를 대상으로 랜덤 포레스트 알고리즘을 활용하여 자동 채점 모델을 개발하고 그 성능을 평가하였다. 연구 결과, 두 문항에 대한 최종 모델의 평가요소별 정확도는 각각 0.95–1.00, 0.73–0.89의 범위로 나타났으며, 이는 타 교과에 비해 상대적으로 높은 수준이다. 데이터의 양을 고려한 평가 범주 설정의 중요성을 확인하였으며, 수학 교육전문가에 의한 텍스트 전처리와 데이터 특성에 맞는 벡터화 방법의 선택이 모델의 성능 및 해석 가능성을 향상시키는 데 기여하였다. 또한, 현실적 한계로 인해 균형적인 데이터 수집이 어려운 상황에서 오버샘플링이 성능을 보완하는 유용한 방법임을 확인하였다. 교육적 활용도를 높이기 위해, 랜덤 포레스트 기반 모델에서 도출된 특성 중요도를 활용하여 피드백과 같이 교수-학습에 유용한 정보를 생성하는 추가 연구가 필요하다. 본 연구는 수학 서술형 자동 채점에 관한 기초 연구로서 의미가 있으며, 인공지능 전문가와 수학교육 전문가 간의 긴밀한 협력을 통해 다양한 후속 연구가 진행될 필요가 있다.",
+      "abstract_en": "Despite the growing attention on artificial intelligence-based automated scoring technology as a support method for the introduction of descriptive items in school environments and large-scale assessments, there is a noticeable lack of foundational research in mathematics compared to other subjects. This study developed an automated scoring model for two descriptive items in first-year middle school mathematics using the Random Forest algorithm, evaluated its performance, and explored ways to enhance this performance. The accuracy of the final models for the two items was found to be between 0.95 to 1.00 and 0.73 to 0.89, respectively, which is relatively high compared to automated scoring models in other subjects. We discovered that the strategic selection of the number of evaluation categories, taking into account the amount of data, is crucial for the effective development and performance of automated scoring models. Additionally, text preprocessing by mathematics education experts proved effective in improving both the performance and interpretability of the automated scoring model. Selecting a vectorization method that matches the characteristics of the items and data was identified as one way to enhance model performance. Furthermore, we confirmed that oversampling is a useful method to supplement performance in situations where practical limitations hinder balanced data collection. To enhance educational utility, further research is needed on how to utilize feature importance derived from the Random Forest-based automated scoring model to generate useful information for teaching and learning, such as feedback. This study is significant as foundational research in the field of mathematics descriptive automatic scoring, and there is a need for various subsequent studies through close collaboration between AI experts and math education experts.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003087538",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003099700",
+      "type": "journal",
+      "title": "수학 일지 쓰기 활동이 초등학교 6학년 학생들의 수학불안 및 수학적 의사소통에 미치는 영향",
+      "title_en": "The effects of mathematics journal writing on mathematics anxiety and mathematical communication in 6th grade elementary school students",
+      "authors": [
+        {
+          "name": "유동훈",
+          "name_en": "Yu, Dong Hoon",
+          "role": "first",
+          "affiliation": "함박초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육 논문집",
+      "publisher": "한국수학교육학회",
+      "year": "2024",
+      "volume": "38",
+      "issue": "2",
+      "pages": "187–213",
+      "doi": "10.7468/jksmee.2024.38.2.187",
+      "keywords": [
+        "수학 일지",
+        "수학 쓰기",
+        "수학적 의사소통",
+        "수학불안"
+      ],
+      "keywords_en": [
+        "mathematics journal",
+        "mathematical communication",
+        "mathematics writing",
+        "mathematics anxiety"
+      ],
+      "abstract": "본 연구는 초등학교 6학년 학생들을 대상으로 수학 일지 쓰기 활동이 학생들의 수학불안과 수학적 의사소통 중 ‘쓰기’ 영역에 미치는 영향을 알아보기 위한 것이다. 이를 위해 초등학교 6학년 학생 27명을 대상으로 분수·소수의 나눗셈을학습하는 동안 14차시의 수학 일지 쓰기 활동을 실시하였다. 수학불안은 검사지를 이용하여 측정한 후 사전, 사후 결과를 통계적으로 분석하였고, 수학적 의사소통은 ‘쓰기’ 영역에 대한 분석틀을 이용하여 양적으로 측정한 뒤 수준의변화를 확인하였다. 또한, 연구참여자 중 13명을 면담하여 수학 일지 활동이 수학불안과 수학적 의사소통에 미치는 영향을 심층적으로 살펴보고자 하였다. 연구 결과, 수학불안의 4개의 상위 요인 중 수학교과 요인과 환경 요인에서 수학불안 감소에 유의미한 효과가 나타났다. 수학적 의사소통 중 ‘쓰기’ 영역의 ‘표현’과 ‘설명’의 평균 수준은 점진적으로높아지는 경향을 보였으며, 특히 교사의 구체적인 피드백이 학생들의 의사소통 수준 향상을 지원하였다. 이러한 연구결과를 바탕으로 학교 현장에서 수학 일지 쓰기 활동의 활용 및 지도 방안에 대한 시사점을 제안하였다.",
+      "abstract_en": "This study aims to investigate the impact of mathematical journal writing activities on sixth-grade students' mathematics anxiety and the 'writing' aspect of mathematical communication. For this purpose, 27 sixth-grade students participated in 14 sessions of mathematical journal writing activities while learning division with fractions and decimals. Mathematics anxiety was measured using a questionnaire, with pre- and post-test results statistically analyzed. Mathematical communication in the 'writing' domain was quantitatively measured using an analytical framework to track changes in levels. Additionally, 13 students were interviewed to examine the impact of journal writing on mathematics anxiety and mathematical communication in more detail. The study found that among the four main factors of mathematics anxiety, there was a significant reduction in the subject-specific and environmental factors. The average levels of 'expression' and 'explanation' in the 'writing' domain of mathematical communication gradually increased, with specific teacher feedback supporting improvements in students' communication levels. Based on these findings, the study suggests implications for the use and guidance of mathematical journal writing activities in school settings.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003099700",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003084494",
+      "type": "journal",
+      "title": "초등학교 4·5·6학년 학생들의 혼합그래프 이해 능력 조사",
+      "title_en": "An Analysis of Elementary School Students' Comprehension of Combination Graphs in Grades 4, 5, and 6",
+      "authors": [
+        {
+          "name": "문정은",
+          "name_en": "Mun, Jeongeun",
+          "role": "first",
+          "affiliation": "서울도곡초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "한국초등수학교육학회지",
+      "publisher": "한국초등수학교육학회",
+      "year": "2024",
+      "volume": "28",
+      "issue": "2",
+      "pages": "275–300",
+      "doi": "10.54340/kseme.2024.28.2.5",
+      "keywords": [
+        "통계",
+        "그래프",
+        "그래프 이해",
+        "혼합그래프"
+      ],
+      "keywords_en": [
+        "statistics",
+        "graph",
+        "comprehension of graph",
+        "combination graph"
+      ],
+      "abstract": "본 연구는 수학과 교육과정에서 막대그래프와 꺾은선그래프를 학습한 초등학교 4, 5, 6학년 학생들의 혼합그래프에 대한 이해 능력을 분석하는 것을 목적으로 한다. 이를 위해 단일그래프와 혼합그래프에 대한 이해 능력을 조사하는 검사지를 제작하여 총 226명의 학생들에게 적용하였다. 분석 결과, 모든 학년에서 혼합그래프의 정답률이 단일그래프에 비해 낮게 나타났으며, 특히 자료 사이의 관계를 찾는 과제에서 그 차이가 크게 나타났다. 또한, 학생들은 꺾은선그래프와 꺾은선그래프의 혼합보다는 꺾은선그래프와 막대그래프의 혼합을, y축이 1개인 경우보다는 2개인 경우를, 축의 값이 모두 실수인 경우보다는 비율이 포함된 경우를 더 어려워하였다. 주요 오류 유형으로는 그래프와 y축의 혼동, 문제 이해의 부족 등이 확인되었다. 연구 결과를 토대로 초등학교 통계 교육에 대한 시사점을 제안하였다.",
+      "abstract_en": "This study aims to analyze the comprehension of combination graphs among elementary school students in grades 4, 5, and 6 who have studied bar and line graphs in the mathematics curriculum. For this purpose, a test was designed to assess the understanding of both single and combination graphs, and it was administered to a total of 226 students. The analysis revealed that across all grades, the accuracy rates for combination graphs were lower compared to single graphs, particularly in tasks involving identifying relationships between data. Furthermore, students found it more challenging to deal with combinations of line and bar graphs than with combinations of line graphs only, with two axes rather than one, and with ratios included on the axes rather than all real numbers. The main types of errors identified included confusion between graphs and axes, subjective judgments, and a lack of understanding of the problem. Based on these findings, implications for elementary school statistics education are proposed.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003084494",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003098371",
+      "type": "journal",
+      "title": "AlgeoMath를 활용한 초등 도형 과제의 도구화 스킴 분석",
+      "title_en": "Analysis of Instrumentation Schemes for Elementary Geometry Tasks using AlgeoMath",
+      "authors": [
+        {
+          "name": "최미라",
+          "name_en": "Mira Choi",
+          "role": "first",
+          "affiliation": "서울선사초등학교"
+        },
+        {
+          "name": "이예진",
+          "name_en": "Ye-Jin Lee",
+          "role": "co",
+          "affiliation": "서울잠전초등학교",
+          "orcid": "0000-0002-5551-1786"
+        },
+        {
+          "name": "최은미",
+          "name_en": "Eunmi Choi",
+          "role": "co",
+          "affiliation": "서울공연초등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Inyong Choi",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2024",
+      "volume": "26",
+      "issue": "2",
+      "pages": "181–207",
+      "doi": "10.57090/sm.2024.06.26.2.181",
+      "keywords": [
+        "동적 기하",
+        "도구 발생",
+        "도구화 스킴"
+      ],
+      "keywords_en": [
+        "DGE",
+        "AlgeoMath",
+        "Dynamic geometry",
+        "instrumental genesis",
+        "instrumentation scheme"
+      ],
+      "abstract": "최근 초등 도형 학습에서 동적 기하 환경(DGE)의 활용에 대한 관심이 증가하고 있다. 본 연구에서는 도구적 관점을 이용하여 DGE를 활용하는 초등 도형 과제를 분석하고, 초등학생들이 직면할 수 있는 개념적 및 기술적 어려움을 도출하고자 하였다. 이를 위해 교과서 및 선행 연구를 분석하여 한국형 DGE인 AlgeoMath를 활용한 과제를 추출하고, 실습을 통해 과제별 도구화 스킴을 분석하였다. 분석 결과, 일부 도구의 용어 및 기호가 초등 교육과정에 부합하지 않거나 수학적 오류를 포함하고 있었으며, 함수적 관점의 이해나 중등 기초 작도를 요구하는 일부 스킴은 초등학생에게 개념적 및 절차적 어려움을 줄 수 있음을 확인하였다. 또한, 정밀하게 구현된 변환 도구가 비형식적이고 직관적으로 학습하는 초등 평면도형의 이동에 적합하지 않음을 확인하였다. 마지막으로, 객체의 독립성과 종속성, 숨기기 등 DGE 고유의 특성과 AlgeoMath의 기능적 한계 및 오류가 학생들에게 어려움을 초래할 수 있음을 확인하였다. 연구 결과를 토대로, AlgeoMath를 활용한 초등 수학 수업에 관한 교수학적 시사점 및 초등용 DGE의 기능 구성에 관한 시사점을 제안하였다.",
+      "abstract_en": "Recently, there has been increasing interest in the use of Dynamic Geometry Environments (DGE) in elementary geometry learning. This study aims to analyze elementary geometry tasks utilizing DGE from an instrumental perspective and to identify the conceptual and technical difficulties that elementary students may encounter. To achieve this, we analyzed textbooks and previous studies to extract tasks that utilize the Korean DGE, AlgeoMath, and conducted practical exercises to analyze the instrumentation schemes for each task. The analysis revealed that some terms and symbols of the tools were not aligned with the elementary curriculum or contained mathematical errors, and that some schemes requiring an understanding of functional perspectives or basic constructions in secondary mathematics could present conceptual and procedural difficulties for elementary students. Furthermore, we found that precisely implemented transformation tools were not suitable for the informal and intuitive learning of elementary plane figure movements. Finally, it was confirmed that the inherent characteristics of DGE, such as the independence and dependence of objects and the hiding feature, as well as the functional limitations and errors of AlgeoMath, could pose challenges for students. Based on these findings, the study suggests pedagogical implications for elementary mathematics lessons using AlgeoMath and provides insights into the functional composition of DGE for elementary use.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003098371",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART003017018",
+      "type": "journal",
+      "title": "나이지리아와 우리나라의 초등 수학과 교육과정 비교: 교육 ODA를 중심으로",
+      "title_en": "Comparative Analysis of Primary Mathematics Curriculum between Nigeria and South Korea: Focusing on Official Development Assistance",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "한국초등수학교육학회지",
+      "publisher": "한국초등수학교육학회",
+      "year": "2023",
+      "volume": "27",
+      "issue": "4",
+      "pages": "351–378",
+      "doi": "10.54340/kseme.2023.27.4.3",
+      "keywords": [
+        "나이지리아",
+        "공적개발원조",
+        "초등 수학과 교육과정"
+      ],
+      "keywords_en": [
+        "Nigeria",
+        "ODA",
+        "Primary mathematics curriculum"
+      ],
+      "abstract": "본 연구는 나이지리아 대상 교육 ODA에 참여하는 국내 전문가들에게 나이지리아 초등 수학과 교육과정에 대한 기본 정보를 제공하기 위해 수행되었다. 이를 위해 나이지리아의 현행 초등 수학과 교육과정을 우리나라 2015 개정 교육과정과 비교 분석하였다. 분석 결과, 나이지리아 초등 수학과 교육과정은 내용, 지도 시기, 지도 방법 측면에서 우리나라와 상당한 차이를 나타냈다. 나이지리아는 나선형 원리를 우리나라보다 강하게 적용하며, 양적 적성 문제에 높은 비중을 두고 있었다. 또한, 경제생활 및 새천년개발목표(MDGs)와 관련된 내용을 다수 포함하고 있으며 영국, 프랑스 교육과정과 유사한 측면도 나타났다. 연구 결과를 바탕으로 나이지리아 대상 수학교육 ODA에 관한 시사점을 제시하였다.",
+      "abstract_en": "This study conducted a comparative analysis between the current primary mathematics curriculum in Nigeria and South Korea's 2015 revised curriculum, with the intention of providing fundamental information and implications for educational Official Development Assistance (ODA). The analysis revealed significant differences between Nigeria and South Korea in terms of curriculum content, instructional timing, and teaching methods. The Nigerian curriculum has a stronger application of the spiral principle and a higher emphasis on quantitative aptitude problems than the Korean curriculum. It also includes a lot of content related to economic life and the Millennium Development Goals(MDGs), and has some similarities with the British and French curricula. Based on the results of the analysis, implications for mathematics education ODA in Nigeria were presented.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART003017018",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002844346",
+      "type": "journal",
+      "title": "<인공지능 수학> 교과서의 예측 및 최적화 내용 분석",
+      "title_en": "An Analysis of the <Artificial Intelligence Mathematics> Textbook: Focusing on Forecast and Optimization",
+      "authors": [
+        {
+          "name": "구나영",
+          "name_en": "Ku, Nayoung",
+          "role": "first",
+          "affiliation": "경기과학고등학교",
+          "orcid": "0000-0002-6408-3111"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "춘천교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육학연구",
+      "publisher": "대한수학교육학회",
+      "year": "2022",
+      "volume": "32",
+      "issue": "2",
+      "pages": "125–147",
+      "doi": "10.29275/jerm.2022.32.2.125",
+      "keywords": [
+        "인공지능 수학",
+        "교과서 분석",
+        "예측",
+        "최적화"
+      ],
+      "keywords_en": [
+        "artificial intelligence mathematics",
+        "textbook analysis",
+        "forecast",
+        "optimization"
+      ],
+      "abstract": "지능정보기술의 비약적인 발전에 맞추어 2015 개정 수학과 교육과정에서는 <인공지능 수학>이 신설되었으며 새로 개발된교육과정과 교과서에 대한 검토가 요구된다. 본 연구는 인공지능의 핵심 원리를 다루고 있는 예측과 최적화에 관한 교육과정을기초로 교과서가 어떻게 구현되었는지를 확인하고, 차기 교육과정이나 교과서 개발에 대한 시사점을 얻는 것을 목적으로 한다. 5종의 <인공지능 수학> 교과서를 분석 대상으로 하며, 교육과정 문서와 시안 개발 연구 보고서를 기초로 예측과 최적화에 관한3가지 성취기준에 대해 재구성 성취기준과 재구성 유의사항을 도출하여 분석틀을 마련한다. 각 성취기준에 대한 분석 결과를제시하고, 차기 교육과정 및 교과서 개발을 위한 시사점을 제안한다.",
+      "abstract_en": "The purpose of this study is to analyze the <Artificial Intelligence Mathematics> textbook focusing on forecast and optimization. The topic of forecast and optimization addresses the core principles of artificial intelligence. The analytical framework in the study was developed by deriving reconstructed achievement standards and teaching and learning guidelines from three achievement standards about forecast and optimization. Moreover, five types of textbooks were analyzed. The results have several implications for developing a revised curriculum and textbook.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002844346",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002884470",
+      "type": "journal",
+      "title": "안구 운동 추적을 통한 중학생의 함수 관계 인식과 표현 분석: 쌓기나무 과제를 중심으로",
+      "title_en": "Analysis of Functional Relationship Recognition and Expression of Middle School Students through Eye-Tracking: Focusing on the Stacking Tree Task",
+      "authors": [
+        {
+          "name": "정진환",
+          "name_en": "Jeong, Jinhwan",
+          "role": "first",
+          "affiliation": "Geowon Middle School"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "서울교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2022",
+      "volume": "24",
+      "issue": "3",
+      "pages": "413–449",
+      "doi": "",
+      "keywords": [
+        "함수 교육",
+        "아이트래커",
+        "회상 자극 면담",
+        "재귀적 패턴화",
+        "공변적 사고",
+        "대응 규칙"
+      ],
+      "keywords_en": [
+        "function education",
+        "eye tracker",
+        "recall stimulus interview",
+        "recursive patterning",
+        "covariational thinking",
+        "correspondence relationship"
+      ],
+      "abstract": "본 연구는 변화하는 수량의 관계를 발견하고 표현하는 과정에서 학생들의 사고 과정과 오류의 원인을 분석하고자 하였다. 이를 위해 쌓기나무 입체 함수 과제를 해결하는 과정에서 학생들의 안구 운동을 측정하여 분석하였다. 분석 결과 학생들의 함수적 사고 과정은 재귀적 패턴화, 공변적 사고, 대응 규칙에 따라 범주화할 수 있었다. 또한, 학생들은 양의 값들 사이의 관계를 올바로 연결하지 못하는 등의 오류를 범하였으며, 그 원인은 다양하게 분석될 수 있었다.",
+      "abstract_en": "This research was conducted to analyze the students' thinking processes and the causes of errors in the process of recognizing and expressing the relationship between changing quantities. This could be analyzed by tracking students' eye movements in the process of solving the stacking tree three-dimensional function task. As a result of the analysis, students' functional thinking processes could be categorized into recursive patterning, covariational thinking, and correspondence relationship. In addition, the students made errors such as not being able to correctly connect the relationship between the values ​​of quantities, and the causes could be analyzed in various ways.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002884470",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002720807",
+      "type": "journal",
+      "title": "빈도적 관점에서의 조건부확률 도입 사례 연구: 빈도 수형도와 시뮬레이션의 활용을 중심으로",
+      "title_en": "Introduction of Conditional Probability with the Relative Frequency Approach: Focus on the Use of the Frequency Tree Diagram and Simulation",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육학연구",
+      "publisher": "대한수학교육학회",
+      "year": "2021",
+      "volume": "31",
+      "issue": "2",
+      "pages": "179–210",
+      "doi": "",
+      "keywords": [
+        "조건부확률",
+        "빈도적 관점",
+        "자연빈도",
+        "수형도",
+        "시뮬레이션"
+      ],
+      "keywords_en": [
+        "conditional probability",
+        "relative frequency approach",
+        "natural frequency",
+        "tree diagram",
+        "simulation"
+      ],
+      "abstract": "빈도적 관점에서 조건부확률 도입의 가능성을 확인하기 위하여 빈도 수형도와 시뮬레이션을 활용한 도입 활동을 고안하고 고등학교 1학년 14명에게 모둠 수업 형태로 적용하였다. 모둠 활동 영상, 시뮬레이션 조작 영상, 활동지 기록을 분석한 결과, 학생들은 반복실험 결과에서 조건부 상대도수, 상대도수의 극한, 이론적 확률을 구하는 빈도적 접근을 통해 조건부확률 개념을 구성할 수 있었다. 학생들은 빈도 수형도를 통해 문제 상황을 이해하고 확률 추론에 관한 의사소통을 하였으며 시뮬레이션과 큰 수의 법칙을 이용하여 이론적 확률을 점검하였다. 빈도적 관점의 도입 활동에서 학생들의 추론 특성과 교수·학습에 관한 유의점을 제시하였다. 교육과정에서 조건부확률을 빈도적 관점으로 도입할 것을 제언하였으며 구체적인 교과서 구현 방안을 제시하였다.",
+      "abstract_en": "The purpose of this study is to propose and discuss the pedagogical idea of introducing conditional probability with the relative frequency approach. This study developed a learning activity and simulation using the frequency tree diagram and implemented them. The first-year high school students (n=14) were able to construct the concept of conditional probability through a frequency perspective of sequentially obtaining the conditional relative frequency, the limit of the relative frequency, and the theoretical probability. The implications for teaching and curriculum were presented.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002720807",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002692516",
+      "type": "journal",
+      "title": "OECD 교육지표와 PISA를 이용한 수학 수업 시간 국제 비교",
+      "title_en": "International Comparative Study on Mathematics Instruction Time Based on EAG and PISA",
+      "authors": [
+        {
+          "name": "김화경",
+          "name_en": "Kim, Hwakyung",
+          "role": "first",
+          "affiliation": "상명대학교",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "송민호",
+          "name_en": "Song, Min Ho",
+          "role": "co",
+          "affiliation": "한국교육과정평가원"
+        },
+        {
+          "name": "정인우",
+          "name_en": "Chung, In Woo",
+          "role": "co",
+          "affiliation": "서울국제고등학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "교과교육학연구",
+      "publisher": "교과교육연구소",
+      "year": "2021",
+      "volume": "25",
+      "issue": "1",
+      "pages": "48–60",
+      "doi": "10.24231/rici.2021.25.1.48",
+      "keywords": [
+        "OECD 교육지표",
+        "수학 수업 시간",
+        "수학 성취도"
+      ],
+      "keywords_en": [
+        "PISA",
+        "OECD Education Indicator",
+        "Mathematics Instruction Time",
+        "Mathematical Performance"
+      ],
+      "abstract": "수업 시간의 양은 교사의 수업과 평가, 학생의 학업 성취에 영향을 주는 중요한 요소 중 하나로 교육과정이 현장에서 수업으로 잘 구현되기 위해서는 적당한 수업 시간이 확보되어야 한다. 본 연구에서는 OECD 국제 지표를 이용하여 우리나라 수학 수업 시간이 국제적으로 어느 정도 수준인지 비교하였다. 그리고 PISA 자료와의 연계를 통해 국가가 보장하는 의무 수학 수업 시간과 수학 성취도 사이의 상관관계를 살펴보았다. 분석 결과, 우리나라는 OECD 소속 23개국 중 초등 저학년, 초등 고학년에서 수학 수업 시간이 가장 적었으며, 중학교에서는 헝가리 다음으로 수업 시간이 적었다. OECD 평균은 학년이 올라갈수록 수학 수업 시간이 감소하지만 우리나라는 정반대의 경향을 나타냈고, 초등 저학년, 초등 고학년, 중학교의 수학 수업 시간은 각각 OECD 평균 대비 64%, 70%, 81% 수준 밖에 되지 않았다. 개별 국가의 의무 수학 수업 시간은 수학 성취도 평균과는 정적 상관을 나타냈으며, 1수준 미만 비율과는 부적 상관을 나타냈다.",
+      "abstract_en": "Instruction time is one of the important factors affecting the teaching and evaluation of teachers, and academic achievement of students. For successful implementation of curriculum in classes, adequate instruction time should be secured. In this study, the researchers compared the degree of mathematics instruction time in Korea to other nations across the world, using OECD education indicators. In addition, the correlation between the compulsory mathematics instruction time guaranteed by the country and mathematics achievement was examined, based on PISA data. The result of the analysis showed, among 23 OECD countries, Korea has the lowest instruction time for mathematics in elementary schools and the second lowest in middle schools. It is the OECD average that mathematics instruction time decreased as students advanced on to higher grades but Korea showed the opposite trend. Mathematics instruction time in the lower elementary, upper elementary, and middle schools in Korea is only at 64%, 70%, and 81% of the OECD average, respectively. The compulsory mathematics instruction time of each country indicated a positive correlation with the average of mathematical performance, and negative correlation with the ratio of below level 1.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002692516",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002791736",
+      "type": "journal",
+      "title": "프랑스 고등학교 수학 교과서의 ‘알고리즘과 프로그래밍’ 영역 분석",
+      "title_en": "Analysis of ‘Algorithms and Programming’ in French High School Mathematics Textbooks",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "first",
+          "affiliation": "춘천교육대학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "임해미",
+          "name_en": "Rim, Haemee",
+          "role": "corresponding",
+          "affiliation": "공주대학교",
+          "orcid": "0000-0002-8508-0788"
+        },
+        {
+          "name": "김화경",
+          "name_en": "Kim, Hwakyung",
+          "role": "co",
+          "affiliation": "상명대학교",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "이화영",
+          "name_en": "Lee, Hwayoung",
+          "role": "co",
+          "affiliation": "한국과학창의재단"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2021",
+      "volume": "23",
+      "issue": "4",
+      "pages": "617–646",
+      "doi": "10.29275/sm.2021.12.23.4.617",
+      "keywords": [
+        "알고리즘",
+        "프로그래밍",
+        "컴퓨팅 사고",
+        "프랑스 수학 교과서",
+        "프랑스 수학과 교육과정"
+      ],
+      "keywords_en": [
+        "algorithm",
+        "programming",
+        "computational thinking",
+        "French mathematics textbooks",
+        "French mathematics curriculum"
+      ],
+      "abstract": "본 연구에서는 수학과 교육과정의 내용 영역으로 알고리즘과 프로그래밍을 적극 도입하고 있는 프랑스의 고등학교 1, 2학년 수학 교과서를 분석하였다. 대수, 기하, 해석 등 영역별로 알고리즘과 프로그래밍이 어떻게 활 용되고 있는지 살펴보고, 사용된 코딩 언어의 유형과 과제의 유형을 분석하였다. 분석 결과, 프랑스 교과서에서 는 모든 내용 영역에 걸쳐 알고리즘과 프로그래밍이 활용되고 있었고, 텍스트 기반 코드와 의사코드가 주로 사 용되고 있었다. 또한 코드의 해석/수정/작성, 실행 및 문제 해결, 점검 및 반성 등 다양한 유형으로 수학 과제에 서 알고리즘과 프로그래밍을 다룰 수 있음을 확인할 수 있었다. 분석 결과를 토대로 수학과 교육과정의 알고리 즘 도입에 관한 시사점을 제시하였다.",
+      "abstract_en": "In this study, first and second-year high school math textbooks in France, which are actively introducing algorithms and programming as the content area of the mathematics curriculum, were analyzed. We looked at how algorithms and programming were used by areas such as algebra, geometry, and analysis, and analyzed the types of coding languages used and types of tasks. As a result of the analysis, algorithms and programming were used in all content areas in French textbooks, and text-based codes and pseudocodes were mainly used. In addition, it was confirmed that algorithms and programming can be dealt with in mathematical tasks in various forms, such as interpretation/modification/writing of code, execution and problem solving, and reflection. Based on the analysis results, implications for the introduction of algorithms in the mathematics curriculum were presented.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002791736",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002734897",
+      "type": "journal",
+      "title": "고교학점제 도입에 따른 고등학교 수학과 교육과정 1차 재구조화",
+      "title_en": "Restructuring High School Mathematics according to the Credit System-Based Curriculum Framework: An Initial Suggestion",
+      "authors": [
+        {
+          "name": "김화경",
+          "name_en": "Kim, Hwakyung",
+          "role": "first",
+          "affiliation": "상명대학교",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "송창근",
+          "name_en": "Song Chang Geun",
+          "role": "co",
+          "affiliation": "서울대학교"
+        },
+        {
+          "name": "이화영",
+          "name_en": "Hwayoung Lee",
+          "role": "co",
+          "affiliation": "(재)한국과학창의재단"
+        },
+        {
+          "name": "임해미",
+          "name_en": "Rim, Haemee",
+          "role": "co",
+          "affiliation": "공주대학교",
+          "orcid": "0000-0002-8508-0788"
+        },
+        {
+          "name": "정종식",
+          "name_en": "Jongsik Jung",
+          "role": "co",
+          "affiliation": "중앙대학교사범대학부속중학교"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "corresponding",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "이경화",
+          "name_en": "Kyeong-Hwa, Lee",
+          "role": "corresponding",
+          "affiliation": "서울대학교",
+          "orcid": "0000-0002-2784-3409"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2021",
+      "volume": "23",
+      "issue": "2",
+      "pages": "291–315",
+      "doi": "10.29275/sm.2021.06.23.2.291",
+      "keywords": [
+        "고교학점제",
+        "고등학교 수학",
+        "참여주체들의 의견",
+        "공통 과목과 선택 과목"
+      ],
+      "keywords_en": [
+        "credit system-based curriculum",
+        "high school mathematics",
+        "agents’ opinion",
+        "common subject and elective subject"
+      ],
+      "abstract": "본 연구는 고교학점제의 도입에 따른 고등학교 수학과 교육과정 1차 재구조화 방안을 제시하는 것을 목표로 한다. 이를 위해 미래지향적인 수학교육에 대한 연구와 외국의 고등학교 수학 과목을 분석한 연구를 메타적으로 분석하여 다양한 수학교육 참여주체의 의견을 조사하는 기초 관점을 마련하였다. 이어서 수학자, 수학교사, 수학교육 연구자, 학생, 학부모 등을 대상으로 고등학교 수학과 교육과정 재구조화의 여러 측면에 대한 의견을 설문조사, 협의회의 방법으로 조사하였다. 마지막으로 의견조사 결과를 종합하여 수학과 교육과정 재구조화 방안을 탐색하여 제시하였다. 연구 결과는 다음과 같다. 먼저 미래지향적인 수학교육에 필수적인 내용인 행렬과 공간벡터를 각각 공통 과목과 선택 과목에 포함시키되 학습 부담이 증가하지 않는 방안을 모색하여 제시하였다. 다음으로 공통 과목과 선택 과목을 구조화하는 두 가지 방안을 도출하여 제시하였다. 공통 과목과 선택 과목 각각의 주요 내용도 제안하였다. 후속 연구에서는 본 연구에서 제시한 방안을 수정하거나 보완하고 세부 내용 체계, 교수ㆍ학습 및 평가 방법 등의 정교화가 이루어져야 하며, 이 과정에서 다양한 참여주체의 의견을 체계적으로 수렴하여 반영할 필요가 있다.",
+      "abstract_en": "This study reports an initial suggestion of restructuring high school mathematics according to the credit system-based curriculum framework. The credit system-based curriculum has been discussed since the revision study of curriculum was conducted in 2015 that created substantial issues to be resolved. We reviewed relevant studies on future-oriented mathematics education and studies on the high school mathematics in the curricula of foreign countries. Based on the implications from the literature review, we developed key questions to consider in the process of restructuring high school mathematics curriculum. We investigated various mathematics education agents’ opinion on the key aspects of high school mathematics curriculum through surveys and discussions. As a result, this study presents the following structures as an initial suggestion: 1) a common subject includes ‘matrix’ and one of the general elective subject called <Geometry> includes ‘vectors in three dimensions’, 2) two differentiation models of common and elective subjects, and 3) a proposal of goals, characteristics, and contents of individual subjects. Series of follow-up studies to name each subject, to structure contents, to elaborate teaching/learning and evaluation perspectives from the credit-based curriculum framework should be conducted by integrating diverse agents’ opinion and needs.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002734897",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002724377",
+      "type": "journal",
+      "title": "싱가포르 2020 수학과 교육과정 분석 연구",
+      "title_en": "An Analysis on Singapore 2020 Secondary Mathematics Curriculum",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "first",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "송민호",
+          "name_en": "Song Minho",
+          "role": "corresponding",
+          "affiliation": "한국교육과정평가원"
+        },
+        {
+          "name": "김화경",
+          "name_en": "Kim, Hwakyung",
+          "role": "co",
+          "affiliation": "상명대학교",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "정인우",
+          "name_en": "Chung Inwoo",
+          "role": "co",
+          "affiliation": "서울국제고등학교"
+        }
+      ],
+      "journal": "학습자중심교과교육연구",
+      "publisher": "학습자중심교과교육학회",
+      "year": "2021",
+      "volume": "21",
+      "issue": "11",
+      "pages": "219–232",
+      "doi": "",
+      "keywords": [
+        "싱가포르 2020 수학과 교육과정",
+        "수학 성취도",
+        "국제학업성취도평가(PISA)"
+      ],
+      "keywords_en": [
+        "Singapore 2020 mathematics curriculum",
+        "Math achievement",
+        "Programme for International Student Assessment (PISA"
+      ],
+      "abstract": "목적 본 연구에서는 싱가포르 2020 수학과 교육과정에 대한 분석을 바탕으로 향후 우리나라 수학과 교육과정 개선에 대한 시사점을모색하고자 한다. 방법 싱가포르 2020 수학과 교육과정과 이전의 2013 교육과정에 대하여 학습 내용 차원에서 변화된 부분을 비교⋅분석하고, 분석결과를 바탕으로 우리나라 2015 개정 수학과 교육과정과 비교하여 향후 교육과정 개선 방향에 대한 논의를 진행하였다. 결과 싱가포르 2020 수학과 교육과정은 2013 교육과정과 비교하여 변화의 폭은 크지 않지만 일부 용어의 변화, 특정 내용의 대상학년 변화, 교육과정 전반에서 실세계 맥락 문제해결 강조 등의 변화를 확인할 수 있었다. 결론 PISA 등 최신 국제학업성취평가를 반영한 구체적인 교육과정 설계, 실세계 맥락 문제해결, 공학적 도구의 활용 등 싱가포르2020 수학과 교육과정에는 우리나라 교육과정 연구에 시사하는 바가 있음을 확인하였다.",
+      "abstract_en": "Objectives The purposes of this study were to find implications for Korean mathematics curriculum based on the analysis of Singapore 2020 secondary mathematics curriculum. Methods This study compares Singapore 2020 mathematics curriculum with that of 2013, and seeks implications for the future Korean mathematics curriculum. Results From the analysis, we found that significant changes were not made in Singapore 2020 mathematics curriculum compared to 2013 curriculum. However, some changes in the use of terms and the target grades of certain contents, and the emphasis on solving problems in the real-world contexts throughout the curriculum were confirmed. Conclusions Some distinguishable features in Singapore mathematics curriculum―that the curriculum was designed reflecting the latest international academic assessments like PISA, with emphasis on problem-solving in the real-world contexts and the use of technology―are also references to Korean curriculum.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002724377",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002706032",
+      "type": "journal",
+      "title": "수학 수업에서의 디지털 기기 사용 시간 및 사용 주체: PISA 2018을 중심으로",
+      "title_en": "Time and Subject of Technology Usage in Mathematics Classes: Focusing on PISA 2018",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "first",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "김화경",
+          "name_en": "Kim, Hwakyung",
+          "role": "corresponding",
+          "affiliation": "상명대학교",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "송민호",
+          "name_en": "Song, Min Ho",
+          "role": "co",
+          "affiliation": "한국교육과정평가원"
+        },
+        {
+          "name": "정인우",
+          "name_en": "Chung In Woo",
+          "role": "co",
+          "affiliation": "서울국제고등학교"
+        }
+      ],
+      "journal": "학습자중심교과교육연구",
+      "publisher": "학습자중심교과교육학회",
+      "year": "2021",
+      "volume": "21",
+      "issue": "7",
+      "pages": "483–497",
+      "doi": "",
+      "keywords": [
+        "수학 수업",
+        "디지털 기기",
+        "사용 시간",
+        "사용 주체"
+      ],
+      "keywords_en": [
+        "PISA 2018",
+        "mathematics class",
+        "technology",
+        "usage time",
+        "subject of usage"
+      ],
+      "abstract": "본 연구에서는 PISA 2018의 자료를 이용하여 우리나라 수학 수업에서의 디지털 기기 활용 실태를 OECD 국가 평균과비교하여 분석하였다. 분석 결과 우리나라는 OECD 국가 평균에 비해 수학 수업에서 디지털 기기가 사용되는 시간이 적고 학생 중심사용 비율도 낮았다. 특히 우리나라는 성취수준이 높은 학생이 수학 수업에서 디지털 기기를 직접 사용하는 경우가 다른 OECD 국가에 비해 상대적으로 적었으며 절대적으로도 적었다. 최근 수학교육에서 ‘공학적 도구와의 학습’을 바탕으로 한 복합적 문제해결 역량의 신장이 강조되고 있는 바, 우리나라 수학 수업에서도 학생 중심의 공학적 도구의 활용을 보다 활성화할 필요가 있다. 이를 위한제언으로 수학 수업에서 공학적 도구의 활용 실태를 세부적으로 조사하는 후속 연구의 실시와 공학적 도구와의 학습을 활성화하기위한 현장 지원을 제시하였다.",
+      "abstract_en": "Many countries around the world, including Korea, are emphasizing using technology in math classes at the national level. This study attempted to analyze the use of technology in math classes in Korea by comparing them with OECD countries using PISA 2018 data. As a result of the analysis, compared to other countries, Korea has less time to use digital devices in math classes and lower rates of student-centered use. In Korea, the proportion of students with high mathematical performance who use technology directly in class is relatively less and absolutely less than the OECD average. Therefore, there is a need to promote the use of technology in mathematics classes in Korea, and in particular, it is necessary to enhance student-centered ‘learning with technology’. For this, a follow-up study detailing the utilization of technologies in mathematics classes, on-site support for activating learning with technology were proposed.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002706032",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002623073",
+      "type": "journal",
+      "title": "고등학교 수학교사들의 교육과정 자료 해석: 조건부확률을 중심으로",
+      "title_en": "An Analysis of Inservice Mathematics Teachers’ Reading of Curriculum Materials: Focused on Conditional Probability",
+      "authors": [
+        {
+          "name": "구나영",
+          "name_en": "Ku, Nayoung",
+          "role": "first",
+          "affiliation": "평촌고등학교",
+          "orcid": "0000-0002-6408-3111"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "탁병주",
+          "name_en": "Byungjoo Tak",
+          "role": "co",
+          "affiliation": "전주교육대학교",
+          "orcid": "0000-0001-9736-8423"
+        },
+        {
+          "name": "강현영",
+          "name_en": "Kang, Hyun-Young",
+          "role": "co",
+          "affiliation": "목원대학교"
+        }
+      ],
+      "journal": "수학교육학연구",
+      "publisher": "대한수학교육학회",
+      "year": "2020",
+      "volume": "30",
+      "issue": "3",
+      "pages": "487–508",
+      "doi": "",
+      "keywords": [
+        "교육과정 자료 해석",
+        "현직교사",
+        "조건부확률"
+      ],
+      "keywords_en": [
+        "curriculum material reading",
+        "inservice teacher",
+        "conditional probability"
+      ],
+      "abstract": "본 연구에서는 현직 고등학교 교사의 교육과정, 교과서 및 교사용 지도서, 조건부확률 수업에 관한 인식을 확인하고, 교사가 조건부확률에 관한 2015 개정 수학과 교육과정의 주요 변화 중 무엇에 주목하여 이를 어떻게 해석하는지 살펴보았다. 먼저 대다수의 교사들은 교육과정을 실행할 때 교사의 자율성을 강조하였으며 조건부확률을 지도할 때 개념 이해를 가장 중시하는 것으로 나타났다. 교사의 적극적인 역할이나 교과서와 교사용 지도서의 한계를 지적하는 인식이 확인됨에도 불구하고, 2015 개정 수학과 교육과정의 해석에서는 교사의 지식과 경험을 활용하여 구체적으로 해석하는 응답의 빈도가 가장 낮았다. 교사들은 조건부확률과 관련된 2015 개정 수학과 교육과정의 주요 변화 중 태도 및 실천, 정보처리, 학습 부담 경감, 평가 방법 개선, 추론 순으로 언급하였다. 교사들은 추론과 관련하여 교육과정을 전반적으로 평가하거나 지식과 경험을 활용하여 해석하는 빈도가 높았으나 다른 변화와 관련해서는 대부분 제시된 내용을 재서술하는 것으로 확인되었다. 이에 교육과정 개정의 의도를 수업에서 구현할 수 있는 구체적인 방안 중심의 전문성 향상의 기회를 교사에게 제공할 필요성이 제기된다.",
+      "abstract_en": "In this study, 218 highschool mathematics teachers were surveyed to identify their perceptions and reading of curriculum materials. As a result, the majority of teachers emphasized the agency of teachers in enacting the curriculum and regarded conceptual understanding as crucial in teaching conditional probability. Nevertheless, the analysis of reading of the 2015 revised mathematics curriculum showed the lowest frequency of responses using the teachers’ knowledge and experience. Among the major changes in the 2015 revised mathematics curriculum related conditional probability, teachers mentioned in the order of attitude and practice, information processing, reducing the burden of learning, improving evaluation methods, and reasoning. When teachers mentioned reasoning, they were more likely to evaluate or interpret the curriculum materials using their knowledge and experience. But most of teachers stated that the other changes as particular features were included. Thus, opportunities must be provided to improve teachers’ professional development based on the concrete methods that can enact the intention of the 2015 revised mathematics curriculum.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002623073",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002592331",
+      "type": "journal",
+      "title": "수학 학습을 위한 3차원 코딩 환경의 개발 및 활용",
+      "title_en": "Development and Application of a 3D Coding Environment for Mathematics Learning",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "수학교육학연구",
+      "publisher": "대한수학교육학회",
+      "year": "2020",
+      "volume": "30",
+      "issue": "2",
+      "pages": "199–225",
+      "doi": "10.29275/jerm.2020.05.30.2.199",
+      "keywords": [
+        "계산적 사고",
+        "코딩",
+        "자유학기제",
+        "구성주의",
+        "학습 환경",
+        "게임 만들기"
+      ],
+      "keywords_en": [
+        "computational thinking",
+        "coding",
+        "free-semester",
+        "constructionism",
+        "learning environment",
+        "game-making"
+      ],
+      "abstract": "본 연구에서는 수학과 CT의 통합 학습을 위한 3차원 코딩 학습 환경을 개발하고, 이를 자유학기제 주제선택 활동에서 활용할 수 있는 구체적인 교수ㆍ학습 방안을 제시하였다. 먼저 구성주의의 설계 이론을 바탕으로 코딩을 통해 작은 정육면체 블록을 쌓아 구조물을 만들고 상호작용하는 게임 요소를 구현할 수 있는 3차원 게임 제작 환경 <MathCraft>를 개발하였다. 이를 활용하여 중학교 교육과정의 수학 학습 요소가 포함된 게임 만들기 형식의 자유학기제 교수ㆍ학습 과정을 개발하고 중학생 40명, 수학교사 20명을 대상으로 적용하였다. 연구결과, 개발된 환경과 자유학기제 프로그램은 학생들에게 수학과 CT의 학습 기회를 제공할 수 있었으며 흥미를 유발하고 수학 및 코딩의 정의적 영역을 개선하는데 긍정적 효과가 있었다. 적용결과를 토대로 학습 환경과 교수ㆍ학습 내용을 수정ㆍ보완하였다. 연구 과정 및 결과를 토대로 코딩을 활용한 수학과 CT의 통합 교육에 관한 시사점을 제안하였다.",
+      "abstract_en": "In this study, we developed a 3D coding learning environment for integrated learning of mathematics and CT, and presented a teaching-learning plan that can be used in theme selection activities of the free-semester. First, based on the design theory of constructionism, we developed a 3D game-making environment <MathCraft> that can build structures with small cube blocks and implement interactive game elements through coding. Using this concept, we developed free-semester teaching-learning content in the form of game-making that included mathematics learning elements in the middle school curriculum and applied it to 40 students and 20 math teachers. As a result, the developed environment and free-semester program provided students with valuable learning opportunities in mathematics and CT, and had positive impact on improving the affective characteristics of mathematics and coding. Based on the application results, the learning environment and teaching-learning content were corrected and supplemented. Based on the research process and the results, implications for the integrated education of mathematics and CT using coding are suggested.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002592331",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002634883",
+      "type": "journal",
+      "title": "안구 운동 추적을 활용한 중학교 수학 영재의 도형추론능력 분석",
+      "title_en": "Using Eye-tracking to Analyze the Figural Reasoning Ability of Mathematically Gifted Middle School Students",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2020",
+      "volume": "22",
+      "issue": "3",
+      "pages": "509–535",
+      "doi": "",
+      "keywords": [
+        "도형추론",
+        "안구 운동 추적",
+        "수학 영재",
+        "레이븐 고급 누진 행렬 검사"
+      ],
+      "keywords_en": [
+        "figural reasoning",
+        "eye-tracking",
+        "mathematically gifted student",
+        "raven"
+      ],
+      "abstract": "본 연구는 레이븐 고급 누진 행렬 검사를 이용하여 중학교 수학 영재 학생 30명의 도형추론능력을 확인하고 안구 운동 추적을 활용하여 그 과정을 분석하였다. 분석 결과 수학 영재들은 간단한 시각적 조작을 요구하는 문항은 모두 잘 해결하였지만, 다소 복잡한 시각적 사고나 분석적 사고가 필요한 문항에 있어서는 차이가 나타났다. 수학 영재 학생들이 도형 패턴에서 규칙을 추론하는 과정을 분석한 결과, 정보 검색 방법, 구조의 파악 속도, 사고의 유연성, 메타인지 등에서 많은 차이가 존재했고, 이는 도형추론의 성패에 영향을 미쳤다. 연구 결과를 토대로 영재 교육에 대한 시사점을 제시하였다.",
+      "abstract_en": "Using the raven’s advanced progressive matrix, this study investigated the figural reasoning ability of 30 mathematically gifted students in middle school and analyzed the figural reasoning process using eye-tracking method. As a result of the study, mathematically gifted students showed a large individual difference in figural reasoning ability. Almost all subjects were able to solve the items that require simple visual manipulation, but there were individual differences in the accuracy of visual items involving complex rules or items with two or more rules. As a result of analyzing the patterning process, there were many differences in thinking ability or characteristics such as information searching method, structure grasping speed, mental flexibility, meta-cognition, and analytical thinking, which influenced the success or failure of figural reasoning. It was confirmed that the selected mathematically gifted students' individual thinking ability and characteristics were measured and that differentiated instruction was needed to strengthen their thinking ability.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002634883",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002634895",
+      "type": "journal",
+      "title": "컴퓨터 기반 평가에서 수학 기초학력 미달 학생의 특징 분석 : PISA 2018 문항 응답 시간과 동작을 중심으로",
+      "title_en": "Characteristics of Low-Achievers in Computer-based Mathematics Assessment: Evidence from PISA 2018",
+      "authors": [
+        {
+          "name": "김화경",
+          "name_en": "Kim, Hwa Kyung",
+          "role": "first",
+          "affiliation": "상명대학교",
+          "orcid": "0000-0001-7727-9204"
+        },
+        {
+          "name": "정인우",
+          "name_en": "Chung, In Woo",
+          "role": "co",
+          "affiliation": "서울국제고등학교"
+        },
+        {
+          "name": "송민호",
+          "name_en": "Song, Min Ho",
+          "role": "co",
+          "affiliation": "한국교육과정평가원"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "학교수학",
+      "publisher": "대한수학교육학회",
+      "year": "2020",
+      "volume": "22",
+      "issue": "3",
+      "pages": "791–809",
+      "doi": "",
+      "keywords": [
+        "컴퓨터 기반 평가",
+        "수학 기초학력 미달 학생"
+      ],
+      "keywords_en": [
+        "PISA 2018",
+        "Computer-based test",
+        "Low-achiever in mathematics."
+      ],
+      "abstract": "근래 우리나라 중등학교 수학 기초학력 미달 학생들의 비율이 지속적으로 증가하고 있다. 이러한 경향은 국제 수준 역량기반 평가인 PISA의 결과에서도 확인되는데, 특히 컴퓨터 기반 평가가 도입된 PISA 2015 이후로 우리나라 수학 기초학력 미달 집단의 비율이 크게 증가한 점은 주목할 만한 사실이다. 이에 대한 원인을 파악하기 위해 본 연구에서는 PISA 2018에서 수학 영역의 결과를 바탕으로 기초학력 미달 집단과 우수학력 집단의 특징에 대한 분석을 진행하며, PISA 2015 결과를 보조적으로 이용한다. 분석 결과, PISA 문항에 대한 응답 시간, 동작 횟수, 첫 동작까지의 시간에서 두 집단 사이에 두드러진 차이가 나타남을 확인할 수 있었다. 이러한 결과를 바탕으로 본 연구에서는 컴퓨터 기반으로 변화되는 평가 환경에 대비하여 수학 기초학력 미달 학생들의 지도 방법에 대한 시사점을 얻고자 한다.",
+      "abstract_en": "Currently, the number of low-achievers in mathematics is constantly increasing. PISA results manifest this tendency, and it is noticeable that the proportion of low-achievers in mathematics has been growing sharply since the introduction of PISA 2015, which adopts computer-based test. In an attempt to figure out the reasons of this phenomenon, this study compares the characteristics of low-achievers and high-achievers on PISA 2018 results, supplemented by PISA 2015 results. The analysis shows that the two groups distinguish from each other in the areas of response time, the number of action, and the time to the first action. In the end, this study suggests some teaching implications for the changes caused by computer- based test environment.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002634895",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002498962",
+      "type": "journal",
+      "title": "예비 수학교사들의 교육과정 자료 해석: 조건부확률을 중심으로",
+      "title_en": "An analysis of preservice mathematics teachers’ reading of curriculum materials: Focused on conditional probability",
+      "authors": [
+        {
+          "name": "구나영",
+          "name_en": "Ku, Nayoung",
+          "role": "first",
+          "affiliation": "안양고등학교",
+          "orcid": "0000-0002-6408-3111"
+        },
+        {
+          "name": "탁병주",
+          "name_en": "Byungjoo Tak",
+          "role": "co",
+          "affiliation": "전주교육대학교",
+          "orcid": "0000-0001-9736-8423"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "강현영",
+          "name_en": "Kang, Hyun-Young",
+          "role": "corresponding",
+          "affiliation": "목원대학교"
+        }
+      ],
+      "journal": "수학교육",
+      "publisher": "한국수학교육학회",
+      "year": "2019",
+      "volume": "58",
+      "issue": "3",
+      "pages": "347–365",
+      "doi": "10.7468/mathedu.2019.58.3.347",
+      "keywords": [
+        "교육과정 자료",
+        "교육과정 해석",
+        "예비교사",
+        "조건부확률"
+      ],
+      "keywords_en": [
+        "curriculum material",
+        "curriculum reading",
+        "preservice teacher",
+        "conditional probability"
+      ],
+      "abstract": "본 연구에서는 설문조사를 통해 예비 수학교사들이 조건부확률에 대한 교육과정 자료를 어떻게 인식하고 해석하는지에 대해 분석하였다. 예비교사들은 재구성할 수 있는 대상으로서 교육과정 자료를 인식하고 있었으나, 실제로 자신의지식을 활용하여 교육과정 자료를 적극적으로 해석하기보다는 반복해서 내용을 기술하고 평가하는 경향을 보였다.",
+      "abstract_en": "It is important to pay attention to how teachers recognize and use curriculum materials in order to link written curriculum and enacted curriculum. In this study, 90 preservice mathematics teachers were surveyed to identify their perspective and reading of curriculum materials. Especially, we focused on the curriculum documents, textbooks, and teachers’ guidebooks containing the concept of conditional probability which is addressed in highschool mathematics curriculum. The various misconceptions of conditional probability were reported in the many researches, and there are multiple methods to introduce conditional probability in mathematics classes. As a result, curriculum materials have some limits to be used as they are and considered to be reconstructable by participants, but their curriculum reading were mainly classified to be descriptive and evaluative, not to be interpretive. However, unlike curriculum documents, textbooks and teachers’ guidebooks were partially interpreted by participants using their knowledge of conditional probability. The purpose of this study is to investigate the profession of mathematics teachers in terms of curriculum implementation. We expect that this study will provide a basic framework for analyzing mathematics teachers’ works and suggest some implications for the professional development of mathematics teachers.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002498962",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002255765",
+      "type": "journal",
+      "title": "큰 수의 법칙 시뮬레이션에서 중학생의 안구 운동 분석",
+      "title_en": "An Analysis of Middle School Student’s Eye Movements in the Law of Large Numbers Simulation Activity",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "first",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "조한혁",
+          "name_en": "Cho, Han Hyuk",
+          "role": "corresponding",
+          "affiliation": "서울대학교"
+        }
+      ],
+      "journal": "수학교육",
+      "publisher": "한국수학교육학회",
+      "year": "2017",
+      "volume": "56",
+      "issue": "3",
+      "pages": "281–300",
+      "doi": "10.7468/mathedu.2017.56.3.281",
+      "keywords": [
+        "안구 운동",
+        "큰 수의 법칙",
+        "시뮬레이션",
+        "확률교육"
+      ],
+      "keywords_en": [
+        "eye movement",
+        "law of large numbers",
+        "simulation",
+        "probability education"
+      ],
+      "abstract": "This study analyzed the difficulties of middle school students in computer simulation of the law of large numbers through eye movement analysis. Some students did not attend to the simulation results and could not make meaningful inferences. It is observed that students keep the existing concept even though they observe the simulation results which are inconsistent with the misconceptions they have. Since probabilistic intuition influence student’s thinking very strongly, it is necessary to design a task that allows students to clearly recognize the difference between their erroneous intuitions and simulation results. In addition, we could confirm through eye movements analysis that students could not make meaningful observations and inferences if too much reasoning was needed even though the simulation included a rich context. It is necessary to use visual representations such as graphs to provide immediate feedback to students, to encourage students to attend to the results in a certain intentional way to discover the underlying mathematical structure rather than simply presenting experimental data. Some students focused their attention on the visually salient feature of the experimental results and have made incorrect conclusion. The simulation should be designed so that the patterns of the experimental results that the student must discover are not visually distorted and allow the students to perform a sufficient number of simulations. Based on the results of this study, we suggested that cumulative relative frequency graph showing multiple results at the same time, and the term ‘generally tends to get closer’ should be used in learning of the law of large numbers. In addition, it was confirmed that eye-tracking method is a useful tool for analyzing interaction in technology-based probabilistic learning",
+      "abstract_en": "",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002255765",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART002168842",
+      "type": "journal",
+      "title": "순열 조합 이해 과제에서의 안구 운동 추적 연구",
+      "title_en": "Eye Movements in Understanding Combinatorial Problems",
+      "authors": [
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "first",
+          "affiliation": "한성과학고등학교",
+          "orcid": "0000-0002-9766-9952"
+        },
+        {
+          "name": "조한혁",
+          "name_en": "Cho, Han Hyuk",
+          "role": "corresponding",
+          "affiliation": "서울대학교"
+        }
+      ],
+      "journal": "수학교육학연구",
+      "publisher": "대한수학교육학회",
+      "year": "2016",
+      "volume": "26",
+      "issue": "4",
+      "pages": "635–662",
+      "doi": "",
+      "keywords": [
+        "조합",
+        "문장제",
+        "실행식",
+        "안구운동 추적"
+      ],
+      "keywords_en": [
+        "combinatorics",
+        "word problem",
+        "executable expression",
+        "eye-tracking"
+      ],
+      "abstract": "조합(combinatorics)은 확률적 사고의 기초가 되며 정보, 과학 등 타교과와 연계성이 높은 중요한 영역이지만, 학교 수학에서 학생들이 가장 어려워하는 단원 중 하나이다. 본 연구는 순열 조합 문제의 구조를 나타낼 수 있는 표현식을 도입하여, 문제를 표현식으로 변환하는 대학원생의 안구 운동을 분석함으로써 순열 조합 문장제의 이해 과정과 의미 구조에 따른 난이도 차이를 조사하였다. 연구 결과, 연구참여자들의 순열 조합 문장제 이해 전략은 문제에 대한 수학적 모델을 내적으로 직접 표상하는 전략과 보기에 주어진 표현식과 문제를 비교하여 답을 찾는 전략으로 분류할 수 있었다. 전문가 집단인 연구참여자들은 대상들의 구별성, 중복가능성, 의미 구조에 관한 단어나 수치 정보 등 문제의 핵심정보를 빠르게 파악하고 주의를 기울였다. 의미 구조의 변환이 필요한 문제를 풀 때 학생들은 문제의 핵심정보를 더 많이 보고, 보기의 표현식을 더 오래 응시하며, 문제와 보기 사이의 비교를 더 많이 하는 등 복잡한 인지 처리와 연관된 안구 운동 지표가 나타났다. 안구 운동 데이터는 문제 이해 과정에서 연구참여자의 수학적 인지를 분석하는데 유의미한 정보를 제공하였다.",
+      "abstract_en": "Combinatorics, the basis of probabilistic thinking, is an important area of mathematics and closely linked with other subjects such as informatics and STEAM areas. But combinatorics is one of the most difficult units in school mathematics for leaning and teaching. This study, using the designed combinatorial models and executable expression, aims to analyzes the eye movement of graduate students when they translate the written combinatorial problems to the corresponding executable expression, and examines not only the understanding process of the written combinatorial sentences but also the degree of difficulties depending on the combinatorial semantic structures. The result of the study shows that there are two types of solving process the participants take when they solve the problems : one is to choose the right executable expression by comparing the sentence and the executable expression frequently. The other approach is to find the corresponding executable expression after they derive the suitable mental model by translating the combinatorial sentence. We found the cognitive processing patterns of the participants how they pay attention to words and numbers related to the essential informations hidden in the sentence. Also we found that the student’s eyes rest upon the essential combinatorial sentences and executable expressions longer and they perform the complicated cognitive handling process such as comparing the written sentence with executable expressions when they try the problems whose meaning structure is rarely used in the school mathematics. The data of eye movement provide meaningful information for analyzing the cognitive process related to the solving process of the participants.",
+      "kci_level": "KCI 등재",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002168842",
+      "source": "kci",
+      "added": "2026-11-11"
+    },
+    {
+      "id": "ART001940145",
+      "type": "journal",
+      "title": "Embodied Approach to the Concept of Vector and its Application",
+      "title_en": "",
+      "authors": [
+        {
+          "name": "조한혁",
+          "name_en": "Cho, Han Hyuk",
+          "role": "co",
+          "affiliation": "서울대학교"
+        },
+        {
+          "name": "NOH, Chang Kyun",
+          "name_en": "NOH, Chang Kyun",
+          "role": "corresponding",
+          "affiliation": "Seoul National University"
+        },
+        {
+          "name": "최인용",
+          "name_en": "Choi, Inyong",
+          "role": "co",
+          "affiliation": "Seoul National University",
+          "orcid": "0000-0002-9766-9952"
+        }
+      ],
+      "journal": "Mathematics Education Research and Practice",
+      "publisher": "한국수학교육학회",
+      "year": "2014",
+      "volume": "18",
+      "issue": "4",
+      "pages": "289–305",
+      "doi": "",
+      "keywords": [],
+      "keywords_en": [
+        "vector education",
+        "embodied expression",
+        "representation",
+        "covariational reasoning",
+        "probabilistic process",
+        "JavaMAL"
+      ],
+      "abstract": "The current mathematical education calls for a learning environment from the constructionism perspective that the learners actively create mathematical rather than receives them. This research made an attempt to analyzeJavaMAL’s expression ‘move’ that enables students to express the agent’s behavior constructively before they learn vector as a formal concept. Since expression ‘move’ is based on a coordinate, it naturally corresponds with the expression of vectors used in school mathematics and allows students take an embodied approach to the concept of vector. Furthermore, as a design tool, expression ‘move’ can be used in various activities includingvector structure. This research made an attempt toinvestigate the educational significance entailed in JavaMAL’s expression ‘move’.",
+      "abstract_en": "",
+      "kci_level": "KCI 후보",
+      "url": "https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART001940145",
+      "source": "kci",
+      "added": "2026-11-11"
+    }
+  ],
+  "updated": "2026-11-12T03:11:25+09:00"
+}

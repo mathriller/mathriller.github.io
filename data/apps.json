@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "id": "sample-fraction",
+      "title": "분수 막대 비교",
+      "summary": "막대를 같은 크기로 나누고 색칠하며 분수의 크기를 비교합니다.",
+      "description": "",
+      "url": "#",
+      "image": "",
+      "area": "수와 연산",
+      "grade": "초등 3–4학년",
+      "tags": ["분수", "시각화"],
+      "sample": true
+    },
+    {
+      "id": "sample-pattern",
+      "title": "규칙 찾기 실험실",
+      "summary": "도형 패턴을 늘려 가며 규칙을 말과 식으로 표현해 봅니다.",
+      "description": "",
+      "url": "#",
+      "image": "",
+      "area": "변화와 관계",
+      "grade": "초등 5–6학년",
+      "tags": ["패턴", "일반화"],
+      "sample": true
+    },
+    {
+      "id": "sample-polygon",
+      "title": "정다각형 작도기",
+      "summary": "변의 수를 바꾸며 정다각형과 내접원, 외접원의 관계를 관찰합니다.",
+      "description": "",
+      "url": "#",
+      "image": "",
+      "area": "도형과 측정",
+      "grade": "초등 5–6학년",
+      "tags": ["작도", "다각형"],
+      "sample": true
+    },
+    {
+      "id": "sample-graph",
+      "title": "우리 반 그래프 만들기",
+      "summary": "반 친구들의 자료를 모아 막대그래프와 꺾은선그래프로 나타냅니다.",
+      "description": "",
+      "url": "#",
+      "image": "",
+      "area": "자료와 가능성",
+      "grade": "초등 3–6학년",
+      "tags": ["그래프", "통계"],
+      "sample": true
+    }
+  ]
+}

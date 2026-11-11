@@ -1,0 +1,35 @@
+# 사이트를 GitHub Pages에 배포한다.
+# main 브랜치에 변경이 올라오면(관리 페이지에서 저장했을 때 포함) 자동으로 실행된다.
+name: 사이트 배포
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}   # KCI 작업에서 호출될 때도 방금 저장된 최신 내용을 배포
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

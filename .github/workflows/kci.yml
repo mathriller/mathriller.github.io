@@ -1,0 +1,52 @@
+# 관리 페이지의 'KCI 논문 가져오기' 버튼이 이 작업을 실행한다.
+# GitHub 웹에서 Actions → KCI 논문 가져오기 → Run workflow 로 직접 실행해도 된다.
+name: KCI 논문 가져오기
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: KCI 논문 주소 또는 ART 번호 (여러 개는 띄어쓰기나 줄바꿈으로 구분)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: research-data
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: KCI에서 서지 정보 읽기
+        env:
+          URLS: ${{ inputs.urls }}
+        run: python3 scripts/kci.py add "$URLS"
+
+      - name: 변경 사항 저장
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/research.json
+          if git diff --cached --quiet; then
+            echo "변경된 내용이 없습니다."
+            exit 0
+          fi
+          git commit -m "연구 추가: KCI 논문 정보 가져오기"
+          for i in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && exit 0
+            sleep 5
+          done
+          exit 1
+
+  # GitHub Actions가 올린 커밋은 push 이벤트를 다시 일으키지 않으므로 여기서 직접 배포한다.
+  deploy:
+    needs: fetch
+    uses: ./.github/workflows/deploy.yml

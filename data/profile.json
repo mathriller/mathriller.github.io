@@ -1,0 +1,26 @@
+{
+  "name": "최인용",
+  "name_en": "Inyong Choi",
+  "position": "교수",
+  "department": "수학교육과",
+  "university": "서울교육대학교",
+  "email": "",
+  "office": "",
+  "orcid": "0000-0002-9766-9952",
+  "bio": "학생들이 수학을 배우는 과정을 들여다보는 연구를 합니다. 시선추적으로 문제 해결 과정을 관찰하고, 디지털 도구와 인공지능이 수학 수업과 평가를 어떻게 바꿀 수 있는지 살펴봅니다.\n수업에서 바로 쓸 수 있는 작은 앱도 직접 만들어 공유하고 있습니다.",
+  "interests": [
+    "시선추적을 활용한 수학 문제 해결 과정 분석",
+    "인공지능 기반 수학 서술형 자동 채점",
+    "디지털 도구와 체화된 도구화 (AlgeoMath, 코딩 환경)",
+    "확률·통계 교육과 그래프 이해",
+    "초등 대수적 사고와 패턴 일반화",
+    "수학과 교육과정 국제 비교"
+  ],
+  "education": [],
+  "career": [],
+  "photo": "",
+  "links": [
+    { "label": "ORCID", "url": "https://orcid.org/0000-0002-9766-9952" },
+    { "label": "KCI 연구자", "url": "https://www.kci.go.kr/kciportal/po/citationindex/poCretDetail.kci?citationBean.cretId=CRT002411490" }
+  ]
+}
