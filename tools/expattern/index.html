@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Maker 2.0</title>
+
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <span id="nametag"></span>
+            <h1>exPattern</h1>
+        </header>
+
+        <div class="main-content">
+            <!-- Row 1: Patterns 1-4 -->
+            <div class="row row-1">
+                <div class="pattern-box" id="pattern1"></div>
+                <div class="pattern-box" id="pattern2"></div>
+                <div class="pattern-box" id="pattern3"></div>
+                <div class="pattern-box" id="pattern4"></div>
+            </div>
+
+            <!-- Row 2: Labels for Row 1 -->
+            <div class="row row-2">
+                <div class="label-box">n=1 일 때</div>
+                <div class="label-box">n=2 일 때</div>
+                <div class="label-box">n=3 일 때</div>
+                <div class="label-box">
+                    n=<input type="number" id="stage4num" value="4" min="1" max="20" style="width: 3em;"> 일 때
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Row 3: Patterns 5-6 and Problem Area -->
+            <div class="row row-3">
+                <div class="pattern-box" id="pattern5"></div>
+                <div class="pattern-box" id="pattern6"></div>
+                <div class="problem-area">
+                    <div class="problem-title">패턴을 만들어보자.</div>
+
+                    <!-- User Guide -->
+                    <div class="user-guide">
+                        <h3>사용 방법</h3>
+                        <ul>
+                            <li><b>s</b>: 앞으로 한 칸 이동 (블록 생성)</li>
+                            <li><b>t</b>: 뒤로 한 칸 이동 (블록 생성)</li>
+                            <li><b>l</b>: 왼쪽으로 한 칸 이동 (블록 생성)</li>
+                            <li><b>r</b>: 오른쪽으로 한 칸 이동 (블록 생성)</li>
+                            <li><b>L</b>: 왼쪽으로 회전</li>
+                            <li><b>R</b>: 오른쪽으로 회전</li>
+                            <li><b>[ ]</b>: 현재 위치 저장 / 복구 (가지치기)</li>
+                            <li><b>(n)s</b>: n번 반복 (예: (3)s = sss)</li>
+                        </ul>
+                        <p>변수 X, Y를 사용하여 복잡한 패턴을 만들어보세요!</p>
+                    </div>
+
+                    <div class="code-input-area">
+                        <input type="text" id="lastcode" value="s">
+                        <button id="execute" class="myButton">로 패턴 만들기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 4: Inputs and Promise Buttons -->
+            <div class="row row-4">
+                <div class="control-group">
+                    n=<input type="number" id="Xnum" value="3" min="1" max="20" style="width: 3em;"> 일 때
+                </div>
+                <div class="control-group">
+                    n=<input type="number" id="Ynum" value="3" min="1" max="20" style="width: 3em;"> 일 때
+                </div>
+                <!-- Spacer to align with problem area if needed -->
+                <div class="control-group spacer"></div>
+            </div>
+
+            <div class="row row-5">
+                <div class="promise-box">
+                    <button id="Xexecute" class="myButton2">X</button>=
+                    <input type="text" id="promiseX">
+                    <button id="Xexecute2" class="myButton2">약속</button>
+                </div>
+                <div class="promise-box">
+                    <button id="Yexecute" class="myButton3">Y</button>=
+                    <input type="text" id="promiseY">
+                    <button id="Yexecute2" class="myButton3">약속</button>
+                </div>
+                <!-- Tile count removed as requested -->
+                <div class="promise-box wide" style="visibility: hidden;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/turtle.js"></script>
+    <script src="js/parser.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+
+</html>

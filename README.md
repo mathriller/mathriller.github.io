@@ -63,8 +63,20 @@
 
 ## 3. 지금 들어 있는 데이터
 
-- `data/apps.json`: 옛 홈페이지(mathriller.dothome.co.kr)의 도구 15개. 제목과 설명은 그대로 가져왔고, 썸네일은 이 저장소(`assets/img/apps/`)로 옮겼습니다.
-  도구 자체는 아직 닷홈 서버에 있어서 링크가 닷홈 주소를 가리킵니다. 영역과 태그는 제가 붙인 것이니 필요하면 고쳐 주세요.
+- `data/apps.json`: 옛 홈페이지(mathriller.dothome.co.kr)의 도구 15개. 제목과 설명은 그대로 가져왔고, 영역과 태그는 새로 붙였습니다.
+
+## 3-1. 도구 (`tools/`)
+
+옛 닷홈 서버의 도구를 이 저장소로 옮겼습니다. 주소는 `https://mathriller.github.io/tools/폴더이름/` 입니다.
+
+- **바로 고칠 수 있는 도구** (파일이 곧 원본): tiling, fractal, expattern, dcompas, probability, grapher, pocket, clairaut2, clairaut3, boxplot(한 파일로 빌드됨)
+- **React(Vite)로 빌드된 도구**: voxel, bargraph, clairaut0, clairaut1, moving, moving2, moving3, daeching
+  - 각 폴더의 `assets/`에 빌드 결과물이 들어 있습니다. 고치려면 원본 프로젝트에서 `vite.config.js`에 `base: './'`를 넣고 빌드한 뒤, 나온 `dist/` 안의 내용으로 그 폴더를 바꾸면 됩니다.
+- 홈페이지 카드에 없는 도구: moving2(로봇 컨트롤러), moving3, daeching(선대칭 탐구), pocket_old. 필요하면 관리 모드에서 카드를 추가하세요.
+- 옮기지 않은 것: ratiochat(PHP와 데이터베이스가 필요해 GitHub Pages에서 동작하지 않음), calculator·geometry·matrix(내용 없는 자리표시 페이지)
+
+새 도구는 `tools/새폴더/index.html`처럼 폴더째 올리고, 관리 모드에서 카드를 추가하면 됩니다.
+
 - `data/research.json`: KCI에서 ORCID `0000-0002-9766-9952`가 붙은 논문 33편(발행 연월 포함).
 - `data/profile.json`: 소개 글과 연구 관심은 논문 주제를 보고 쓴 **초안**입니다. 꼭 고쳐 주세요.
 

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>원의 넓이 탐구 – 정다각형 근사</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f7fb;--card:rgba(255,255,255,.88);--border:rgba(0,0,0,.07);--shadow:0 4px 24px rgba(0,0,0,.06);--cyan:#0891b2;--blue:#3b82f6;--purple:#7c3aed;--orange:#f97316;--txt:#1e293b;--txt2:#64748b;--txt3:#94a3b8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;flex-direction:column;align-items:center}
+
+.cv-wrap{width:min(98vw,1400px);aspect-ratio:5/2;margin:10px auto 0;position:relative}
+canvas{width:100%;height:100%;border-radius:14px;background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);display:block;cursor:grab}
+canvas:active{cursor:grabbing}
+.zoom-reset{position:absolute;top:10px;right:10px;padding:5px 12px;font-size:.75rem;font-family:'Noto Sans KR',sans-serif;font-weight:500;background:var(--card);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--txt2);box-shadow:var(--shadow);transition:background .15s,color .15s;z-index:2}
+.zoom-reset:hover{background:#e8f0fe;color:var(--txt)}
+
+.ctrl{width:min(98vw,1400px);margin:8px auto 24px;padding:14px 20px;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);display:flex;gap:28px;align-items:stretch;flex-wrap:wrap}
+.sr{flex:1;min-width:240px}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.sl{font-size:.82rem;font-weight:500;color:var(--txt2)}
+.sv{font-size:1.3rem;font-weight:700;color:var(--cyan);font-variant-numeric:tabular-nums}
+.sv span{font-size:.7rem;font-weight:400;color:var(--txt3)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:3px;outline:none;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 6px rgba(8,145,178,.3);border:3px solid #fff}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--cyan);cursor:pointer;border:3px solid #fff}
+#uSlider{background:linear-gradient(90deg,var(--orange),var(--purple))}
+#uSlider::-webkit-slider-thumb{background:var(--orange)}
+@media(max-width:700px){.ctrl{flex-direction:column;gap:12px}}
+</style>
+</head>
+<body>
+
+<div class="cv-wrap"><canvas id="cv"></canvas><button class="zoom-reset" id="zReset" title="확대/이동 초기화">🔍 초기화</button></div>
+
+<div class="ctrl">
+<div class="sr"><div class="sh"><span class="sl">변의 수 (n)</span><span class="sv" id="nD">6 <span>각형</span></span></div><input type="range" id="nSlider" min="3" max="120" value="6"></div>
+<div class="sr"><div class="sh"><span class="sl">펼치기</span><span class="sv" id="uD" style="color:var(--orange)">0<span>%</span></span></div><input type="range" id="uSlider" min="0" max="100" value="0"></div>
+</div>
+<script>
+const KL=['ㄱ','ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㄲ','ㄸ','ㅃ','ㅆ','ㅉ'];
+const cv=document.getElementById('cv'),c=cv.getContext('2d');
+const nS=document.getElementById('nSlider'),uS=document.getElementById('uSlider');
+let dpr=window.devicePixelRatio||1;
+// zoom/pan state
+let userZoom=1, panX=0, panY=0;
+let isDragging=false, dragStartX=0, dragStartY=0, panStartX=0, panStartY=0;
+function resize(){const p=cv.parentElement;const w=p.clientWidth,h=p.clientHeight;cv.width=w*dpr;cv.height=h*dpr;cv.style.width=w+'px';cv.style.height=h+'px';c.setTransform(dpr,0,0,dpr,0,0);}
+
+function draw(n,uT){
+const W=cv.width/dpr,H=cv.height/dpr;
+c.clearRect(0,0,W,H);
+const R=100,sa=2*Math.PI/n,stA=Math.PI/2-sa/2;
+const sL=2*R*Math.sin(Math.PI/n),ap=R*Math.cos(Math.PI/n),peri=n*sL;
+
+// vertices
+const V=[];for(let i=0;i<n;i++){const a=stA+i*sa;V.push({x:R*Math.cos(a),y:R*Math.sin(a)});}
+
+// midpoint of ㄱㄴ (V[0]-V[1])
+const midGN={x:(V[0].x+V[1].x)/2, y:(V[0].y+V[1].y)/2};
+
+// chain: midGN → ㄱ(V[0]) → V[n-1] → V[n-2] → … → V[2] → ㄴ(V[1]) → midGN'
+// Single chain, unfolds to the RIGHT (same direction as original, just cut at midpoint)
+const fc=[midGN, V[0]];
+for(let i=n-1;i>=2;i--) fc.push(V[i]);
+fc.push(V[1], {...midGN});
+
+const sAs=[],sLs=[];
+for(let i=0;i<fc.length-1;i++){const dx=fc[i+1].x-fc[i].x,dy=fc[i+1].y-fc[i].y;sLs.push(Math.sqrt(dx*dx+dy*dy));sAs.push(Math.atan2(dy,dx));}
+const turns=[];for(let i=0;i<sAs.length-1;i++){let t=sAs[i+1]-sAs[i];while(t>Math.PI)t-=2*Math.PI;while(t<-Math.PI)t+=2*Math.PI;turns.push(t);}
+const ch=[{x:fc[0].x,y:fc[0].y}];let dir=sAs[0];
+ch.push({x:ch[0].x+sLs[0]*Math.cos(dir),y:ch[0].y+sLs[0]*Math.sin(dir)});
+for(let i=0;i<turns.length;i++){dir+=turns[i]*(1-uT);const p=ch[ch.length-1];ch.push({x:p.x+sLs[i+1]*Math.cos(dir),y:p.y+sLs[i+1]*Math.sin(dir)});}
+
+// bounding box
+const polyBB={x0:-R-22,x1:R+22,y0:-R-22,y1:R+22};
+const endX=midGN.x+peri,triTopY=midGN.y-ap;
+const fullBB={x0:Math.min(-R-22,midGN.x-10),x1:Math.max(R+22,endX+30),y0:Math.min(-R-22,triTopY-20),y1:Math.max(R+22,midGN.y+30)};
+const bx0=polyBB.x0+(fullBB.x0-polyBB.x0)*uT;
+const bx1=polyBB.x1+(fullBB.x1-polyBB.x1)*uT;
+const by0=polyBB.y0+(fullBB.y0-polyBB.y0)*uT;
+const by1=polyBB.y1+(fullBB.y1-polyBB.y1)*uT;
+const vW=bx1-bx0,vH=by1-by0;
+const baseSc=Math.min(W/vW,H/vH)*.94;
+const vcx=(bx0+bx1)/2,vcy=(by0+by1)/2;
+const sc=baseSc*userZoom;
+function tx(x){return W/2+(x-vcx)*sc+panX;}
+function ty(y){return H/2+(y-vcy)*sc+panY;}
+function ts(s){return Math.abs(s*sc);}
+
+// === DRAW ===
+
+// 1. Circle
+c.beginPath();c.arc(tx(0),ty(0),ts(R),0,Math.PI*2);
+c.strokeStyle='rgba(59,130,246,.35)';c.lineWidth=1.8;c.stroke();
+c.beginPath();c.arc(tx(0),ty(0),ts(R),0,Math.PI*2);
+c.fillStyle='rgba(59,130,246,.03)';c.fill();
+
+// 2. Polygon fill+stroke
+c.beginPath();c.moveTo(tx(V[0].x),ty(V[0].y));for(let i=1;i<n;i++)c.lineTo(tx(V[i].x),ty(V[i].y));c.closePath();
+c.fillStyle='rgba(8,145,178,.06)';c.fill();
+c.strokeStyle='#0891b2';c.lineWidth=1.8;c.stroke();
+
+// 3. Triangle divisions
+c.setLineDash([ts(5),ts(3)]);c.strokeStyle='rgba(124,58,237,.3)';c.lineWidth=1;
+for(let i=0;i<n;i++){c.beginPath();c.moveTo(tx(0),ty(0));c.lineTo(tx(V[i].x),ty(V[i].y));c.stroke();}
+c.setLineDash([]);
+
+// 4. Bottom triangle highlight
+c.beginPath();c.moveTo(tx(0),ty(0));c.lineTo(tx(V[0].x),ty(V[0].y));c.lineTo(tx(V[1].x),ty(V[1].y));c.closePath();
+c.fillStyle='rgba(249,115,22,.06)';c.fill();
+c.setLineDash([ts(4),ts(3)]);c.strokeStyle='rgba(249,115,22,.35)';c.lineWidth=1.2;c.stroke();c.setLineDash([]);
+
+// 5. Height line (center to midpoint of ㄱㄴ)
+c.beginPath();c.setLineDash([ts(4),ts(3)]);c.strokeStyle='rgba(249,115,22,.8)';c.lineWidth=1.8;
+c.moveTo(tx(0),ty(0));c.lineTo(tx(midGN.x),ty(midGN.y));c.stroke();c.setLineDash([]);
+// right angle mark at midGN
+const dx2=V[1].x-V[0].x,dy2=V[1].y-V[0].y,sl2=Math.sqrt(dx2*dx2+dy2*dy2);
+const nx2=dx2/sl2,ny2=dy2/sl2,px2=-ny2,py2=nx2,mk=5;
+c.beginPath();c.strokeStyle='rgba(249,115,22,.7)';c.lineWidth=1;
+c.moveTo(tx(midGN.x+nx2*mk),ty(midGN.y+ny2*mk));c.lineTo(tx(midGN.x+nx2*mk+px2*mk),ty(midGN.y+ny2*mk+py2*mk));c.lineTo(tx(midGN.x+px2*mk),ty(midGN.y+py2*mk));c.stroke();
+
+// 6. Center dot (small)
+c.beginPath();c.arc(tx(0),ty(0),ts(1.2),0,Math.PI*2);c.fillStyle='#1e293b';c.fill();
+
+
+
+// 8. Unfolding chain (single chain from midGN to the right)
+if(uT>0.005){
+const chAlpha=Math.min(1,uT*5);
+c.beginPath();c.moveTo(tx(ch[0].x),ty(ch[0].y));for(let i=1;i<ch.length;i++)c.lineTo(tx(ch[i].x),ty(ch[i].y));
+c.strokeStyle=`rgba(8,145,178,${(.9*chAlpha).toFixed(3)})`;c.lineWidth=2.5;c.stroke();
+// dots
+for(const p of ch){c.beginPath();c.arc(tx(p.x),ty(p.y),ts(2),0,Math.PI*2);c.fillStyle=`rgba(8,145,178,${chAlpha.toFixed(3)})`;c.fill();}
+
+}
+
+// 9. Right triangle (appears at uT~1)
+// Right angle at midGN, base = perimeter (horizontal), height = apothem (vertical to center)
+if(uT>=.98){
+const tA=Math.min(1,(uT-.98)/.02);
+const A={x:midGN.x, y:midGN.y};       // midGN — right angle
+const B={x:midGN.x+peri, y:midGN.y};   // end of unfolded chain
+const C={x:midGN.x, y:midGN.y-ap};     // center of circle (above midGN)
+c.beginPath();c.moveTo(tx(A.x),ty(A.y));c.lineTo(tx(B.x),ty(B.y));c.lineTo(tx(C.x),ty(C.y));c.closePath();
+c.fillStyle=`rgba(249,115,22,${(.12*tA).toFixed(3)})`;c.fill();
+c.strokeStyle=`rgba(249,115,22,${(.7*tA).toFixed(3)})`;c.lineWidth=2;c.stroke();
+// right angle mark at A (midGN)
+const rmk=6;c.beginPath();c.strokeStyle=`rgba(249,115,22,${(.7*tA).toFixed(3)})`;c.lineWidth=1.3;
+c.moveTo(tx(A.x+rmk),ty(A.y));c.lineTo(tx(A.x+rmk),ty(A.y-rmk));c.lineTo(tx(A.x),ty(A.y-rmk));c.stroke();
+
+}
+
+// info
+document.getElementById('nD').innerHTML=`${n} <span>각형</span>`;
+document.getElementById('uD').innerHTML=`${Math.round(uT*100)}<span>%</span>`;
+}
+
+function go(){draw(+nS.value,+uS.value/100);}
+nS.addEventListener('input',go);uS.addEventListener('input',go);
+window.addEventListener('resize',()=>{dpr=window.devicePixelRatio||1;resize();go();});
+
+// zoom with mouse wheel
+cv.addEventListener('wheel',(e)=>{
+e.preventDefault();
+const rect=cv.getBoundingClientRect();
+const mx=e.clientX-rect.left, my=e.clientY-rect.top;
+const factor=e.deltaY<0?1.12:1/1.12;
+const oldZoom=userZoom;
+userZoom=Math.max(.5,Math.min(30,userZoom*factor));
+const zr=userZoom/oldZoom;
+panX=mx-(mx-panX)*zr;
+panY=my-(my-panY)*zr;
+go();
+},{passive:false});
+
+// pan with mouse drag
+cv.addEventListener('mousedown',(e)=>{
+isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;panStartX=panX;panStartY=panY;
+});
+window.addEventListener('mousemove',(e)=>{
+if(!isDragging)return;
+panX=panStartX+(e.clientX-dragStartX);
+panY=panStartY+(e.clientY-dragStartY);
+go();
+});
+window.addEventListener('mouseup',()=>{isDragging=false;});
+
+// touch support
+cv.addEventListener('touchstart',(e)=>{
+if(e.touches.length===1){isDragging=true;dragStartX=e.touches[0].clientX;dragStartY=e.touches[0].clientY;panStartX=panX;panStartY=panY;}
+},{passive:true});
+cv.addEventListener('touchmove',(e)=>{
+if(!isDragging||e.touches.length!==1)return;
+e.preventDefault();
+panX=panStartX+(e.touches[0].clientX-dragStartX);
+panY=panStartY+(e.touches[0].clientY-dragStartY);
+go();
+},{passive:false});
+cv.addEventListener('touchend',()=>{isDragging=false;});
+
+// reset button
+document.getElementById('zReset').addEventListener('click',()=>{
+userZoom=1;panX=0;panY=0;go();
+});
+
+resize();go();
+</script>
+</body>
+</html>

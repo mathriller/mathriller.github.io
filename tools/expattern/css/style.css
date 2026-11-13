@@ -1,0 +1,550 @@
+/* Global Styles */
+:root {
+    --primary-color: #FF8C00;
+    /* Darker Orange */
+    --secondary-color: #4682B4;
+    /* Steel Blue */
+    --accent-color: #FF4500;
+    /* Orange Red */
+    --bg-color: #f8f9fa;
+    --panel-bg: #ffffff;
+    --border-color: #dee2e6;
+    --text-color: #343a40;
+    --font-family: 'Segoe UI', 'Malgun Gothic', 'Dotum', sans-serif;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    box-shadow: var(--shadow);
+    z-index: 10;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+#nametag {
+    position: absolute;
+    left: 20px;
+    top: 15px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    margin: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Rows */
+.row {
+    display: flex;
+    width: 100%;
+}
+
+.row-1 {
+    height: 40vh;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.row-2 {
+    height: 40px;
+    background-color: #e9ecef;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.row-3 {
+    height: 40vh;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.row-4 {
+    height: 40px;
+    background-color: #e9ecef;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.row-5 {
+    height: 70px;
+    background-color: #f1f3f5;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Pattern Boxes */
+.pattern-box {
+    flex: 1;
+    border-right: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+}
+
+.pattern-box:last-child {
+    border-right: none;
+}
+
+/* Labels */
+.label-box {
+    flex: 1;
+    border-right: 1px solid var(--border-color);
+    text-align: center;
+    line-height: 40px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #495057;
+}
+
+.label-box:last-child {
+    border-right: none;
+}
+
+/* Control Groups */
+.control-group {
+    flex: 1;
+    border-right: 1px solid var(--border-color);
+    text-align: center;
+    line-height: 40px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #495057;
+}
+
+.control-group.spacer {
+    flex: 2;
+}
+
+/* Promise Boxes */
+.promise-box {
+    flex: 1;
+    border-right: 1px solid var(--border-color);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.promise-box.wide {
+    flex: 2;
+}
+
+/* Problem Area */
+.problem-area {
+    flex: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.problem-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 10px;
+    color: #343a40;
+}
+
+#pimg {
+    flex: 1;
+}
+
+/* User Guide Styles */
+.user-guide {
+    flex: 1;
+    padding: 15px 30px;
+    overflow-y: auto;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.user-guide h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+.user-guide ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 20px;
+}
+
+.user-guide li {
+    margin-bottom: 5px;
+}
+
+.user-guide b {
+    color: #333;
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.user-guide p {
+    margin-top: 10px;
+    font-style: italic;
+    color: #777;
+}
+
+.code-input-area {
+    border-top: 1px solid var(--border-color);
+    padding: 10px;
+    text-align: center;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Specific Colors */
+#pattern5 {
+    background-color: #fff0f0;
+    /* Softer Red */
+}
+
+#pattern6 {
+    background-color: #f0f8ff;
+    /* Softer Blue */
+}
+
+/* Buttons */
+button {
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 8px 16px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.myButton {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.myButton:hover {
+    background-color: #e0a800;
+}
+
+.myButton2 {
+    background-color: #dc3545;
+    color: white;
+}
+
+.myButton2:hover {
+    background-color: #c82333;
+}
+
+.myButton3 {
+    background-color: #007bff;
+    color: white;
+}
+
+.myButton3:hover {
+    background-color: #0056b3;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="number"] {
+    text-align: center;
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+#lastcode {
+    width: 200px;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .app-container {
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .main-content {
+        margin: 10px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Flatten the structure */
+    .row {
+        display: contents;
+    }
+
+    hr {
+        display: none;
+    }
+
+    /* Reorder items for single column flow */
+    /* Pattern 1 */
+    #pattern1 {
+        order: 1;
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: none;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    .row-2 .label-box:nth-child(1) {
+        order: 2;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        background-color: #f8f9fa;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    /* Pattern 2 */
+    #pattern2 {
+        order: 3;
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: none;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    .row-2 .label-box:nth-child(2) {
+        order: 4;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        background-color: #f8f9fa;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    /* Pattern 3 */
+    #pattern3 {
+        order: 5;
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: none;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    .row-2 .label-box:nth-child(3) {
+        order: 6;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        background-color: #f8f9fa;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    /* Pattern 4 */
+    #pattern4 {
+        order: 7;
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: none;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    .row-2 .label-box:nth-child(4) {
+        order: 8;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        background-color: #f8f9fa;
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    /* Pattern 5 */
+    #pattern5 {
+        order: 9;
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    /* Pattern 6 */
+    #pattern6 {
+        order: 10;
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        flex: none;
+        /* Prevent collapsing */
+    }
+
+    /* Problem Area */
+    .problem-area {
+        display: contents;
+        /* Allow children to be reordered */
+    }
+
+    .problem-title {
+        order: 11;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        background: #fff;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .code-input-area {
+        order: 12;
+        width: 100%;
+        flex-direction: column;
+        border-top: none;
+        /* Remove default border */
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .user-guide {
+        order: 20;
+        /* Move to bottom */
+        width: 100%;
+        padding: 15px;
+        background: #fff;
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* Controls (Row 4) */
+    .row-4 .control-group {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .row-4 .control-group:nth-child(1) {
+        order: 13;
+    }
+
+    .row-4 .control-group:nth-child(2) {
+        order: 14;
+    }
+
+    .row-4 .control-group.spacer {
+        display: none;
+    }
+
+    /* Promise Boxes (Row 5) */
+    .row-5 .promise-box {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 10px 0;
+    }
+
+    .row-5 .promise-box:nth-child(1) {
+        order: 15;
+    }
+
+    .row-5 .promise-box:nth-child(2) {
+        order: 16;
+    }
+
+    .row-5 .promise-box.wide {
+        display: none;
+    }
+
+    /* General Adjustments */
+    header h1 {
+        font-size: 24px;
+    }
+
+    #nametag {
+        font-size: 14px;
+        top: 12px;
+        left: 15px;
+    }
+
+    .user-guide ul {
+        grid-template-columns: 1fr;
+    }
+
+    #lastcode {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    /* Fix for canvas size in pattern boxes */
+    canvas {
+        width: 100% !important;
+        height: 100% !important;
+    }
+}

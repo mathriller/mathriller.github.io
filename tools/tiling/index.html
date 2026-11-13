@@ -1,0 +1,3377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>헤슈 타일링 & 에셔 테셀레이션 스튜디오 (Heesch Tiling & Escher Studio)</title>
+  <!-- KaTeX for crisp mathematical formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --accent: #06b6d4;
+      --surface: #ffffff;
+      --bg: #f8fafc;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --sidebar-width: 380px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Top Navigation Bar */
+    header {
+      height: 60px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 20;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+    }
+
+    .brand-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-title span.sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* View Mode Tabs */
+    .view-tabs {
+      display: flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 8px;
+      gap: 4px;
+    }
+
+    .view-tab-btn {
+      padding: 6px 14px;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .view-tab-btn.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Preset dropdown menu */
+    .preset-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .preset-select {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    .app-body {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Sidebar Controls */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .section {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title .badge {
+      font-size: 11px;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-transform: none;
+    }
+
+    /* Polygon selection buttons */
+    .poly-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .poly-btn {
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .poly-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: none;
+      stroke: var(--text-muted);
+      stroke-width: 2;
+    }
+
+    .poly-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .poly-btn.active svg {
+      stroke: var(--primary);
+    }
+
+    /* Edge Selection Buttons */
+    .edge-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .edge-chip {
+      padding: 5px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .edge-chip .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .edge-chip.active {
+      background: var(--text);
+      color: white;
+      border-color: var(--text);
+    }
+
+    /* Form rows */
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 42px;
+      height: 22px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 22px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Edge mapping info box */
+    .info-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .info-card strong {
+      color: var(--text);
+    }
+
+    /* Drawing Toolbar inside Sidebar */
+    .draw-tools {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .tool-btn {
+      padding: 8px 4px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .tool-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .tool-btn.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .palette-list {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 0 0 1px var(--border);
+      transition: transform 0.1s;
+    }
+
+    .color-swatch.active {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+
+    /* Main Workspace Views */
+    .workspace {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+      background: #f1f5f9;
+    }
+
+    .canvas-pane {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: #ffffff;
+      overflow: hidden;
+      transition: flex 0.3s ease;
+    }
+
+    .canvas-pane:first-child {
+      border-right: 2px solid #e2e8f0;
+    }
+
+    .pane-header {
+      height: 40px;
+      padding: 0 16px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+    }
+
+    .pane-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pane-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .canvas-container {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Floating Canvas Controls */
+    .floating-controls {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .fab {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+
+    .fab:hover {
+      background: #f8fafc;
+      transform: translateY(-1px);
+    }
+
+    /* Bottom Educational Banner */
+    .edu-banner {
+      height: 52px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 20;
+    }
+
+    .edu-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .status-pill.success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .status-pill.warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .status-pill.danger {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .edu-msg {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .heesch-code-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 700;
+      background: #f1f5f9;
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* Guide Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      width: 100%;
+      max-width: 680px;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    .modal-body h4 {
+      font-size: 15px;
+      margin: 16px 0 8px;
+      color: var(--text);
+    }
+
+    .modal-footer {
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      background: #f8fafc;
+    }
+
+    /* View Mode overrides */
+    .mode-prototile .canvas-pane:last-child {
+      display: none;
+    }
+    .mode-prototile .canvas-pane:first-child {
+      border-right: none;
+    }
+
+    .mode-tiling .canvas-pane:first-child {
+      display: none;
+    }
+
+    /* Custom range slider styling */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      background: transparent;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      margin-top: -5px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* Stamp Preset Grid */
+    .stamp-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .stamp-item {
+      aspect-ratio: 1;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      background: var(--surface);
+      transition: all 0.15s;
+    }
+
+    .stamp-item:hover, .stamp-item.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo">H</div>
+      <div class="brand-title">
+        헤슈 타일링 & 에셔 스튜디오
+        <span class="sub">Heesch Tiling & Escher Tessellation</span>
+      </div>
+    </div>
+
+    <!-- View Mode Switcher -->
+    <div class="view-tabs">
+      <button class="view-tab-btn active" id="tabSplit" onclick="setViewMode('split')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="18" rx="1"/><rect x="13" y="3" width="8" height="18" rx="1"/></svg>
+        분할 화면 (기본)
+      </button>
+      <button class="view-tab-btn" id="tabPrototile" onclick="setViewMode('prototile')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"/></svg>
+        기본 조각 집중
+      </button>
+      <button class="view-tab-btn" id="tabTiling" onclick="setViewMode('tiling')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+        평면 채우기 집중
+      </button>
+    </div>
+
+    <div class="top-actions">
+      <!-- Heesch Presets -->
+      <div class="preset-selector">
+        <label for="presetDropdown">🌟 헤슈 프리셋:</label>
+        <select id="presetDropdown" class="preset-select" onchange="applyPreset(this.value)">
+          <option value="custom" selected>기본 정다각형 (변 관계 없음 / 직접 구성)</option>
+          <optgroup label="정사각형 (Square)">
+            <option value="sq_TTTT">TTTT (대칭 평행이동)</option>
+            <option value="sq_TGTG">T G T G (미끄럼 반사)</option>
+            <option value="sq_C4C4">C₄ C₄ (90° 꼭짓점 회전)</option>
+            <option value="sq_CCCC">C C C C (중점 180° 반회전)</option>
+          </optgroup>
+          <optgroup label="정삼각형 (Triangle)">
+            <option value="tri_CCC">C C C (3변 반회전)</option>
+            <option value="tri_TC">T C (평행이동 + 반회전)</option>
+            <option value="tri_C3C3C3">C₃ C₃ C₃ (120° 꼭짓점 회전)</option>
+          </optgroup>
+          <optgroup label="정육각형 (Hexagon)">
+            <option value="hex_TTT">T T T (3쌍 평행이동 - 에셔 도마뱀)</option>
+            <option value="hex_C3C3C3">C₃ C₃ C₃ (120° 회전)</option>
+            <option value="hex_CCCCCC">C C C C C C (6변 반회전)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <button class="btn" onclick="openModal('guideModal')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        원리 가이드
+      </button>
+
+      <button class="btn btn-primary" onclick="exportPNG()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        작품 다운로드
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <div class="app-body">
+    
+    <!-- Left Configuration Sidebar -->
+    <aside class="sidebar">
+      
+      <!-- Step 1: Base Polygon -->
+      <div class="section">
+        <div class="section-title">
+          <span>Step 1. 기본 다각형 선택</span>
+          <span class="badge" id="basePolyBadge">정사각형</span>
+        </div>
+        <div class="poly-grid">
+          <button class="poly-btn" id="btnPoly3" onclick="setBasePolygon(3)">
+            <svg viewBox="0 0 24 24"><polygon points="12 3 21 20 3 20"/></svg>
+            정삼각형 (3)
+          </button>
+          <button class="poly-btn active" id="btnPoly4" onclick="setBasePolygon(4)">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/></svg>
+            정사각형 (4)
+          </button>
+          <button class="poly-btn" id="btnPoly6" onclick="setBasePolygon(6)">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7"/></svg>
+            정육각형 (6)
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Edge Deformation & Heesch Mapping -->
+      <div class="section">
+        <div class="section-title">
+          <span>Step 2. 변 변형 & 변환 규칙 (Heesch)</span>
+          <span class="badge" id="selectedEdgeBadge">변 E1 선택됨</span>
+        </div>
+
+        <label style="font-size:12px; font-weight:600; margin-bottom:6px; display:block;">편집할 변 선택:</label>
+        <div class="edge-badges" id="edgeChipsContainer">
+          <!-- Dynamically populated chips E1, E2, ... -->
+        </div>
+
+        <div class="form-group">
+          <label for="transformSelect">변환 기호 (Heesch Code):</label>
+          <select id="transformSelect" class="form-control" onchange="onEdgeTransformChange(this.value)">
+            <option value="NONE">None (독립 변형 / 자유 변)</option>
+            <option value="T">T (평행이동, Translation)</option>
+            <option value="G">G (미끄럼 반사, Glide Reflection)</option>
+            <option value="C">C (중점 180° 점대칭 반회전, Halfturn)</option>
+            <option value="C3">C₃ (120° 꼭짓점 회전)</option>
+            <option value="C4">C₄ (90° 꼭짓점 회전)</option>
+            <option value="C6">C₆ (60° 꼭짓점 회전)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="targetEdgeGroup">
+          <label for="targetEdgeSelect">대응할 대상 변 (Target Edge):</label>
+          <select id="targetEdgeSelect" class="form-control" onchange="onTargetEdgeChange(parseInt(this.value))">
+            <!-- Options dynamically populated -->
+          </select>
+        </div>
+
+        <div class="toggle-row">
+          <span style="font-size: 13px; font-weight: 600;">부드러운 곡선 (Catmull Spline)</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="splineToggle" onchange="toggleSpline(this.checked)" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="info-card" id="edgeMathInfo" style="margin-top: 10px;">
+          💡 <strong>조작법</strong>: 캔버스 위 변을 <strong>더블클릭</strong>하면 제어점이 추가됩니다. 제어점을 드래그하여 변을 변형하고, <strong>우클릭</strong>하면 제어점이 삭제됩니다.
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <button class="btn" style="flex:1;" onclick="resetCurrentEdge()">선택 변 초기화</button>
+          <button class="btn" style="flex:1;" onclick="resetAllEdges()">전체 변 직선화</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Tessellation Engine -->
+      <div class="section">
+        <div class="section-title">
+          <span>Step 3. 테셀레이션 엔진</span>
+          <span class="badge" id="engineModeBadge">자동 격자 채우기</span>
+        </div>
+
+        <div class="form-group">
+          <label>타일링 생성 방식:</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <button class="btn active" id="btnModeAuto" onclick="setTilingMode('auto')">⚡ 자동 격자 채우기</button>
+            <button class="btn" id="btnModeManual" onclick="setTilingMode('manual')">🧩 수동 스탬프 조립</button>
+          </div>
+        </div>
+
+        <!-- Manual Controls -->
+        <div id="manualControls" style="display: none; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid var(--border); margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 12px; font-weight: 600;">조립된 타일: <strong id="manualTileCount">1</strong>개</span>
+            <span style="font-size: 11px; color: var(--text-muted);">가장자리 변 클릭으로도 조립!</span>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-primary" style="flex: 1; padding: 6px;" onclick="manualAddNextTile()">+ 다음 타일 부착</button>
+            <button class="btn" style="padding: 6px 10px;" onclick="manualUndoTile()" title="한 단계 취소">↩</button>
+            <button class="btn" style="padding: 6px 10px;" onclick="manualResetTiles()" title="처음으로">🔄</button>
+          </div>
+        </div>
+
+        <!-- Density / Scale -->
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+            <span>타일 크기 / 배율</span>
+            <span id="scaleVal">1.0x</span>
+          </div>
+          <input type="range" id="scaleSlider" min="0.5" max="2.0" step="0.1" value="1.0" oninput="onScaleChange(this.value)">
+        </div>
+
+        <!-- Palette Selector -->
+        <div class="form-group">
+          <label>타일 배색 팔레트 (Tile Palette):</label>
+          <select id="paletteSelect" class="form-control" onchange="onPaletteChange(this.value)">
+            <option value="morocco">모로코 파스텔 (Morocco Warm)</option>
+            <option value="marine">마린 아쿠아 (Marine Ocean)</option>
+            <option value="forest">포레스트 세이지 (Forest Sage)</option>
+            <option value="sunset">선셋 그라데이션 (Sunset Glow)</option>
+            <option value="escher">에셔 모노크롬 (Escher Classic)</option>
+            <option value="white">순백색 단색 (Pure White)</option>
+            <option value="custom">🎨 사용자 직접 지정 단색 (Custom)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="customColorGroup" style="display: none; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; margin-top: -6px; margin-bottom: 12px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 12px; font-weight: 600;">기본 조각 & 타일 색상:</span>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="color" id="customTileColorInput" value="#ffffff" onchange="onCustomColorChange(this.value)" style="width: 32px; height: 26px; border: 1px solid var(--border); border-radius: 4px; padding: 1px; cursor: pointer; background: white;">
+              <span id="customColorHex" style="font-size: 11px; font-family: monospace; color: var(--text-muted);">#ffffff</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile Boundary Stroke (Color & Thickness) -->
+        <div class="form-group" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-top: 6px;">
+          <div style="font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+            <span>📐 타일 경계 실선 (Border Outline)</span>
+          </div>
+          
+          <!-- Border Width Slider -->
+          <div style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 3px;">
+              <span style="color: var(--text-muted); font-weight: 600;">경계선 두께:</span>
+              <span id="borderWidthVal" style="font-weight: 700; color: var(--text);">2px</span>
+            </div>
+            <input type="range" id="borderWidthSlider" min="0" max="8" step="0.5" value="2" oninput="onBorderWidthChange(this.value)">
+          </div>
+
+          <!-- Border Color Picker -->
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 11px; font-weight: 600; color: var(--text-muted);">경계선 색상:</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <div style="display: flex; gap: 4px; align-items: center;">
+                <button type="button" onclick="onBorderColorChange('#000000')" style="width: 18px; height: 18px; border-radius: 50%; background: #000000; border: 1px solid #cbd5e1; cursor: pointer;" title="검정 (Black)"></button>
+                <button type="button" onclick="onBorderColorChange('#475569')" style="width: 18px; height: 18px; border-radius: 50%; background: #475569; border: 1px solid #cbd5e1; cursor: pointer;" title="다크 그레이"></button>
+                <button type="button" onclick="onBorderColorChange('#94a3b8')" style="width: 18px; height: 18px; border-radius: 50%; background: #94a3b8; border: 1px solid #cbd5e1; cursor: pointer;" title="라이트 그레이"></button>
+                <button type="button" onclick="onBorderColorChange('#ffffff')" style="width: 18px; height: 18px; border-radius: 50%; background: #ffffff; border: 1px solid #cbd5e1; cursor: pointer;" title="화이트"></button>
+              </div>
+              <input type="color" id="borderColorInput" value="#000000" onchange="onBorderColorChange(this.value)" style="width: 28px; height: 24px; border: 1px solid var(--border); border-radius: 4px; padding: 1px; cursor: pointer; background: white;">
+              <span id="borderColorHex" style="font-size: 11px; font-family: monospace; color: var(--text-muted);">#000000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Escher Drawing / Decoration Layer -->
+      <div class="section">
+        <div class="section-title">
+          <span>Step 4. 에셔 꾸미기 (Live Drawing)</span>
+          <span class="badge" id="drawStatusBadge">드로잉 대기</span>
+        </div>
+
+        <div class="toggle-row" style="margin-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 700; color: var(--primary);">✏️ 조각 내부 그리기 모드 활성화</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="drawingToggle" onchange="toggleDrawingMode(this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div id="drawingToolbox" style="opacity: 0.5; pointer-events: none; transition: opacity 0.2s;">
+          <div class="draw-tools">
+            <button class="tool-btn active" id="toolBrush" onclick="setDrawTool('brush')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
+              브러시
+            </button>
+            <button class="tool-btn" id="toolEraser" onclick="setDrawTool('eraser')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"/><path d="M22 21H7"/><path d="m5 11 9 9"/></svg>
+              지우개
+            </button>
+            <button class="tool-btn" id="toolStamp" onclick="setDrawTool('stamp')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22h14"/><path d="M19 18a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2"/><path d="M12 2v10"/><path d="M8 6h8"/></svg>
+              스탬프
+            </button>
+            <button class="tool-btn" onclick="undoDrawStroke()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+              되돌리기
+            </button>
+          </div>
+
+          <!-- Color Swatches -->
+          <div style="margin-bottom: 10px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">브러시 색상:</label>
+            <div class="palette-list">
+              <div class="color-swatch active" style="background: #1e293b;" onclick="setDrawColor('#1e293b', this)"></div>
+              <div class="color-swatch" style="background: #ef4444;" onclick="setDrawColor('#ef4444', this)"></div>
+              <div class="color-swatch" style="background: #3b82f6;" onclick="setDrawColor('#3b82f6', this)"></div>
+              <div class="color-swatch" style="background: #10b981;" onclick="setDrawColor('#10b981', this)"></div>
+              <div class="color-swatch" style="background: #f59e0b;" onclick="setDrawColor('#f59e0b', this)"></div>
+              <div class="color-swatch" style="background: #8b5cf6;" onclick="setDrawColor('#8b5cf6', this)"></div>
+              <input type="color" id="customColorPicker" value="#1e293b" onchange="setDrawColor(this.value, null)" style="width:24px; height:24px; border:none; padding:0; background:none; cursor:pointer;">
+            </div>
+          </div>
+
+          <!-- Brush Size Slider -->
+          <div class="form-group" style="margin-bottom: 10px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:2px;">
+              <span>브러시 굵기</span>
+              <span id="brushSizeVal">4px</span>
+            </div>
+            <input type="range" id="brushSizeSlider" min="2" max="20" value="4" oninput="setBrushSize(this.value)">
+          </div>
+
+          <!-- Stamp Presets -->
+          <div id="stampSelectorBox" style="display:none; margin-bottom: 10px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); display: block;">스탬프 프리셋 선택:</label>
+            <div class="stamp-grid">
+              <div class="stamp-item active" onclick="selectStamp('eye', this)" title="눈알">👁️</div>
+              <div class="stamp-item" onclick="selectStamp('fish', this)" title="물고기 비늘">🐟</div>
+              <div class="stamp-item" onclick="selectStamp('wing', this)" title="새 날개">🪽</div>
+              <div class="stamp-item" onclick="selectStamp('star', this)" title="별 기하 무늬">⭐</div>
+              <div class="stamp-item" onclick="selectStamp('spiral', this)" title="소용돌이">🌀</div>
+            </div>
+          </div>
+
+          <button class="btn" style="width: 100%;" onclick="clearDrawings()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            드로잉 전체 지우기
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Center Interactive Workspace (Dual View) -->
+    <main class="workspace" id="workspaceContainer">
+      
+      <!-- Left Pane: Prototile Editor -->
+      <section class="canvas-pane" id="prototilePane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5"><polygon points="12 2 2 22 22 22"/></svg>
+            기본 조각 편집기 (Prototile Editor)
+          </div>
+          <div class="pane-hint">
+            변 더블클릭: 제어점 추가 | 우클릭: 제어점 삭제
+          </div>
+        </div>
+        <div class="canvas-container">
+          <canvas id="prototileCanvas"></canvas>
+        </div>
+        <div class="floating-controls">
+          <button class="fab" onclick="resetEditorZoom()" title="편집기 중앙 정렬">🎯</button>
+        </div>
+      </section>
+
+      <!-- Right Pane: Tessellation Canvas -->
+      <section class="canvas-pane" id="tilingPane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+            전체 평면 테셀레이션 뷰 (Tiling Plane)
+          </div>
+          <div class="pane-hint">
+            마우스 드래그: 화면 이동 | 휠: 줌 인/아웃
+          </div>
+        </div>
+        <div class="canvas-container">
+          <canvas id="tilingCanvas"></canvas>
+        </div>
+        <div class="floating-controls">
+          <button class="fab" onclick="tilingZoomIn()" title="확대">+</button>
+          <button class="fab" onclick="tilingZoomOut()" title="축소">-</button>
+          <button class="fab" onclick="resetTilingPanZoom()" title="화면 원점 복귀">⌖</button>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Bottom Educational Banner -->
+  <footer class="edu-banner">
+    <div class="edu-status">
+      <div class="status-pill success" id="statusPill">
+        <span>●</span> <span id="statusPillText">완전 밀착 (Valid Tiling)</span>
+      </div>
+      <div class="edu-msg" id="statusMessage">
+        완벽합니다! 설정하신 헤슈 코드로 평면이 빈틈이나 겹침 없이 채워졌습니다.
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">현재 헤슈 코드:</span>
+      <div class="heesch-code-display" id="heeschCodeSummary">
+        T G T G
+      </div>
+    </div>
+  </footer>
+
+  <!-- Educational Guide Modal -->
+  <div class="modal-backdrop" id="guideModal" onclick="closeModalOnBackdrop(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>📐 헤슈 타일링(Heesch Tiling)이란?</h3>
+        <button class="btn" style="padding: 4px 8px;" onclick="closeModal('guideModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>독일의 수학자 <strong>하인리히 헤슈(Heinrich Heesch, 1906–1995)</strong>는 단 하나의 타일(기본 조각)로 평면을 빈틈없이 채울 수 있는 변환 규칙을 체계적으로 분류했습니다.</p>
+        
+        <h4>1. 주요 헤슈 변환 기호</h4>
+        <ul>
+          <li><strong>$T$ (Translation, 평행이동)</strong>: 변의 형태를 마주보는 대상 변으로 평행이동하여 그대로 복사합니다. 한쪽이 튀어나오면 반대쪽은 들어가며 완벽히 맞물립니다.</li>
+          <li><strong>$G$ (Glide Reflection, 미끄럼 반사)</strong>: 변을 반사(거울 대칭)시킨 뒤 평행이동시킵니다. 신발 발자국처럼 지그재그로 맞물립니다.</li>
+          <li><strong>$C$ (Centrosymmetry / Halfturn, 중점 180° 회전)</strong>: 변 자체의 가운데 중점을 기준으로 $180^\circ$ 회전 대칭을 이룹니다. 자기 자신의 절반이 나머지 절반과 대칭이 됩니다.</li>
+          <li><strong>$C_3, C_4, C_6$ (꼭짓점 회전)</strong>: 인접한 두 변이 만나는 꼭짓점을 중심으로 각각 $120^\circ(C_3)$, $90^\circ(C_4)$, $60^\circ(C_6)$ 회전하여 대상 변에 적용됩니다.</li>
+        </ul>
+
+        <h4>2. 왜 아무렇게나 매핑하면 평면이 채워지지 않을까요?</h4>
+        <p>평면을 빈틈과 겹침 없이 채우려면 각 꼭짓점에서 모이는 타일들의 <strong>내각의 합이 정확히 $360^\circ$</strong>가 되어야 하며, 맞닿는 변의 곡선 궤적이 정확한 등거리 변환(Isometry)을 형성해야 합니다. 임의의 엉뚱한 변환을 주면 캔버스에 <strong>붉은색 겹침(Overlap)</strong>이나 <strong>빈틈(Gap)</strong>이 생기는 것을 직접 확인해 보세요!</p>
+
+        <h4>3. 에셔(M.C. Escher)의 비밀</h4>
+        <p>판화가 에셔는 이러한 수학적 타일링 골격 위에 도마뱀, 물고기, 새의 형상을 그려 넣어 기묘하고 아름다운 테셀레이션 예술을 창작했습니다. 상단 [꾸미기 모드]를 활성화하여 여러분만의 에셔 작품을 만들어 보세요!</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="closeModal('guideModal')">이해했습니다, 시작하기!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript Application Logic -->
+  <script>
+    /* ==========================================================================
+       1. GLOBAL STATE & DATA STRUCTURES
+       ========================================================================== */
+    const EDGE_COLORS = [
+      '#ef4444', // Red (E1)
+      '#3b82f6', // Blue (E2)
+      '#10b981', // Green (E3)
+      '#f59e0b', // Amber (E4)
+      '#8b5cf6', // Purple (E5)
+      '#ec4899', // Pink (E6)
+      '#06b6d4', // Cyan (E7)
+      '#84cc16'  // Lime (E8)
+    ];
+
+    const PALETTES = {
+      morocco: ['#fef3c7', '#fed7aa', '#fbcfe8', '#ddd6fe', '#bae6fd'],
+      marine:  ['#cffafe', '#a5f3fc', '#bae6fd', '#93c5fd', '#e0f2fe'],
+      forest:  ['#dcfce7', '#bbf7d0', '#fef9c3', '#ecfccb', '#d1fae5'],
+      sunset:  ['#fee2e2', '#ffedd5', '#fef3c7', '#fce7f3', '#f3e8ff'],
+      escher:  ['#f8fafc', '#e2e8f0', '#cbd5e1', '#94a3b8', '#64748b'],
+      white:   ['#ffffff'],
+      custom:  ['#ffffff']
+    };
+
+    const state = {
+      viewMode: 'split', // 'split' | 'prototile' | 'tiling'
+      polygonSides: 4,   // 3, 4, 6
+      isSpline: true,
+      selectedEdgeIndex: 0,
+      tilingMode: 'auto', // 'auto' | 'manual'
+      tilingScale: 1.0,
+      currentPalette: 'morocco',
+      customTileColor: '#ffffff',
+      tileBorderColor: '#000000',
+      tileBorderWidth: 2,
+
+      // Drawing layer
+      drawingEnabled: false,
+      drawTool: 'brush', // 'brush' | 'eraser' | 'stamp'
+      brushColor: '#1e293b',
+      brushSize: 4,
+      currentStamp: 'eye',
+      drawStrokes: [], // array of strokes: { type, color, size, points } or { type:'stamp', name, x, y, size, color }
+
+      // Manual assembly state
+      manualTiles: [], // list of placed tile transforms: { a, b, c, d, tx, ty, colorIdx }
+
+      // Pan & Zoom
+      prototilePan: { x: 0, y: 0 },
+      prototileZoom: 1.0,
+      tilingPan: { x: 0, y: 0 },
+      tilingZoom: 1.0,
+
+      // Geometry:
+      // vertices: [{x, y}, ...]
+      // edges: [{ type: 'NONE'|'T'|'G'|'C'|'C3'|'C4'|'C6', target: j, controlPoints: [{u, v}, ...] }]
+      baseVertices: [],
+      edges: [],
+      edgeBadgeBounds: [],
+
+      // Validation result
+      isValid: true,
+      errorReason: '',
+      overlapCount: 0
+    };
+
+    /* ==========================================================================
+       2. CANVAS CONTEXTS & SETUP
+       ========================================================================== */
+    const protoCanvas = document.getElementById('prototileCanvas');
+    const protoCtx = protoCanvas.getContext('2d');
+
+    const tilingCanvas = document.getElementById('tilingCanvas');
+    const tilingCtx = tilingCanvas.getContext('2d');
+
+    // Offscreen mask canvas for overlap detection
+    const maskCanvas = document.createElement('canvas');
+    const maskCtx = maskCanvas.getContext('2d');
+
+    // Red Hatch Pattern for overlap visualization
+    let hatchPattern = null;
+    function createHatchPattern() {
+      const p = document.createElement('canvas');
+      p.width = 16;
+      p.height = 16;
+      const pc = p.getContext('2d');
+      pc.strokeStyle = 'rgba(239, 68, 68, 0.85)';
+      pc.lineWidth = 2.5;
+      pc.beginPath();
+      pc.moveTo(0, 16); pc.lineTo(16, 0);
+      pc.moveTo(-4, 4); pc.lineTo(4, -4);
+      pc.moveTo(12, 20); pc.lineTo(20, 12);
+      pc.stroke();
+      hatchPattern = tilingCtx.createPattern(p, 'repeat');
+    }
+    createHatchPattern();
+
+    function resizeCanvases() {
+      const pRect = protoCanvas.parentElement.getBoundingClientRect();
+      protoCanvas.width = pRect.width * window.devicePixelRatio;
+      protoCanvas.height = pRect.height * window.devicePixelRatio;
+      protoCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      const tRect = tilingCanvas.parentElement.getBoundingClientRect();
+      tilingCanvas.width = tRect.width * window.devicePixelRatio;
+      tilingCanvas.height = tRect.height * window.devicePixelRatio;
+      tilingCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      maskCanvas.width = tilingCanvas.width;
+      maskCanvas.height = tilingCanvas.height;
+
+      renderAll();
+    }
+
+    window.addEventListener('resize', resizeCanvases);
+
+    /* ==========================================================================
+       3. GEOMETRY & HEESCH INITIALIZATION
+       ========================================================================== */
+    function initPolygon(sides) {
+      state.polygonSides = sides;
+      state.baseVertices = [];
+      state.edges = [];
+      state.edgeBadgeBounds = [];
+      state.drawStrokes = [];
+      state.selectedEdgeIndex = 0;
+
+      // Base radius
+      const radius = sides === 3 ? 150 : (sides === 4 ? 140 : 130);
+
+      // Generate regular polygon vertices (Clockwise)
+      // Triangle: pointing upwards
+      // Square: axis aligned
+      // Hexagon: flat top
+      let startAngle = 0;
+      if (sides === 3) startAngle = -Math.PI / 2;
+      else if (sides === 4) startAngle = -Math.PI / 4;
+      else if (sides === 6) startAngle = 0;
+
+      for (let i = 0; i < sides; i++) {
+        const theta = startAngle + (2 * Math.PI * i) / sides;
+        state.baseVertices.push({
+          x: radius * Math.cos(theta),
+          y: radius * Math.sin(theta)
+        });
+      }
+
+      // Initialize edges
+      for (let i = 0; i < sides; i++) {
+        state.edges.push({
+          type: 'NONE',
+          target: -1, // No target initially
+          isMaster: true,
+          controlPoints: [] // local (u, v) coordinates along baseline
+        });
+      }
+
+      updateEdgeUI();
+      validateHeeschTiling();
+      resetManualAssembly();
+      renderAll();
+    }
+
+    // Set Base Polygon Handler
+    function setBasePolygon(sides) {
+      document.querySelectorAll('.poly-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`btnPoly${sides}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      document.getElementById('basePolyBadge').textContent = 
+        sides === 3 ? '정삼각형' : (sides === 4 ? '정사각형' : '정육각형');
+
+      // Set preset dropdown to custom (clean regular polygon without pre-existing relationships)
+      const dropdown = document.getElementById('presetDropdown');
+      if (dropdown) dropdown.value = 'custom';
+
+      initPolygon(sides);
+    }
+
+    /* ==========================================================================
+       4. HEESCH PRESETS
+       ========================================================================== */
+    function applyPreset(presetKey) {
+      if (presetKey === 'custom') {
+        for (let i = 0; i < state.polygonSides; i++) {
+          state.edges[i].type = 'NONE';
+          state.edges[i].target = -1;
+          state.edges[i].isMaster = true;
+          state.edges[i].controlPoints = [];
+        }
+        updateEdgeUI();
+        validateHeeschTiling();
+        resetManualAssembly();
+        renderAll();
+        return;
+      }
+
+      if (presetKey.startsWith('tri') && state.polygonSides !== 3) {
+        initPolygon(3);
+        document.querySelectorAll('.poly-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.getElementById('btnPoly3');
+        if (btn) btn.classList.add('active');
+        document.getElementById('basePolyBadge').textContent = '정삼각형';
+      } else if (presetKey.startsWith('sq') && state.polygonSides !== 4) {
+        initPolygon(4);
+        document.querySelectorAll('.poly-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.getElementById('btnPoly4');
+        if (btn) btn.classList.add('active');
+        document.getElementById('basePolyBadge').textContent = '정사각형';
+      } else if (presetKey.startsWith('hex') && state.polygonSides !== 6) {
+        initPolygon(6);
+        document.querySelectorAll('.poly-btn').forEach(b => b.classList.remove('active'));
+        const btn = document.getElementById('btnPoly6');
+        if (btn) btn.classList.add('active');
+        document.getElementById('basePolyBadge').textContent = '정육각형';
+      }
+
+      // Reset edge types
+      for (let i = 0; i < state.polygonSides; i++) {
+        state.edges[i].type = 'NONE';
+        state.edges[i].target = -1;
+        state.edges[i].isMaster = true;
+        state.edges[i].controlPoints = [];
+      }
+
+      if (presetKey === 'sq_TTTT') {
+        // Square: E0 -> E2 (T), E1 -> E3 (T)
+        setEdgeRule(0, 'T', 2);
+        setEdgeRule(1, 'T', 3);
+        // Add sample subtle wave on E0 and E1 for delightful immediate visual
+        if (state.edges[0].controlPoints.length === 0) {
+          state.edges[0].controlPoints = [{ u: 0.35, v: 0.2 }, { u: 0.65, v: -0.2 }];
+          syncSlaveEdges();
+        }
+      } else if (presetKey === 'sq_TGTG') {
+        // E0 -> E2 (T), E1 -> E3 (G)
+        setEdgeRule(0, 'T', 2);
+        setEdgeRule(1, 'G', 3);
+        if (state.edges[1].controlPoints.length === 0) {
+          state.edges[1].controlPoints = [{ u: 0.5, v: 0.3 }];
+          syncSlaveEdges();
+        }
+      } else if (presetKey === 'sq_C4C4') {
+        // Adjacent 90° rotations: E0 -> E1 (C4), E3 -> E2 (C4)
+        setEdgeRule(0, 'C4', 1);
+        setEdgeRule(3, 'C4', 2);
+        if (state.edges[0].controlPoints.length === 0) {
+          state.edges[0].controlPoints = [{ u: 0.5, v: 0.25 }];
+          syncSlaveEdges();
+        }
+      } else if (presetKey === 'sq_CCCC') {
+        // All four edges have midpoint halfturn
+        for (let i = 0; i < 4; i++) {
+          setEdgeRule(i, 'C', i);
+        }
+        if (state.edges[0].controlPoints.length === 0) {
+          state.edges[0].controlPoints = [{ u: 0.25, v: 0.25 }, { u: 0.75, v: -0.25 }];
+        }
+      } else if (presetKey === 'tri_CCC') {
+        for (let i = 0; i < 3; i++) {
+          setEdgeRule(i, 'C', i);
+        }
+        if (state.edges[0].controlPoints.length === 0) {
+          state.edges[0].controlPoints = [{ u: 0.25, v: 0.2 }, { u: 0.75, v: -0.2 }];
+        }
+      } else if (presetKey === 'tri_TC') {
+        // E0 -> E1 (T), E2 (C)
+        setEdgeRule(0, 'T', 1);
+        setEdgeRule(2, 'C', 2);
+        if (state.edges[0].controlPoints.length === 0) {
+          state.edges[0].controlPoints = [{ u: 0.5, v: 0.25 }];
+          syncSlaveEdges();
+        }
+      } else if (presetKey === 'tri_C3C3C3') {
+        // Adjacent 120° rotation
+        setEdgeRule(0, 'C3', 1);
+        setEdgeRule(2, 'C', 2);
+      } else if (presetKey === 'hex_TTT') {
+        // Hexagon opposite edges: E0->E3, E1->E4, E2->E5
+        setEdgeRule(0, 'T', 3);
+        setEdgeRule(1, 'T', 4);
+        setEdgeRule(2, 'T', 5);
+        if (state.edges[0].controlPoints.length === 0) {
+          state.edges[0].controlPoints = [{ u: 0.35, v: 0.2 }, { u: 0.65, v: -0.15 }];
+          syncSlaveEdges();
+        }
+      } else if (presetKey === 'hex_C3C3C3') {
+        setEdgeRule(0, 'C3', 1);
+        setEdgeRule(2, 'C3', 3);
+        setEdgeRule(4, 'C3', 5);
+      } else if (presetKey === 'hex_CCCCCC') {
+        for (let i = 0; i < 6; i++) {
+          setEdgeRule(i, 'C', i);
+        }
+      }
+
+      updateEdgeUI();
+      validateHeeschTiling();
+      resetManualAssembly();
+      renderAll();
+    }
+
+    function setEdgeRule(srcIdx, type, targetIdx) {
+      state.edges[srcIdx].type = type;
+      state.edges[srcIdx].isMaster = true;
+      state.edges[srcIdx].target = targetIdx;
+
+      if (type !== 'NONE' && type !== 'C' && srcIdx !== targetIdx && targetIdx >= 0) {
+        state.edges[targetIdx].type = type;
+        state.edges[targetIdx].isMaster = false;
+        state.edges[targetIdx].target = srcIdx;
+      }
+    }
+
+    /* ==========================================================================
+       5. EDGE GEOMETRY & COORDINATE CONVERSIONS
+       ========================================================================== */
+    // Get world coordinates of base vertices
+    function getEdgeEndpoints(edgeIndex) {
+      const vA = state.baseVertices[edgeIndex];
+      const vB = state.baseVertices[(edgeIndex + 1) % state.polygonSides];
+      return { vA, vB };
+    }
+
+    // Convert normalized (u, v) to world (x, y) for an edge
+    function edgeUVtoWorld(edgeIndex, u, v) {
+      const { vA, vB } = getEdgeEndpoints(edgeIndex);
+      const dx = vB.x - vA.x;
+      const dy = vB.y - vA.y;
+      const len = Math.hypot(dx, dy);
+      const tx = dx / len;
+      const ty = dy / len;
+      // Clockwise polygon outward normal: (ty, -tx)
+      const nx = ty;
+      const ny = -tx;
+
+      return {
+        x: vA.x + u * dx + v * len * nx,
+        y: vA.y + u * dy + v * len * ny
+      };
+    }
+
+    // Convert world (x, y) to normalized (u, v) for an edge
+    function worldToEdgeUV(edgeIndex, x, y) {
+      const { vA, vB } = getEdgeEndpoints(edgeIndex);
+      const dx = vB.x - vA.x;
+      const dy = vB.y - vA.y;
+      const lenSq = dx * dx + dy * dy;
+      const len = Math.sqrt(lenSq);
+      const tx = dx / len;
+      const ty = dy / len;
+      const nx = ty;
+      const ny = -tx;
+
+      const px = x - vA.x;
+      const py = y - vA.y;
+
+      const u = (px * tx + py * ty) / len;
+      const v = (px * nx + py * ny) / len;
+
+      return { u, v };
+    }
+
+    function rotatePointAroundVertex(sourceEdgeIdx, targetEdgeIdx, u, v) {
+      const worldPt = edgeUVtoWorld(sourceEdgeIdx, u, v);
+      const { vA: sA, vB: sB } = getEdgeEndpoints(sourceEdgeIdx);
+      const { vA: tA, vB: tB } = getEdgeEndpoints(targetEdgeIdx);
+
+      let V = null;
+      let sourceVec = null;
+      let targetVec = null;
+
+      const eps = 1e-2;
+      if (Math.hypot(sB.x - tA.x, sB.y - tA.y) < eps) {
+        V = sB;
+        sourceVec = { x: sA.x - sB.x, y: sA.y - sB.y };
+        targetVec = { x: tB.x - tA.x, y: tB.y - tA.y };
+      } else if (Math.hypot(sA.x - tB.x, sA.y - tB.y) < eps) {
+        V = sA;
+        sourceVec = { x: sB.x - sA.x, y: sB.y - sA.y };
+        targetVec = { x: tA.x - tB.x, y: tA.y - tB.y };
+      } else if (Math.hypot(sA.x - tA.x, sA.y - tA.y) < eps) {
+        V = sA;
+        sourceVec = { x: sB.x - sA.x, y: sB.y - sA.y };
+        targetVec = { x: tB.x - tA.x, y: tB.y - tA.y };
+      } else if (Math.hypot(sB.x - tB.x, sB.y - tB.y) < eps) {
+        V = sB;
+        sourceVec = { x: sA.x - sB.x, y: sA.y - sB.y };
+        targetVec = { x: tA.x - tB.x, y: tA.y - tB.y };
+      }
+
+      if (!V) {
+        return { u: 1 - u, v: -v };
+      }
+
+      const angleSource = Math.atan2(sourceVec.y, sourceVec.x);
+      const angleTarget = Math.atan2(targetVec.y, targetVec.x);
+      const deltaTheta = angleTarget - angleSource;
+
+      const cos = Math.cos(deltaTheta);
+      const sin = Math.sin(deltaTheta);
+      const dx = worldPt.x - V.x;
+      const dy = worldPt.y - V.y;
+      const rotX = V.x + dx * cos - dy * sin;
+      const rotY = V.y + dx * sin + dy * cos;
+
+      return worldToEdgeUV(targetEdgeIdx, rotX, rotY);
+    }
+
+    // Sync slave edge control points from master edge
+    function syncSlaveEdges() {
+      for (let i = 0; i < state.polygonSides; i++) {
+        const edge = state.edges[i];
+        if (edge.type === 'C') {
+          // Halfturn symmetry: preserved symmetrically in-place
+          if (!drag.isDragging || drag.type !== 'controlPoint' || drag.edgeIndex !== i) {
+            const N = edge.controlPoints.length;
+            const halfN = Math.floor(N / 2);
+            for (let k = 0; k < halfN; k++) {
+              const opp = N - 1 - k;
+              edge.controlPoints[opp] = {
+                u: 1 - edge.controlPoints[k].u,
+                v: -edge.controlPoints[k].v
+              };
+            }
+          }
+        } else if (edge.isMaster && edge.type !== 'NONE' && edge.target !== undefined && edge.target >= 0 && edge.target !== i) {
+          const targetEdge = state.edges[edge.target];
+          if (!targetEdge) continue;
+          if (edge.type === 'T') {
+            // Translation: opposite edges run in reverse clockwise direction
+            // u maps to 1 - u, v maps to -v. Reverse array order to preserve vertex-to-vertex sequence
+            targetEdge.controlPoints = edge.controlPoints.map(p => ({
+              u: 1 - p.u,
+              v: -p.v
+            })).reverse();
+          } else if (edge.type === 'G') {
+            // Glide Reflection: reflect across axis, preserving sequence
+            targetEdge.controlPoints = edge.controlPoints.map(p => ({
+              u: p.u,
+              v: -p.v
+            }));
+          } else if (edge.type === 'C3' || edge.type === 'C4' || edge.type === 'C6') {
+            // Exact 2D Euclidean rotation around common vertex
+            const mapped = edge.controlPoints.map(p => rotatePointAroundVertex(i, edge.target, p.u, p.v));
+            const { vA: sA, vB: sB } = getEdgeEndpoints(i);
+            const { vA: tA, vB: tB } = getEdgeEndpoints(edge.target);
+            const eps = 1e-2;
+            const isInverted = Math.hypot(sB.x - tA.x, sB.y - tA.y) < eps || Math.hypot(sA.x - tB.x, sA.y - tB.y) < eps;
+            targetEdge.controlPoints = isInverted ? mapped.reverse() : mapped;
+          } else {
+            targetEdge.controlPoints = edge.controlPoints.map(p => ({ ...p }));
+          }
+        }
+      }
+    }
+
+    // Generate discrete polygon path points for an edge (incorporating control points and splines)
+    function getEdgeSamplePoints(edgeIndex) {
+      const edge = state.edges[edgeIndex];
+      const { vA, vB } = getEdgeEndpoints(edgeIndex);
+
+      if (edge.controlPoints.length === 0) {
+        return [vA, vB];
+      }
+
+      // Convert control points to world
+      const pts = [
+        vA,
+        ...edge.controlPoints.map(cp => edgeUVtoWorld(edgeIndex, cp.u, cp.v)),
+        vB
+      ];
+
+      if (!state.isSpline || pts.length <= 2) {
+        return pts;
+      }
+
+      // Catmull-Rom Spline sampling
+      const samples = [];
+      const numSegments = pts.length - 1;
+      const stepsPerSegment = 16;
+
+      for (let i = 0; i < numSegments; i++) {
+        const p0 = i > 0 ? pts[i - 1] : pts[i];
+        const p1 = pts[i];
+        const p2 = pts[i + 1];
+        const p3 = i + 2 < pts.length ? pts[i + 2] : p2;
+
+        for (let t = 0; t <= stepsPerSegment; t++) {
+          if (i > 0 && t === 0) continue; // avoid duplicate
+          const s = t / stepsPerSegment;
+          const s2 = s * s;
+          const s3 = s2 * s;
+
+          const x = 0.5 * (
+            (2 * p1.x) +
+            (-p0.x + p2.x) * s +
+            (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * s2 +
+            (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * s3
+          );
+
+          const y = 0.5 * (
+            (2 * p1.y) +
+            (-p0.y + p2.y) * s +
+            (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * s2 +
+            (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * s3
+          );
+
+          samples.push({ x, y });
+        }
+      }
+      return samples;
+    }
+
+    // Get complete closed boundary polygon of the deformed prototile
+    function getFullPrototilePolygon() {
+      const poly = [];
+      for (let i = 0; i < state.polygonSides; i++) {
+        const edgePts = getEdgeSamplePoints(i);
+        // Exclude the last point to avoid duplicates with the next edge's first point
+        for (let j = 0; j < edgePts.length - 1; j++) {
+          poly.push(edgePts[j]);
+        }
+      }
+      return poly;
+    }
+
+    /* ==========================================================================
+       6. UI BINDINGS & CONTROLS
+       ========================================================================== */
+    function updateEdgeUI() {
+      const container = document.getElementById('edgeChipsContainer');
+      container.innerHTML = '';
+
+      for (let i = 0; i < state.polygonSides; i++) {
+        const chip = document.createElement('div');
+        chip.className = `edge-chip ${i === state.selectedEdgeIndex ? 'active' : ''}`;
+        chip.innerHTML = `
+          <span class="dot" style="background: ${EDGE_COLORS[i]};"></span>
+          E${i + 1}
+          <small style="opacity:0.75; font-size:10px;">(${state.edges[i].type})</small>
+        `;
+        chip.onclick = () => selectEdge(i);
+        container.appendChild(chip);
+      }
+
+      const curEdge = state.edges[state.selectedEdgeIndex];
+      document.getElementById('selectedEdgeBadge').textContent = `변 E${state.selectedEdgeIndex + 1} 선택됨`;
+      document.getElementById('transformSelect').value = curEdge.type;
+
+      // Target edge dropdown
+      const targetGroup = document.getElementById('targetEdgeGroup');
+      const targetSelect = document.getElementById('targetEdgeSelect');
+      targetSelect.innerHTML = '';
+
+      if (curEdge.type === 'NONE' || curEdge.type === 'C') {
+        targetGroup.style.display = 'none';
+      } else {
+        targetGroup.style.display = 'block';
+
+        // Placeholder option when target is unassigned
+        const placeholderOpt = document.createElement('option');
+        placeholderOpt.value = -1;
+        placeholderOpt.textContent = '-- 대응할 대상 변을 선택하세요 --';
+        placeholderOpt.disabled = true;
+        if (curEdge.target === undefined || curEdge.target < 0) {
+          placeholderOpt.selected = true;
+        }
+        targetSelect.appendChild(placeholderOpt);
+
+        for (let j = 0; j < state.polygonSides; j++) {
+          if (j !== state.selectedEdgeIndex) {
+            const opt = document.createElement('option');
+            opt.value = j;
+            let statusSuffix = '';
+            if (state.edges[j].target >= 0 && state.edges[j].target !== state.selectedEdgeIndex) {
+              statusSuffix = ` (현재 E${state.edges[j].target + 1}와 연결됨)`;
+            } else if (state.edges[j].target === state.selectedEdgeIndex) {
+              statusSuffix = ` 🔗 (현재 짝)`;
+            }
+            opt.textContent = `E${j + 1} (${EDGE_COLORS[j]})${statusSuffix}`;
+            if (j === curEdge.target) opt.selected = true;
+            targetSelect.appendChild(opt);
+          }
+        }
+      }
+
+      // Mathematical info message
+      const infoBox = document.getElementById('edgeMathInfo');
+      const targetLabel = (curEdge.target !== undefined && curEdge.target >= 0) ? `E${curEdge.target + 1}` : '(대상 변 미지정)';
+      if (curEdge.type === 'T') {
+        infoBox.innerHTML = `🔷 <strong>E${state.selectedEdgeIndex + 1} ↔ ${targetLabel} (평행이동, Translation)</strong><br>${curEdge.target >= 0 ? '선택한 변의 형상이 대상 변으로 평행이동 복사됩니다. 한쪽이 튀어나오면 대상 변은 들어갑니다.' : '<span style="color:#ef4444; font-weight:600;">대응할 대상 변을 아래 목록에서 선택해 주세요.</span>'}`;
+      } else if (curEdge.type === 'G') {
+        infoBox.innerHTML = `🔁 <strong>E${state.selectedEdgeIndex + 1} ↔ ${targetLabel} (미끄럼 반사, Glide Reflection)</strong><br>${curEdge.target >= 0 ? '변을 축에 대해 반사한 뒤 평행이동하여 대상 변에 적용됩니다. 좌우 대칭이 뒤집힙니다.' : '<span style="color:#ef4444; font-weight:600;">대응할 대상 변을 아래 목록에서 선택해 주세요.</span>'}`;
+      } else if (curEdge.type === 'C') {
+        infoBox.innerHTML = `🔄 <strong>E${state.selectedEdgeIndex + 1} (중점 180° 점대칭, Halfturn)</strong><br>변의 중점을 기준으로 점대칭됩니다. 절반을 변형하면 나머지 절반이 자동으로 회전하여 맞춰집니다.`;
+      } else if (curEdge.type.startsWith('C')) {
+        const deg = curEdge.type === 'C3' ? '120°' : (curEdge.type === 'C4' ? '90°' : '60°');
+        infoBox.innerHTML = `💫 <strong>E${state.selectedEdgeIndex + 1} ↔ ${targetLabel} (${deg} 꼭짓점 회전)</strong><br>${curEdge.target >= 0 ? `두 변이 만나는 공통 꼭짓점을 중심으로 ${deg} 회전하여 대상 변에 대응됩니다.` : '<span style="color:#ef4444; font-weight:600;">대응할 대상 변을 아래 목록에서 선택해 주세요.</span>'}`;
+      } else {
+        infoBox.innerHTML = `✏️ <strong>E${state.selectedEdgeIndex + 1} (독립 자유 변)</strong><br>규칙 없이 자유롭게 제어점을 움직일 수 있습니다.`;
+      }
+    }
+
+    function selectEdge(index) {
+      state.selectedEdgeIndex = index;
+      updateEdgeUI();
+      renderAll();
+    }
+
+    function onEdgeTransformChange(newType) {
+      const cur = state.edges[state.selectedEdgeIndex];
+      const oldTarget = cur.target;
+      cur.type = newType;
+      cur.isMaster = true;
+
+      if (newType === 'NONE' || newType === 'C') {
+        // Clear partner link if this edge was paired with someone
+        if (oldTarget >= 0 && state.edges[oldTarget]) {
+          if (state.edges[oldTarget].target === state.selectedEdgeIndex) {
+            state.edges[oldTarget].target = -1;
+            state.edges[oldTarget].type = 'NONE';
+            state.edges[oldTarget].isMaster = true;
+          }
+        }
+        cur.target = -1;
+      } else {
+        // T, G, C3, C4, C6: requires target
+        if (oldTarget >= 0 && oldTarget !== state.selectedEdgeIndex && state.edges[oldTarget]) {
+          // If already paired with a valid target edge, update partner's type synchronously
+          state.edges[oldTarget].type = newType;
+          state.edges[oldTarget].isMaster = false;
+          state.edges[oldTarget].target = state.selectedEdgeIndex;
+        } else {
+          // DO NOT auto-select another edge! Keep target -1 until user explicitly chooses it
+          cur.target = -1;
+        }
+      }
+
+      document.getElementById('presetDropdown').value = 'custom';
+      syncSlaveEdges();
+      updateEdgeUI();
+      validateHeeschTiling();
+      resetManualAssembly();
+      renderAll();
+    }
+
+    function onTargetEdgeChange(newTarget) {
+      const srcIdx = state.selectedEdgeIndex;
+      const cur = state.edges[srcIdx];
+
+      if (isNaN(newTarget) || newTarget < 0) {
+        if (cur.target >= 0 && state.edges[cur.target] && state.edges[cur.target].target === srcIdx) {
+          state.edges[cur.target].target = -1;
+          state.edges[cur.target].type = 'NONE';
+          state.edges[cur.target].isMaster = true;
+        }
+        cur.target = -1;
+      } else {
+        const targetIdx = newTarget;
+
+        // 1. If this edge already had another partner, unpair that partner cleanly
+        if (cur.target >= 0 && cur.target !== targetIdx && state.edges[cur.target]) {
+          if (state.edges[cur.target].target === srcIdx) {
+            state.edges[cur.target].target = -1;
+            state.edges[cur.target].type = 'NONE';
+            state.edges[cur.target].isMaster = true;
+          }
+        }
+
+        // 2. If the chosen target edge already had another partner, unpair that partner as well
+        const oldPartnerOfTarget = state.edges[targetIdx].target;
+        if (oldPartnerOfTarget >= 0 && oldPartnerOfTarget !== srcIdx && state.edges[oldPartnerOfTarget]) {
+          state.edges[oldPartnerOfTarget].target = -1;
+          state.edges[oldPartnerOfTarget].type = 'NONE';
+          state.edges[oldPartnerOfTarget].isMaster = true;
+        }
+
+        // 3. Bidirectional pairing in one step!
+        cur.target = targetIdx;
+        cur.isMaster = true;
+
+        state.edges[targetIdx].type = cur.type;
+        state.edges[targetIdx].isMaster = false;
+        state.edges[targetIdx].target = srcIdx;
+      }
+
+      document.getElementById('presetDropdown').value = 'custom';
+      syncSlaveEdges();
+      updateEdgeUI();
+      validateHeeschTiling();
+      resetManualAssembly();
+      renderAll();
+    }
+
+    function toggleSpline(enabled) {
+      state.isSpline = enabled;
+      renderAll();
+    }
+
+    function resetCurrentEdge() {
+      state.edges[state.selectedEdgeIndex].controlPoints = [];
+      syncSlaveEdges();
+      renderAll();
+    }
+
+    function resetAllEdges() {
+      for (let i = 0; i < state.polygonSides; i++) {
+        state.edges[i].controlPoints = [];
+      }
+      syncSlaveEdges();
+      renderAll();
+    }
+
+    function onScaleChange(val) {
+      state.tilingScale = parseFloat(val);
+      document.getElementById('scaleVal').textContent = `${val}x`;
+      renderAll();
+    }
+
+    function onPaletteChange(paletteName) {
+      state.currentPalette = paletteName;
+      const customGroup = document.getElementById('customColorGroup');
+      if (customGroup) {
+        customGroup.style.display = (paletteName === 'custom' || paletteName === 'white') ? 'block' : 'none';
+      }
+      if (paletteName === 'white') {
+        state.customTileColor = '#ffffff';
+        PALETTES.custom = ['#ffffff'];
+        const input = document.getElementById('customTileColorInput');
+        if (input) input.value = '#ffffff';
+        const hex = document.getElementById('customColorHex');
+        if (hex) hex.textContent = '#ffffff';
+      }
+      renderAll();
+    }
+
+    function onCustomColorChange(colorVal) {
+      state.customTileColor = colorVal;
+      PALETTES.custom = [colorVal];
+      state.currentPalette = 'custom';
+      document.getElementById('paletteSelect').value = 'custom';
+      const hex = document.getElementById('customColorHex');
+      if (hex) hex.textContent = colorVal;
+      renderAll();
+    }
+
+    function onBorderWidthChange(val) {
+      const width = parseFloat(val);
+      state.tileBorderWidth = isNaN(width) ? 2 : width;
+      const valEl = document.getElementById('borderWidthVal');
+      if (valEl) valEl.textContent = `${state.tileBorderWidth}px`;
+      renderAll();
+    }
+
+    function onBorderColorChange(colorVal) {
+      state.tileBorderColor = colorVal;
+      const input = document.getElementById('borderColorInput');
+      if (input) input.value = colorVal;
+      const hex = document.getElementById('borderColorHex');
+      if (hex) hex.textContent = colorVal;
+      renderAll();
+    }
+
+    function setViewMode(mode) {
+      state.viewMode = mode;
+      document.querySelectorAll('.view-tab-btn').forEach(b => b.classList.remove('active'));
+      if (mode === 'split') document.getElementById('tabSplit').classList.add('active');
+      else if (mode === 'prototile') document.getElementById('tabPrototile').classList.add('active');
+      else if (mode === 'tiling') document.getElementById('tabTiling').classList.add('active');
+
+      const ws = document.getElementById('workspaceContainer');
+      ws.className = `workspace mode-${mode}`;
+
+      setTimeout(resizeCanvases, 50);
+    }
+
+    function setTilingMode(mode) {
+      state.tilingMode = mode;
+      document.getElementById('btnModeAuto').classList.toggle('active', mode === 'auto');
+      document.getElementById('btnModeManual').classList.toggle('active', mode === 'manual');
+      document.getElementById('manualControls').style.display = mode === 'manual' ? 'block' : 'none';
+      document.getElementById('engineModeBadge').textContent = mode === 'auto' ? '자동 격자 채우기' : '수동 스탬프 조립';
+
+      if (mode === 'manual') {
+        resetManualAssembly();
+      }
+      renderAll();
+    }
+
+    /* ==========================================================================
+       7. MATHEMATICAL VALIDATION & HEESCH CODE SUMMARY
+       ========================================================================== */
+    function validateHeeschTiling() {
+      const codeList = state.edges.map(e => e.type === 'NONE' ? '?' : e.type);
+      const codeStr = codeList.join(' ');
+      document.getElementById('heeschCodeSummary').textContent = codeStr;
+
+      let valid = true;
+      let reason = '';
+
+      // Check for unassigned edges or incomplete pairings
+      const unassigned = state.edges.filter(e => e.type === 'NONE');
+      const incompletePairing = state.edges.filter(e => e.type !== 'NONE' && e.type !== 'C' && (e.target === undefined || e.target < 0));
+
+      if (unassigned.length > 0) {
+        valid = false;
+        reason = `일부 변에 변환 규칙이 지정되지 않았습니다 (${unassigned.length}개 변).`;
+      } else if (incompletePairing.length > 0) {
+        valid = false;
+        reason = `대응 대상 변이 아직 선택되지 않은 변이 있습니다 (${incompletePairing.map(e => 'E' + (state.edges.indexOf(e) + 1)).join(', ')}). 대상 변을 지정해 주세요.`;
+      } else {
+        const sides = state.polygonSides;
+        if (sides === 4) {
+          const tCount = state.edges.filter(e => e.type === 'T').length;
+          const gCount = state.edges.filter(e => e.type === 'G').length;
+          const cCount = state.edges.filter(e => e.type === 'C').length;
+          const c4Count = state.edges.filter(e => e.type === 'C4').length;
+
+          if (tCount === 4) {
+            valid = (state.edges[0].target === 2 && state.edges[1].target === 3);
+            if (!valid) reason = '평행이동(T)은 마주보는 변끼리 짝을 지어야 평면이 채워집니다!';
+          } else if (c4Count === 4) {
+            valid = true;
+          } else if (cCount === 4) {
+            valid = true;
+          } else if (tCount === 2 && gCount === 2) {
+            valid = true;
+          } else {
+            valid = false;
+            reason = '정사각형에서는 TTTT, TGTG, C₄C₄, CCCC 등의 조합만 완벽히 평면을 채울 수 있습니다.';
+          }
+        } else if (sides === 3) {
+          const cCount = state.edges.filter(e => e.type === 'C').length;
+          const tCount = state.edges.filter(e => e.type === 'T').length;
+          const c3Count = state.edges.filter(e => e.type === 'C3').length;
+
+          if (cCount === 3 || (tCount === 2 && cCount === 1) || c3Count === 2) {
+            valid = true;
+          } else {
+            valid = false;
+            reason = '정삼각형에서는 CCC, TC, C₃C₃ 등의 헤슈 규칙이 필요합니다.';
+          }
+        } else if (sides === 6) {
+          const tCount = state.edges.filter(e => e.type === 'T').length;
+          const gCount = state.edges.filter(e => e.type === 'G').length;
+          const cCount = state.edges.filter(e => e.type === 'C').length;
+          const c3Count = state.edges.filter(e => e.type === 'C3').length;
+
+          if (tCount === 6) {
+            valid = (state.edges[0].target === 3 && state.edges[1].target === 4 && state.edges[2].target === 5);
+            if (!valid) reason = '정육각형 평행이동(TTT)은 마주보는 세 쌍의 변끼리 정확히 짝을 지어야 합니다.';
+          } else if (cCount === 6 || c3Count === 6) {
+            valid = true;
+          } else if ((tCount === 2 && gCount === 4) || (tCount === 4 && gCount === 2) || (gCount === 6)) {
+            valid = true;
+          } else {
+            valid = false;
+            reason = '정육각형에서는 TTT, C₃C₃C₃, CCCCCC, GG T GG T 등의 규칙이 필요합니다.';
+          }
+        }
+      }
+
+      state.isValid = valid;
+      state.errorReason = reason;
+
+      const pill = document.getElementById('statusPill');
+      const pillText = document.getElementById('statusPillText');
+      const msg = document.getElementById('statusMessage');
+
+      if (valid) {
+        pill.className = 'status-pill success';
+        pillText.textContent = '완전 밀착 (Valid Heesch Tiling)';
+        msg.textContent = '🎉 완벽합니다! 설정하신 헤슈 코드로 평면이 빈틈이나 겹침 없이 채워졌습니다.';
+      } else {
+        pill.className = 'status-pill danger';
+        pillText.textContent = '비정칙 매핑 / 겹침 발생';
+        msg.textContent = `⚠️ ${reason || '타일이 서로 겹치거나 빈틈이 발생했습니다! 변의 대응 관계나 변환 코드를 수정해 보세요.'}`;
+      }
+    }
+
+    /* ==========================================================================
+       8. DRAWING LAYER & ESCHER STUFF
+       ========================================================================== */
+    function toggleDrawingMode(enabled) {
+      state.drawingEnabled = enabled;
+      const toolbox = document.getElementById('drawingToolbox');
+      toolbox.style.opacity = enabled ? '1' : '0.5';
+      toolbox.style.pointerEvents = enabled ? 'auto' : 'none';
+      document.getElementById('drawStatusBadge').textContent = enabled ? '드로잉 활성' : '드로잉 대기';
+      document.getElementById('drawStatusBadge').className = `badge ${enabled ? 'active' : ''}`;
+      renderAll();
+    }
+
+    function setDrawTool(tool) {
+      state.drawTool = tool;
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      if (tool === 'brush') document.getElementById('toolBrush').classList.add('active');
+      else if (tool === 'eraser') document.getElementById('toolEraser').classList.add('active');
+      else if (tool === 'stamp') document.getElementById('toolStamp').classList.add('active');
+
+      document.getElementById('stampSelectorBox').style.display = tool === 'stamp' ? 'block' : 'none';
+    }
+
+    function setDrawColor(color, swatchEl) {
+      state.brushColor = color;
+      if (swatchEl) {
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        swatchEl.classList.add('active');
+      }
+    }
+
+    function setBrushSize(size) {
+      state.brushSize = parseInt(size);
+      document.getElementById('brushSizeVal').textContent = `${size}px`;
+    }
+
+    function selectStamp(stampName, el) {
+      state.currentStamp = stampName;
+      document.querySelectorAll('.stamp-item').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function undoDrawStroke() {
+      state.drawStrokes.pop();
+      renderAll();
+    }
+
+    function clearDrawings() {
+      state.drawStrokes = [];
+      renderAll();
+    }
+
+    // Render decoration strokes in local prototile coordinates
+    function renderDecoration(ctx) {
+      if (state.drawStrokes.length === 0) return;
+
+      for (const stroke of state.drawStrokes) {
+        if (stroke.type === 'brush') {
+          if (stroke.points.length < 2) continue;
+          ctx.strokeStyle = stroke.color;
+          ctx.lineWidth = stroke.size;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+          for (let i = 1; i < stroke.points.length; i++) {
+            ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+          }
+          ctx.stroke();
+        } else if (stroke.type === 'stamp') {
+          drawPresetStamp(ctx, stroke.name, stroke.x, stroke.y, stroke.size, stroke.color);
+        }
+      }
+    }
+
+    // Preset Vector Stamp Drawings
+    function drawPresetStamp(ctx, name, x, y, size, color) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.fillStyle = color;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+
+      const r = size * 2.5;
+
+      if (name === 'eye') {
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, r * 1.4, r * 0.9, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.65, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(-r * 0.25, -r * 0.25, r * 0.25, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (name === 'fish') {
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 1.2, Math.PI * 0.15, Math.PI * 0.85);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(0, -r * 0.4, r * 0.8, Math.PI * 0.2, Math.PI * 0.8);
+        ctx.stroke();
+      } else if (name === 'wing') {
+        ctx.beginPath();
+        ctx.moveTo(-r, r * 0.5);
+        ctx.quadraticCurveTo(-r * 0.5, -r, r, -r * 0.8);
+        ctx.quadraticCurveTo(r * 0.2, 0, -r, r * 0.5);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(-r * 0.5, r * 0.3);
+        ctx.quadraticCurveTo(0, -r * 0.2, r * 0.8, -r * 0.4);
+        ctx.stroke();
+      } else if (name === 'star') {
+        ctx.beginPath();
+        for (let i = 0; i < 10; i++) {
+          const angle = (i * Math.PI) / 5 - Math.PI / 2;
+          const rad = i % 2 === 0 ? r * 1.2 : r * 0.5;
+          const px = rad * Math.cos(angle);
+          const py = rad * Math.sin(angle);
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fill();
+      } else if (name === 'spiral') {
+        ctx.beginPath();
+        for (let a = 0; a < Math.PI * 4; a += 0.2) {
+          const rad = (a / (Math.PI * 4)) * r * 1.2;
+          const px = rad * Math.cos(a);
+          const py = rad * Math.sin(a);
+          if (a === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    /* ==========================================================================
+       9. MANUAL ASSEMBLY ENGINE
+       ========================================================================== */
+    function resetManualAssembly() {
+      state.manualTiles = [{
+        a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0,
+        colorIdx: 0
+      }];
+      document.getElementById('manualTileCount').textContent = state.manualTiles.length;
+    }
+
+    function getEdgeIsometry(edgeIdx) {
+      const edge = state.edges[edgeIdx];
+      if (!edge || edge.type === 'NONE') return null;
+
+      const { vA: sA, vB: sB } = getEdgeEndpoints(edgeIdx);
+      const sMid = { x: (sA.x + sB.x) / 2, y: (sA.y + sB.y) / 2 };
+
+      // Halfturn (C): 180° rotation around midpoint of edge
+      if (edge.type === 'C') {
+        return {
+          a: -1, b: 0,
+          c: 0, d: -1,
+          tx: 2 * sMid.x,
+          ty: 2 * sMid.y
+        };
+      }
+
+      // If target edge is unassigned or invalid
+      if (edge.target === undefined || edge.target < 0) {
+        return null;
+      }
+
+      const targetIdx = edge.target;
+      const { vA: tA, vB: tB } = getEdgeEndpoints(targetIdx);
+      const tMid = { x: (tA.x + tB.x) / 2, y: (tA.y + tB.y) / 2 };
+
+      const sDx = sB.x - sA.x;
+      const sDy = sB.y - sA.y;
+      const sLen = Math.hypot(sDx, sDy);
+      const ux_s = sDx / sLen;
+      const uy_s = sDy / sLen;
+      const nx_s = uy_s;
+      const ny_s = -ux_s;
+
+      const tDx = tB.x - tA.x;
+      const tDy = tB.y - tA.y;
+      const tLen = Math.hypot(tDx, tDy);
+      const ux_t = tDx / tLen;
+      const uy_t = tDy / tLen;
+      const nx_t = uy_t;
+      const ny_t = -ux_t;
+
+      if (edge.type === 'G') {
+        // Glide Reflection:
+        // Orientation-reversing isometry (det = -1)
+        // Maps edge t tangent to edge s tangent (tA -> sA, tB -> sB)
+        // and outward normal to inward normal (nx_t -> -nx_s)
+        const a = ux_s * ux_t - nx_s * nx_t;
+        const c = ux_s * uy_t - nx_s * ny_t;
+        const b = uy_s * ux_t - ny_s * nx_t;
+        const d = uy_s * uy_t - ny_s * ny_t;
+
+        const tx = sMid.x - (a * tMid.x + c * tMid.y);
+        const ty = sMid.y - (b * tMid.x + d * tMid.y);
+
+        return { a, b, c, d, tx, ty };
+      }
+
+      // Orientation-preserving isometries (T, C3, C4, C6):
+      // det = +1
+      // Maps edge t tangent to -edge s tangent (tA -> sB, tB -> sA)
+      // and outward normal to inward normal (nx_t -> -nx_s)
+      const a = -(ux_s * ux_t + nx_s * nx_t);
+      const c = -(ux_s * uy_t + nx_s * ny_t);
+      const b = -(uy_s * ux_t + ny_s * nx_t);
+      const d = -(uy_s * uy_t + ny_s * ny_t);
+
+      const tx = sMid.x - (a * tMid.x + c * tMid.y);
+      const ty = sMid.y - (b * tMid.x + d * tMid.y);
+
+      return { a, b, c, d, tx, ty };
+    }
+
+    function manualAddNextTile() {
+      const lastTile = state.manualTiles[state.manualTiles.length - 1];
+      const edgeIdx = (state.manualTiles.length - 1) % state.polygonSides;
+      const iso = getEdgeIsometry(edgeIdx);
+      if (!iso) return;
+      const nextTransform = composeTransform(lastTile, iso);
+      const palette = PALETTES[state.currentPalette] || ['#ffffff'];
+
+      if (palette.length <= 1) {
+        nextTransform.colorIdx = 0;
+      } else {
+        const radius = state.polygonSides === 3 ? 150 : (state.polygonSides === 4 ? 140 : 130);
+        const apothem = radius * Math.cos(Math.PI / state.polygonSides);
+        const maxAdjDist = apothem * 2.3;
+        const usedColors = new Set();
+        for (let i = 0; i < state.manualTiles.length; i++) {
+          const d = Math.hypot(state.manualTiles[i].tx - nextTransform.tx, state.manualTiles[i].ty - nextTransform.ty);
+          if (d < maxAdjDist) {
+            usedColors.add(state.manualTiles[i].colorIdx);
+          }
+        }
+        let c = 0;
+        while (usedColors.has(c) && c < palette.length - 1) c++;
+        nextTransform.colorIdx = c;
+      }
+
+      state.manualTiles.push(nextTransform);
+      document.getElementById('manualTileCount').textContent = state.manualTiles.length;
+      renderAll();
+    }
+
+    function manualUndoTile() {
+      if (state.manualTiles.length > 1) {
+        state.manualTiles.pop();
+        document.getElementById('manualTileCount').textContent = state.manualTiles.length;
+        renderAll();
+      }
+    }
+
+    function manualResetTiles() {
+      resetManualAssembly();
+      renderAll();
+    }
+
+    function composeTransform(m1, m2) {
+      return {
+        a: m1.a * m2.a + m1.c * m2.b,
+        b: m1.b * m2.a + m1.d * m2.b,
+        c: m1.a * m2.c + m1.c * m2.d,
+        d: m1.b * m2.c + m1.d * m2.d,
+        tx: m1.a * m2.tx + m1.c * m2.ty + m1.tx,
+        ty: m1.b * m2.tx + m1.d * m2.ty + m1.ty
+      };
+    }
+
+    function createRotationAround(cx, cy, angle) {
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      return {
+        a: cos,
+        b: sin,
+        c: -sin,
+        d: cos,
+        tx: cx * (1 - cos) + cy * sin,
+        ty: cy * (1 - cos) - cx * sin
+      };
+    }
+
+    /* ==========================================================================
+       10. AUTOMATIC GRID TESSELLATION GENERATOR (Edge-Driven BFS)
+       ========================================================================== */
+    function generateAutoGridTiles(bounds) {
+      const sides = state.polygonSides;
+      const palette = PALETTES[state.currentPalette];
+
+      // Precalculate edge isometries for all edges based on current user rules
+      const edgeIsos = [];
+      let hasValidIso = false;
+      for (let i = 0; i < sides; i++) {
+        const iso = getEdgeIsometry(i);
+        edgeIsos.push(iso);
+        if (iso) hasValidIso = true;
+      }
+
+      const seed = { a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0, colorIdx: 0, depth: 0 };
+      if (!hasValidIso) {
+        return [seed];
+      }
+
+      const radius = sides === 3 ? 150 : (sides === 4 ? 140 : 130);
+
+      // Determine center and half-extents of the target rectangle
+      let cx = 0, cy = 0, hw = 1200, hh = 800;
+      if (bounds) {
+        cx = (bounds.minX + bounds.maxX) / 2;
+        cy = (bounds.minY + bounds.maxY) / 2;
+        hw = Math.max(radius * 1.5, (bounds.maxX - bounds.minX) / 2);
+        hh = Math.max(radius * 1.5, (bounds.maxY - bounds.minY) / 2);
+      }
+
+      // Add margin so boundary tiles that straddle the canvas edge are completely rendered
+      const margin = radius * 1.6;
+      const targetHw = hw + margin;
+      const targetHh = hh + margin;
+
+      // Rectangular Chebyshev / L-infinity metric normalized to the target aspect ratio
+      function getRectMetric(x, y) {
+        return Math.max(Math.abs(x - cx) / targetHw, Math.abs(y - cy) / targetHh);
+      }
+
+      seed.rectDist = getRectMetric(seed.tx, seed.ty);
+
+      const allTiles = [seed];
+      const queue = [seed];
+      const maxTiles = 600;
+      const minTileDist = 18;
+
+      while (queue.length > 0 && allTiles.length < maxTiles) {
+        // Pick the tile with the smallest rectangular metric
+        // This guarantees that tiles expand in expanding axis-aligned RECTANGLES, NEVER a diamond!
+        let bestIdx = 0;
+        let bestDist = queue[0].rectDist;
+        for (let q = 1; q < queue.length; q++) {
+          if (queue[q].rectDist < bestDist) {
+            bestDist = queue[q].rectDist;
+            bestIdx = q;
+          }
+        }
+        const parent = queue.splice(bestIdx, 1)[0];
+
+        // If parent is outside the target rectangle and we have enough coverage, stop exploring further
+        if (parent.rectDist > 1.08 && allTiles.length >= 24) {
+          continue;
+        }
+
+        for (let e = 0; e < sides; e++) {
+          const iso = edgeIsos[e];
+          if (!iso) continue;
+          const neighbor = composeTransform(parent, iso);
+          neighbor.depth = parent.depth + 1;
+          neighbor.rectDist = getRectMetric(neighbor.tx, neighbor.ty);
+
+          // Prune tiles that venture far beyond the target rectangle
+          if (neighbor.rectDist > 1.15 && neighbor.rectDist > parent.rectDist) {
+            continue;
+          }
+
+          let isDuplicate = false;
+          for (let t = 0; t < allTiles.length; t++) {
+            const dx = allTiles[t].tx - neighbor.tx;
+            const dy = allTiles[t].ty - neighbor.ty;
+            if (dx * dx + dy * dy < minTileDist * minTileDist) {
+              isDuplicate = true;
+              break;
+            }
+          }
+
+          if (!isDuplicate) {
+            allTiles.push(neighbor);
+            queue.push(neighbor);
+          }
+        }
+      }
+
+      // Filter to precisely the rectangular boundary
+      const rectTiles = allTiles.filter(t => t.rectDist <= 1.05);
+      const result = rectTiles.length > 0 ? rectTiles : allTiles;
+
+      colorTilesAdjacency(result, sides, palette);
+      return result;
+    }
+
+    // Graph Coloring (Welsh-Powell Greedy Algorithm)
+    // Mathematically guarantees that no two adjacent tiles share the same color
+    function colorTilesAdjacency(tiles, sides, palette) {
+      if (!tiles || tiles.length === 0) return;
+      if (!palette || palette.length <= 1) {
+        for (let i = 0; i < tiles.length; i++) {
+          tiles[i].colorIdx = 0;
+        }
+        return;
+      }
+
+      const radius = sides === 3 ? 150 : (sides === 4 ? 140 : 130);
+      const apothem = radius * Math.cos(Math.PI / sides);
+      // Center-to-center distance between adjacent tiles sharing an edge is approximately 2 * apothem
+      const maxAdjDist = apothem * 2.3;
+
+      // Build planar adjacency graph
+      const adj = Array.from({ length: tiles.length }, () => []);
+      for (let i = 0; i < tiles.length; i++) {
+        for (let j = i + 1; j < tiles.length; j++) {
+          const d = Math.hypot(tiles[i].tx - tiles[j].tx, tiles[i].ty - tiles[j].ty);
+          if (d < maxAdjDist) {
+            adj[i].push(j);
+            adj[j].push(i);
+          }
+        }
+      }
+
+      // Initialize all tile colors to -1
+      for (let i = 0; i < tiles.length; i++) {
+        tiles[i].colorIdx = -1;
+      }
+
+      // Welsh-Powell: Color highest-degree nodes first
+      const order = Array.from({ length: tiles.length }, (_, i) => i);
+      order.sort((a, b) => adj[b].length - adj[a].length);
+
+      for (const idx of order) {
+        const usedColors = new Set();
+        for (const neighborIdx of adj[idx]) {
+          if (tiles[neighborIdx].colorIdx !== -1) {
+            usedColors.add(tiles[neighborIdx].colorIdx);
+          }
+        }
+
+        // Pick lowest available color index from 0 to palette.length - 1
+        let chosenColor = -1;
+        for (let c = 0; c < palette.length; c++) {
+          if (!usedColors.has(c)) {
+            chosenColor = c;
+            break;
+          }
+        }
+
+        if (chosenColor === -1) {
+          // If all colors in palette are used by neighbors, choose color with minimum conflicts
+          const conflictCounts = new Array(palette.length).fill(0);
+          for (const neighborIdx of adj[idx]) {
+            const nc = tiles[neighborIdx].colorIdx;
+            if (nc !== -1) conflictCounts[nc]++;
+          }
+          let minCount = Infinity;
+          for (let c = 0; c < palette.length; c++) {
+            if (conflictCounts[c] < minCount) {
+              minCount = conflictCounts[c];
+              chosenColor = c;
+            }
+          }
+        }
+
+        tiles[idx].colorIdx = chosenColor;
+      }
+    }
+
+    /* ==========================================================================
+       11. RENDERING: PROTOTILE EDITOR (LEFT CANVAS)
+       ========================================================================== */
+    function renderPrototileEditor() {
+      const w = protoCanvas.width / window.devicePixelRatio;
+      const h = protoCanvas.height / window.devicePixelRatio;
+
+      protoCtx.clearRect(0, 0, w, h);
+      drawDotGrid(protoCtx, w, h, 24);
+
+      protoCtx.save();
+      protoCtx.translate(w / 2 + state.prototilePan.x, h / 2 + state.prototilePan.y);
+      protoCtx.scale(state.prototileZoom, state.prototileZoom);
+
+      const poly = getFullPrototilePolygon();
+
+      // Prototile Fill: Sync with palette (White / Custom / Seed Palette Color)
+      let protoFill = '#ffffff';
+      if (state.currentPalette === 'white') {
+        protoFill = '#ffffff';
+      } else if (state.currentPalette === 'custom') {
+        protoFill = state.customTileColor || '#ffffff';
+      } else if (PALETTES[state.currentPalette] && PALETTES[state.currentPalette].length > 0) {
+        protoFill = PALETTES[state.currentPalette][0];
+      }
+      protoCtx.fillStyle = protoFill;
+      protoCtx.beginPath();
+      protoCtx.moveTo(poly[0].x, poly[0].y);
+      for (let i = 1; i < poly.length; i++) {
+        protoCtx.lineTo(poly[i].x, poly[i].y);
+      }
+      protoCtx.closePath();
+      protoCtx.shadowColor = 'rgba(0,0,0,0.08)';
+      protoCtx.shadowBlur = 12;
+      protoCtx.shadowOffsetY = 4;
+      protoCtx.fill();
+      protoCtx.shadowColor = 'transparent';
+
+      // Clipped Decoration Drawing
+      protoCtx.save();
+      protoCtx.clip();
+      renderDecoration(protoCtx);
+      protoCtx.restore();
+
+      // 0. Base Tile Boundary Stroke (matches user's selected border color and thickness)
+      if (state.tileBorderWidth > 0) {
+        protoCtx.beginPath();
+        protoCtx.moveTo(poly[0].x, poly[0].y);
+        for (let i = 1; i < poly.length; i++) {
+          protoCtx.lineTo(poly[i].x, poly[i].y);
+        }
+        protoCtx.closePath();
+        protoCtx.strokeStyle = state.tileBorderColor;
+        protoCtx.lineWidth = Math.max(state.tileBorderWidth, 2);
+        protoCtx.lineJoin = 'round';
+        protoCtx.lineCap = 'round';
+        protoCtx.stroke();
+      }
+
+      // 1. Draw Reference Original Regular Polygon (Gray Solid Line)
+      if (state.baseVertices && state.baseVertices.length > 2) {
+        protoCtx.save();
+        protoCtx.strokeStyle = 'rgba(148, 163, 184, 0.75)'; // clear reference slate-400 gray
+        protoCtx.lineWidth = 1.8;
+        protoCtx.beginPath();
+        protoCtx.moveTo(state.baseVertices[0].x, state.baseVertices[0].y);
+        for (let i = 1; i < state.baseVertices.length; i++) {
+          protoCtx.lineTo(state.baseVertices[i].x, state.baseVertices[i].y);
+        }
+        protoCtx.closePath();
+        protoCtx.stroke();
+        protoCtx.restore();
+      }
+
+      // 2. Draw Deformed Edges
+      for (let i = 0; i < state.polygonSides; i++) {
+        const edgePts = getEdgeSamplePoints(i);
+        const isSelected = i === state.selectedEdgeIndex;
+
+        protoCtx.strokeStyle = EDGE_COLORS[i];
+        protoCtx.lineWidth = isSelected ? 4.5 : 2.5;
+        protoCtx.beginPath();
+        protoCtx.moveTo(edgePts[0].x, edgePts[0].y);
+        for (let j = 1; j < edgePts.length; j++) {
+          protoCtx.lineTo(edgePts[j].x, edgePts[j].y);
+        }
+        protoCtx.stroke();
+      }
+
+      // 3. Base Anchor Vertices
+      for (let i = 0; i < state.baseVertices.length; i++) {
+        const v = state.baseVertices[i];
+        protoCtx.fillStyle = '#1e293b';
+        protoCtx.strokeStyle = '#ffffff';
+        protoCtx.lineWidth = 2.5;
+        protoCtx.beginPath();
+        protoCtx.arc(v.x, v.y, 6.5, 0, Math.PI * 2);
+        protoCtx.fill();
+        protoCtx.stroke();
+      }
+
+      // 4. Control Points on Edges
+      for (let i = 0; i < state.polygonSides; i++) {
+        const edge = state.edges[i];
+        for (let j = 0; j < edge.controlPoints.length; j++) {
+          const cp = edge.controlPoints[j];
+          const worldPt = edgeUVtoWorld(i, cp.u, cp.v);
+          const isSelectedEdge = i === state.selectedEdgeIndex;
+
+          protoCtx.fillStyle = isSelectedEdge ? EDGE_COLORS[i] : '#64748b';
+          protoCtx.strokeStyle = '#ffffff';
+          protoCtx.lineWidth = 2;
+          protoCtx.beginPath();
+          protoCtx.arc(worldPt.x, worldPt.y, isSelectedEdge ? 6 : 4.5, 0, Math.PI * 2);
+          protoCtx.fill();
+          protoCtx.stroke();
+        }
+      }
+
+      // 5. Draw Floating Edge Badges (generously offset outside with leader line)
+      state.edgeBadgeBounds = [];
+      for (let i = 0; i < state.polygonSides; i++) {
+        drawEdgeBadge(protoCtx, i, i === state.selectedEdgeIndex);
+      }
+
+      protoCtx.restore();
+    }
+
+    function getEdgeBadgeInfo(edgeIdx) {
+      const { vA, vB } = getEdgeEndpoints(edgeIdx);
+      const dx = vB.x - vA.x;
+      const dy = vB.y - vA.y;
+      const len = Math.hypot(dx, dy);
+      const nx = dy / len;
+      const ny = -dx / len;
+
+      const baseMidX = (vA.x + vB.x) / 2;
+      const baseMidY = (vA.y + vB.y) / 2;
+
+      const edgePts = getEdgeSamplePoints(edgeIdx);
+
+      // Default anchor is the parametric middle of the edge samples
+      let midPt;
+      if (edgePts.length <= 2) {
+        midPt = { x: baseMidX, y: baseMidY };
+      } else {
+        midPt = edgePts[Math.floor(edgePts.length / 2)];
+      }
+
+      // Scan all points along the edge to find maximum outward protrusion and its peak position
+      let maxDisp = 0;
+      let peakPt = midPt;
+      for (let j = 0; j < edgePts.length; j++) {
+        const disp = (edgePts[j].x - baseMidX) * nx + (edgePts[j].y - baseMidY) * ny;
+        if (disp > maxDisp) {
+          maxDisp = disp;
+          peakPt = edgePts[j];
+        }
+      }
+
+      // If curve protrudes outward, anchor leader line to peak; otherwise to midpoint
+      const anchor = maxDisp > 8 ? peakPt : midPt;
+
+      // Position badge generously outward (54px beyond the outermost protrusion)
+      const outwardDist = maxDisp + 54;
+
+      return {
+        badgeX: baseMidX + nx * outwardDist,
+        badgeY: baseMidY + ny * outwardDist,
+        anchorX: anchor.x,
+        anchorY: anchor.y
+      };
+    }
+
+    function drawEdgeBadge(ctx, edgeIdx, isSelected) {
+      const edge = state.edges[edgeIdx];
+      const edgeName = `E${edgeIdx + 1}`;
+      let codeStr = '';
+
+      if (edge.type === 'C') {
+        codeStr = ' [C 점대칭]';
+      } else if (edge.type === 'T') {
+        const targetStr = (edge.target !== undefined && edge.target >= 0) ? `E${edge.target + 1}` : '?';
+        codeStr = ` [T ➔ ${targetStr}]`;
+      } else if (edge.type === 'G') {
+        const targetStr = (edge.target !== undefined && edge.target >= 0) ? `E${edge.target + 1}` : '?';
+        codeStr = ` [G ➔ ${targetStr}]`;
+      } else if (edge.type === 'C3') {
+        const targetStr = (edge.target !== undefined && edge.target >= 0) ? `E${edge.target + 1}` : '?';
+        codeStr = ` [C₃ ➔ ${targetStr}]`;
+      } else if (edge.type === 'C4') {
+        const targetStr = (edge.target !== undefined && edge.target >= 0) ? `E${edge.target + 1}` : '?';
+        codeStr = ` [C₄ ➔ ${targetStr}]`;
+      } else if (edge.type === 'C6') {
+        const targetStr = (edge.target !== undefined && edge.target >= 0) ? `E${edge.target + 1}` : '?';
+        codeStr = ` [C₆ ➔ ${targetStr}]`;
+      } else {
+        codeStr = ' [자유변]';
+      }
+
+      const label = `${edgeName}${codeStr}`;
+      const { badgeX, badgeY, anchorX, anchorY } = getEdgeBadgeInfo(edgeIdx);
+
+      ctx.save();
+
+      // Dotted leader line connecting edge anchor to badge (clean connection without confusing anchor dot)
+      ctx.strokeStyle = isSelected ? EDGE_COLORS[edgeIdx] : 'rgba(148, 163, 184, 0.6)';
+      ctx.lineWidth = isSelected ? 1.5 : 1;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(anchorX, anchorY);
+      ctx.lineTo(badgeX, badgeY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Measure label text
+      ctx.font = isSelected 
+        ? 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' 
+        : '600 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      const textWidth = ctx.measureText(label).width;
+      const padLeft = 22;
+      const padRight = 10;
+      const badgeW = textWidth + padLeft + padRight;
+      const badgeH = 24;
+      const bx = badgeX - badgeW / 2;
+      const by = badgeY - badgeH / 2;
+
+      // Save bounding box for mouse click & hover
+      state.edgeBadgeBounds[edgeIdx] = { x: bx, y: by, w: badgeW, h: badgeH };
+
+      // Badge drop shadow
+      ctx.shadowColor = isSelected ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.12)';
+      ctx.shadowBlur = isSelected ? 10 : 5;
+      ctx.shadowOffsetY = isSelected ? 3 : 1.5;
+
+      // Badge background pill
+      ctx.fillStyle = isSelected ? '#0f172a' : '#ffffff';
+      ctx.strokeStyle = EDGE_COLORS[edgeIdx];
+      ctx.lineWidth = isSelected ? 2.5 : 1.5;
+
+      ctx.beginPath();
+      ctx.roundRect(bx, by, badgeW, badgeH, 12);
+      ctx.fill();
+      ctx.stroke();
+
+      // Clear shadow for crisp text
+      ctx.shadowColor = 'transparent';
+
+      // Badge color indicator dot inside pill
+      const dotX = bx + 11;
+      const dotY = badgeY;
+      ctx.fillStyle = EDGE_COLORS[edgeIdx];
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Badge text
+      ctx.fillStyle = isSelected ? '#ffffff' : '#1e293b';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, bx + padLeft, badgeY + 0.5);
+
+      ctx.restore();
+    }
+
+    /* ==========================================================================
+       12. RENDERING: TESSELLATION CANVAS (RIGHT CANVAS)
+       ========================================================================== */
+    function renderTilingPlane() {
+      const w = tilingCanvas.width / window.devicePixelRatio;
+      const h = tilingCanvas.height / window.devicePixelRatio;
+
+      tilingCtx.clearRect(0, 0, w, h);
+      drawDotGrid(tilingCtx, w, h, 20);
+
+      tilingCtx.save();
+      tilingCtx.translate(w / 2 + state.tilingPan.x, h / 2 + state.tilingPan.y);
+      const curScale = state.tilingZoom * state.tilingScale;
+      tilingCtx.scale(curScale, curScale);
+
+      const viewportBounds = {
+        minX: (-w / 2 - state.tilingPan.x) / curScale,
+        maxX: (w / 2 - state.tilingPan.x) / curScale,
+        minY: (-h / 2 - state.tilingPan.y) / curScale,
+        maxY: (h / 2 - state.tilingPan.y) / curScale
+      };
+
+      const tiles = state.tilingMode === 'manual' ? state.manualTiles : generateAutoGridTiles(viewportBounds);
+      const poly = getFullPrototilePolygon();
+      const palette = PALETTES[state.currentPalette];
+
+      for (let i = 0; i < tiles.length; i++) {
+        const m = tiles[i];
+        const color = palette[m.colorIdx % palette.length];
+
+        tilingCtx.save();
+        tilingCtx.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+
+        tilingCtx.fillStyle = color;
+        tilingCtx.beginPath();
+        tilingCtx.moveTo(poly[0].x, poly[0].y);
+        for (let j = 1; j < poly.length; j++) {
+          tilingCtx.lineTo(poly[j].x, poly[j].y);
+        }
+        tilingCtx.closePath();
+        tilingCtx.fill();
+
+        tilingCtx.save();
+        tilingCtx.clip();
+        renderDecoration(tilingCtx);
+        tilingCtx.restore();
+
+        // 3. Clear, solid boundary stroke (crisp separation between tiles)
+        if (state.tileBorderWidth > 0) {
+          tilingCtx.beginPath();
+          tilingCtx.moveTo(poly[0].x, poly[0].y);
+          for (let j = 1; j < poly.length; j++) {
+            tilingCtx.lineTo(poly[j].x, poly[j].y);
+          }
+          tilingCtx.closePath();
+          tilingCtx.strokeStyle = state.tileBorderColor;
+          tilingCtx.lineWidth = state.tileBorderWidth;
+          tilingCtx.lineJoin = 'round';
+          tilingCtx.lineCap = 'round';
+          tilingCtx.stroke();
+        }
+
+        tilingCtx.restore();
+      }
+
+      if (!state.isValid && tiles.length > 1) {
+        renderOverlapHatching(tiles, poly);
+      }
+
+      tilingCtx.restore();
+    }
+
+    function renderOverlapHatching(tiles, poly) {
+      if (!hatchPattern || tiles.length < 2) return;
+
+      // Transform local polygon points to tile world coordinates
+      function getTileWorldPoly(m) {
+        return poly.map(pt => ({
+          x: m.a * pt.x + m.c * pt.y + m.tx,
+          y: m.b * pt.x + m.d * pt.y + m.ty
+        }));
+      }
+
+      const count = Math.min(tiles.length, 25);
+      const worldPolys = [];
+      for (let i = 0; i < count; i++) {
+        worldPolys.push(getTileWorldPoly(tiles[i]));
+      }
+
+      tilingCtx.save();
+      for (let i = 0; i < count; i++) {
+        const pA = worldPolys[i];
+        const mi = tiles[i];
+
+        for (let j = i + 1; j < count; j++) {
+          const pB = worldPolys[j];
+          const mj = tiles[j];
+
+          // Bounding distance check
+          const distSq = (mi.tx - mj.tx) ** 2 + (mi.ty - mj.ty) ** 2;
+          if (distSq > 380 * 380) continue;
+
+          // Clip to Tile A
+          tilingCtx.save();
+          tilingCtx.beginPath();
+          tilingCtx.moveTo(pA[0].x, pA[0].y);
+          for (let k = 1; k < pA.length; k++) tilingCtx.lineTo(pA[k].x, pA[k].y);
+          tilingCtx.closePath();
+          tilingCtx.clip();
+
+          // Fill and stroke Tile B intersection
+          tilingCtx.beginPath();
+          tilingCtx.moveTo(pB[0].x, pB[0].y);
+          for (let k = 1; k < pB.length; k++) tilingCtx.lineTo(pB[k].x, pB[k].y);
+          tilingCtx.closePath();
+
+          tilingCtx.fillStyle = hatchPattern;
+          tilingCtx.fill();
+          tilingCtx.strokeStyle = 'rgba(239, 68, 68, 0.9)';
+          tilingCtx.lineWidth = 1.5;
+          tilingCtx.stroke();
+
+          tilingCtx.restore();
+        }
+      }
+      tilingCtx.restore();
+    }
+
+    function drawDotGrid(ctx, w, h, step) {
+      ctx.fillStyle = '#e2e8f0';
+      for (let x = 0; x < w; x += step) {
+        for (let y = 0; y < h; y += step) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function renderAll() {
+      renderPrototileEditor();
+      renderTilingPlane();
+    }
+
+    /* ==========================================================================
+       13. MOUSE INTERACTION & DRAG-AND-DROP
+       ========================================================================== */
+    const drag = {
+      isDragging: false,
+      type: null,
+      edgeIndex: -1,
+      cpIndex: -1,
+      startX: 0,
+      startY: 0
+    };
+
+    protoCanvas.addEventListener('mousedown', (e) => {
+      const rect = protoCanvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const w = protoCanvas.width / window.devicePixelRatio;
+      const h = protoCanvas.height / window.devicePixelRatio;
+      const worldX = (mouseX - (w / 2 + state.prototilePan.x)) / state.prototileZoom;
+      const worldY = (mouseY - (h / 2 + state.prototilePan.y)) / state.prototileZoom;
+
+      if (e.button === 2) {
+        e.preventDefault();
+        const hit = findControlPointHit(worldX, worldY);
+        if (hit) {
+          state.edges[hit.edgeIndex].controlPoints.splice(hit.cpIndex, 1);
+          syncSlaveEdges();
+          renderAll();
+        }
+        return;
+      }
+
+      if (state.drawingEnabled && e.button === 0) {
+        drag.isDragging = true;
+        drag.type = 'drawing';
+        if (state.drawTool === 'brush') {
+          state.drawStrokes.push({
+            type: 'brush',
+            color: state.brushColor,
+            size: state.brushSize,
+            points: [{ x: worldX, y: worldY }]
+          });
+        } else if (state.drawTool === 'stamp') {
+          state.drawStrokes.push({
+            type: 'stamp',
+            name: state.currentStamp,
+            x: worldX,
+            y: worldY,
+            size: state.brushSize * 2.5,
+            color: state.brushColor
+          });
+          renderAll();
+        }
+        return;
+      }
+
+      const badgeHit = findBadgeHit(worldX, worldY);
+      if (badgeHit !== -1) {
+        selectEdge(badgeHit);
+        return;
+      }
+
+      const cpHit = findControlPointHit(worldX, worldY);
+      if (cpHit) {
+        drag.isDragging = true;
+        drag.type = 'controlPoint';
+        drag.edgeIndex = cpHit.edgeIndex;
+        drag.cpIndex = cpHit.cpIndex;
+
+        const clickedEdge = state.edges[cpHit.edgeIndex];
+        if (!clickedEdge.isMaster && clickedEdge.target !== undefined && state.edges[clickedEdge.target]) {
+          clickedEdge.isMaster = true;
+          state.edges[clickedEdge.target].isMaster = false;
+        }
+
+        selectEdge(cpHit.edgeIndex);
+        return;
+      }
+
+      const edgeHit = findEdgeHit(worldX, worldY);
+      if (edgeHit !== -1) {
+        selectEdge(edgeHit);
+        return;
+      }
+
+      drag.isDragging = true;
+      drag.type = 'panEditor';
+      drag.startX = mouseX - state.prototilePan.x;
+      drag.startY = mouseY - state.prototilePan.y;
+    });
+
+    protoCanvas.addEventListener('mousemove', (e) => {
+      const rect = protoCanvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const w = protoCanvas.width / window.devicePixelRatio;
+      const h = protoCanvas.height / window.devicePixelRatio;
+      const worldX = (mouseX - (w / 2 + state.prototilePan.x)) / state.prototileZoom;
+      const worldY = (mouseY - (h / 2 + state.prototilePan.y)) / state.prototileZoom;
+
+      if (!drag.isDragging) {
+        if (state.drawingEnabled) {
+          protoCanvas.style.cursor = 'crosshair';
+        } else if (findBadgeHit(worldX, worldY) !== -1) {
+          protoCanvas.style.cursor = 'pointer';
+        } else if (findControlPointHit(worldX, worldY)) {
+          protoCanvas.style.cursor = 'grab';
+        } else if (findEdgeHit(worldX, worldY) !== -1) {
+          protoCanvas.style.cursor = 'pointer';
+        } else {
+          protoCanvas.style.cursor = 'default';
+        }
+        return;
+      }
+
+      if (drag.type === 'controlPoint') {
+        const uv = worldToEdgeUV(drag.edgeIndex, worldX, worldY);
+        const edge = state.edges[drag.edgeIndex];
+        edge.controlPoints[drag.cpIndex] = uv;
+
+        // If edge is Halfturn (C), mirror the symmetric partner point in place
+        if (edge.type === 'C') {
+          const N = edge.controlPoints.length;
+          const oppIdx = N - 1 - drag.cpIndex;
+          if (oppIdx !== drag.cpIndex && oppIdx >= 0 && oppIdx < N) {
+            edge.controlPoints[oppIdx] = {
+              u: 1 - uv.u,
+              v: -uv.v
+            };
+          }
+        }
+
+        // Strictly preserve user connection order: NO auto-sorting by u
+        syncSlaveEdges();
+        renderAll();
+      } else if (drag.type === 'drawing' && state.drawTool === 'brush') {
+        const curStroke = state.drawStrokes[state.drawStrokes.length - 1];
+        if (curStroke) {
+          curStroke.points.push({ x: worldX, y: worldY });
+          renderAll();
+        }
+      } else if (drag.type === 'panEditor') {
+        state.prototilePan.x = mouseX - drag.startX;
+        state.prototilePan.y = mouseY - drag.startY;
+        renderAll();
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      drag.isDragging = false;
+      drag.type = null;
+    });
+
+    protoCanvas.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      if (state.drawingEnabled) return;
+      const rect = protoCanvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const w = protoCanvas.width / window.devicePixelRatio;
+      const h = protoCanvas.height / window.devicePixelRatio;
+      const worldX = (mouseX - (w / 2 + state.prototilePan.x)) / state.prototileZoom;
+      const worldY = (mouseY - (h / 2 + state.prototilePan.y)) / state.prototileZoom;
+
+      const cpHit = findControlPointHit(worldX, worldY);
+      if (cpHit) {
+        const edge = state.edges[cpHit.edgeIndex];
+        if (edge.type === 'C') {
+          const N = edge.controlPoints.length;
+          const oppIdx = N - 1 - cpHit.cpIndex;
+          if (oppIdx > cpHit.cpIndex) {
+            edge.controlPoints.splice(oppIdx, 1);
+            edge.controlPoints.splice(cpHit.cpIndex, 1);
+          } else if (oppIdx < cpHit.cpIndex) {
+            edge.controlPoints.splice(cpHit.cpIndex, 1);
+            edge.controlPoints.splice(oppIdx, 1);
+          } else {
+            edge.controlPoints.splice(cpHit.cpIndex, 1);
+          }
+        } else {
+          edge.controlPoints.splice(cpHit.cpIndex, 1);
+        }
+        syncSlaveEdges();
+        renderAll();
+      }
+    });
+
+    protoCanvas.addEventListener('dblclick', (e) => {
+      if (state.drawingEnabled) return;
+      const rect = protoCanvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const w = protoCanvas.width / window.devicePixelRatio;
+      const h = protoCanvas.height / window.devicePixelRatio;
+      const worldX = (mouseX - (w / 2 + state.prototilePan.x)) / state.prototileZoom;
+      const worldY = (mouseY - (h / 2 + state.prototilePan.y)) / state.prototileZoom;
+
+      const edgeIdx = findEdgeHit(worldX, worldY);
+      if (edgeIdx !== -1) {
+        const clickedEdge = state.edges[edgeIdx];
+        if (!clickedEdge.isMaster && clickedEdge.target !== undefined && state.edges[clickedEdge.target]) {
+          clickedEdge.isMaster = true;
+          state.edges[clickedEdge.target].isMaster = false;
+        }
+
+        const uv = worldToEdgeUV(edgeIdx, worldX, worldY);
+
+        // Find which polyline segment was clicked and insert the point in that exact position
+        const { vA, vB } = getEdgeEndpoints(edgeIdx);
+        const polyPts = [
+          vA,
+          ...clickedEdge.controlPoints.map(cp => edgeUVtoWorld(edgeIdx, cp.u, cp.v)),
+          vB
+        ];
+
+        let bestSeg = 0;
+        let minDist = Infinity;
+        for (let k = 0; k < polyPts.length - 1; k++) {
+          const d = distToSegment({ x: worldX, y: worldY }, polyPts[k], polyPts[k + 1]);
+          if (d < minDist) {
+            minDist = d;
+            bestSeg = k;
+          }
+        }
+
+        clickedEdge.controlPoints.splice(bestSeg, 0, uv);
+
+        if (clickedEdge.type === 'C') {
+          const oppSeg = clickedEdge.controlPoints.length - 1 - bestSeg;
+          const mirUV = { u: 1 - uv.u, v: -uv.v };
+          clickedEdge.controlPoints.splice(oppSeg, 0, mirUV);
+        }
+
+        // Strictly preserve user connection order: NO auto-sorting by u
+        syncSlaveEdges();
+        selectEdge(edgeIdx);
+        renderAll();
+      }
+    });
+
+    protoCanvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+      state.prototileZoom = Math.max(0.5, Math.min(3.0, state.prototileZoom * zoomFactor));
+      renderPrototileEditor();
+    }, { passive: false });
+
+    let tilingMouseDownPos = { x: 0, y: 0 };
+
+    tilingCanvas.addEventListener('mousedown', (e) => {
+      const rect = tilingCanvas.getBoundingClientRect();
+      drag.isDragging = true;
+      drag.type = 'panTiling';
+      tilingMouseDownPos = { x: e.clientX, y: e.clientY };
+      drag.startX = (e.clientX - rect.left) - state.tilingPan.x;
+      drag.startY = (e.clientY - rect.top) - state.tilingPan.y;
+    });
+
+    tilingCanvas.addEventListener('mouseup', (e) => {
+      if (Math.hypot(e.clientX - tilingMouseDownPos.x, e.clientY - tilingMouseDownPos.y) < 6) {
+        if (state.tilingMode === 'manual') {
+          manualAddNextTile();
+        }
+      }
+    });
+
+    tilingCanvas.addEventListener('mousemove', (e) => {
+      if (drag.isDragging && drag.type === 'panTiling') {
+        const rect = tilingCanvas.getBoundingClientRect();
+        state.tilingPan.x = (e.clientX - rect.left) - drag.startX;
+        state.tilingPan.y = (e.clientY - rect.top) - drag.startY;
+        renderTilingPlane();
+      }
+    });
+
+    tilingCanvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
+      state.tilingZoom = Math.max(0.2, Math.min(5.0, state.tilingZoom * zoomFactor));
+      renderTilingPlane();
+    }, { passive: false });
+
+    function findBadgeHit(x, y) {
+      if (!state.edgeBadgeBounds) return -1;
+      const pad = 4 / state.prototileZoom;
+      for (let i = 0; i < state.polygonSides; i++) {
+        const b = state.edgeBadgeBounds[i];
+        if (!b) continue;
+        if (x >= b.x - pad && x <= b.x + b.w + pad && y >= b.y - pad && y <= b.y + b.h + pad) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    function findControlPointHit(x, y) {
+      const threshold = 12 / state.prototileZoom;
+      for (let i = 0; i < state.polygonSides; i++) {
+        const edge = state.edges[i];
+        for (let j = 0; j < edge.controlPoints.length; j++) {
+          const pt = edgeUVtoWorld(i, edge.controlPoints[j].u, edge.controlPoints[j].v);
+          if (Math.hypot(pt.x - x, pt.y - y) <= threshold) {
+            return { edgeIndex: i, cpIndex: j };
+          }
+        }
+      }
+      return null;
+    }
+
+    function findEdgeHit(x, y) {
+      const threshold = 14 / state.prototileZoom;
+      for (let i = 0; i < state.polygonSides; i++) {
+        const pts = getEdgeSamplePoints(i);
+        for (let j = 0; j < pts.length - 1; j++) {
+          if (distToSegment({ x, y }, pts[j], pts[j + 1]) <= threshold) {
+            return i;
+          }
+        }
+      }
+      return -1;
+    }
+
+    function distToSegment(p, v, w) {
+      const l2 = (v.x - w.x) * (v.x - w.x) + (v.y - w.y) * (v.y - w.y);
+      if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
+      let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+      t = Math.max(0, Math.min(1, t));
+      return Math.hypot(p.x - (v.x + t * (w.x - v.x)), p.y - (v.y + t * (w.y - v.y)));
+    }
+
+    /* ==========================================================================
+       14. FLOATING BUTTON HELPERS & EXPORT PNG
+       ========================================================================== */
+    function resetEditorZoom() {
+      state.prototilePan = { x: 0, y: 0 };
+      state.prototileZoom = 1.0;
+      renderPrototileEditor();
+    }
+
+    function resetTilingPanZoom() {
+      state.tilingPan = { x: 0, y: 0 };
+      state.tilingZoom = 1.0;
+      renderTilingPlane();
+    }
+
+    function tilingZoomIn() {
+      state.tilingZoom = Math.min(5.0, state.tilingZoom * 1.25);
+      renderTilingPlane();
+    }
+
+    function tilingZoomOut() {
+      state.tilingZoom = Math.max(0.2, state.tilingZoom * 0.8);
+      renderTilingPlane();
+    }
+
+    function exportPNG() {
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = 1920;
+      exportCanvas.height = 1080;
+      const ctx = exportCanvas.getContext('2d');
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+      ctx.save();
+      ctx.translate(exportCanvas.width / 2, exportCanvas.height / 2);
+      const exportScale = 1.2 * state.tilingScale;
+      ctx.scale(exportScale, exportScale);
+
+      const exportBounds = {
+        minX: (-exportCanvas.width / 2) / exportScale,
+        maxX: (exportCanvas.width / 2) / exportScale,
+        minY: (-exportCanvas.height / 2) / exportScale,
+        maxY: (exportCanvas.height / 2) / exportScale
+      };
+
+      const tiles = state.tilingMode === 'manual' ? state.manualTiles : generateAutoGridTiles(exportBounds);
+      const poly = getFullPrototilePolygon();
+      const palette = PALETTES[state.currentPalette];
+
+      for (let i = 0; i < tiles.length; i++) {
+        const m = tiles[i];
+        const color = palette[m.colorIdx % palette.length];
+
+        ctx.save();
+        ctx.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(poly[0].x, poly[0].y);
+        for (let j = 1; j < poly.length; j++) {
+          ctx.lineTo(poly[j].x, poly[j].y);
+        }
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.save();
+        ctx.clip();
+        renderDecoration(ctx);
+        ctx.restore();
+
+        // 3. Clear, solid boundary stroke (crisp separation between tiles)
+        if (state.tileBorderWidth > 0) {
+          ctx.beginPath();
+          ctx.moveTo(poly[0].x, poly[0].y);
+          for (let j = 1; j < poly.length; j++) {
+            ctx.lineTo(poly[j].x, poly[j].y);
+          }
+          ctx.closePath();
+          ctx.strokeStyle = state.tileBorderColor;
+          ctx.lineWidth = state.tileBorderWidth;
+          ctx.lineJoin = 'round';
+          ctx.lineCap = 'round';
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+      ctx.restore();
+
+      ctx.font = 'bold 20px -apple-system, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.textAlign = 'right';
+      ctx.fillText(`Heesch Code: ${state.edges.map(e => e.type).join(' ')} | Escher Tessellation Studio`, exportCanvas.width - 40, exportCanvas.height - 30);
+
+      const link = document.createElement('a');
+      link.download = `heesch_tessellation_${Date.now()}.png`;
+      link.href = exportCanvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function closeModalOnBackdrop(e) {
+      if (e.target.classList.contains('modal-backdrop')) {
+        e.target.classList.remove('open');
+      }
+    }
+
+    /* ==========================================================================
+       15. INITIALIZATION ON LOAD
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      initPolygon(4);
+      resizeCanvases();
+    });
+  </script>
+</body>
+</html>

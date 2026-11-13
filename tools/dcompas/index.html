@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초등학생용 디지털 컴퍼스</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f4f8;
+            font-family: 'Jua', 'Noto Sans KR', sans-serif;
+            user-select: none;
+        }
+        #canvas-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair;
+        }
+        .instruction-box {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            border: 3px solid #4F46E5;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .toolbar {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+        .btn {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.1s;
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        .btn-clear { color: #e11d48; border-color: #e11d48; }
+        .btn-undo { color: #2563eb; border-color: #2563eb; }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container">
+        <div id="instruction" class="instruction-box">
+            📍 빈 공간을 클릭해서 컴퍼스의 중심을 찍어보세요!
+        </div>
+        <canvas id="drawingCanvas"></canvas>
+        
+        <div class="toolbar">
+            <button class="btn btn-undo" onclick="undo()">↩️ 실행 취소</button>
+            <button class="btn btn-clear" onclick="clearCanvas()">🗑️ 모두 지우기</button>
+        </div>
+    </div>
+
+<script>
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    const instructionEl = document.getElementById('instruction');
+
+    // 상태 변수
+    let state = 0; // 0: 대기, 1: 중심 찍힘(반지름 조절 중), 2: 그리기 중
+    let centerPoint = { x: 0, y: 0 };
+    let radius = 0;
+    
+    // 각도 및 회전 관련 변수
+    let startAngle = 0;
+    let currentAngle = 0;
+    let previousAngle = 0;
+    let totalRotation = 0;
+    
+    let mousePos = { x: 0, y: 0 };
+    let history = []; 
+    
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        draw();
+    }
+    window.addEventListener('resize', resize);
+    
+    resize();
+
+    canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mousePos = {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
+
+        if (state === 1) {
+            // 반지름 조절 단계
+            radius = Math.hypot(mousePos.x - centerPoint.x, mousePos.y - centerPoint.y);
+            // 각도 업데이트 (컴퍼스가 마우스 따라오도록)
+            currentAngle = Math.atan2(mousePos.y - centerPoint.y, mousePos.x - centerPoint.x);
+        } else if (state === 2) {
+            // 그리기 단계
+            const newAngle = Math.atan2(mousePos.y - centerPoint.y, mousePos.x - centerPoint.x);
+            
+            let diff = newAngle - previousAngle;
+            while (diff <= -Math.PI) diff += 2 * Math.PI;
+            while (diff > Math.PI) diff -= 2 * Math.PI;
+            
+            totalRotation += diff;
+            previousAngle = newAngle;
+            currentAngle = newAngle;
+        }
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+        if (e.target !== canvas) return;
+
+        if (state === 0) {
+            // 1단계: 중심점 찍기
+            centerPoint = { x: mousePos.x, y: mousePos.y };
+            state = 1;
+            instructionEl.textContent = "↔️ 마우스를 움직여 원의 크기를 정하고 클릭하세요!";
+            instructionEl.style.borderColor = "#F59E0B"; 
+        } else if (state === 1) {
+            // 2단계: 반지름 확정
+            radius = Math.hypot(mousePos.x - centerPoint.x, mousePos.y - centerPoint.y);
+            if (radius < 10) {
+                alert("너무 작아요! 조금 더 크게 벌려주세요.");
+                return;
+            }
+            startAngle = Math.atan2(mousePos.y - centerPoint.y, mousePos.x - centerPoint.x);
+            currentAngle = startAngle;
+            previousAngle = startAngle;
+            totalRotation = 0;
+            
+            state = 2;
+            instructionEl.textContent = "✏️ 마우스를 돌려 원을 그려보세요! (제자리로 돌아와서 클릭하면 원 완성)";
+            instructionEl.style.borderColor = "#10B981"; 
+        } else if (state === 2) {
+            // 3단계: 그리기 완료
+            finishDrawing();
+        }
+    });
+
+    function finishDrawing() {
+        // 원 판별 로직:
+        // 1. 회전각이 거의 360도이거나
+        // 2. 현재 각도가 시작 각도와 매우 비슷하고, 회전량이 충분할 때
+        const isClosedLoop = Math.abs(totalRotation) > Math.PI * 1.5 && 
+                             Math.abs((currentAngle - startAngle + 2*Math.PI) % (2*Math.PI)) < 0.3;
+
+        const isFullRotation = Math.abs(totalRotation) >= (Math.PI * 2 * 0.95);
+
+        const isCircle = isClosedLoop || isFullRotation;
+
+        history.push({
+            type: isCircle ? 'circle' : 'arc',
+            x: centerPoint.x,
+            y: centerPoint.y,
+            r: radius,
+            sAngle: startAngle,
+            eAngle: currentAngle,
+            rotation: totalRotation,
+            color: 'black'
+        });
+
+        state = 0;
+        radius = 0;
+        totalRotation = 0;
+        instructionEl.textContent = "📍 빈 공간을 클릭해서 컴퍼스의 중심을 찍어보세요!";
+        instructionEl.style.borderColor = "#4F46E5"; 
+    }
+
+    function undo() {
+        if (history.length > 0) history.pop();
+    }
+
+    function clearCanvas() {
+        history = [];
+        state = 0;
+        radius = 0;
+        instructionEl.textContent = "📍 빈 공간을 클릭해서 컴퍼스의 중심을 찍어보세요!";
+        instructionEl.style.borderColor = "#4F46E5";
+    }
+
+    // --- 그리기 함수들 ---
+
+    function drawGrid() {
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        const step = 40;
+        
+        ctx.beginPath();
+        for (let x = 0; x < canvas.width; x += step) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+        }
+        for (let y = 0; y < canvas.height; y += step) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+        }
+        ctx.stroke();
+    }
+
+    function drawCenterPoint(x, y) {
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#ef4444'; // 빨간색 중심점
+        ctx.fill();
+        // 십자 표시 추가
+        ctx.beginPath();
+        ctx.moveTo(x - 5, y);
+        ctx.lineTo(x + 5, y);
+        ctx.moveTo(x, y - 5);
+        ctx.lineTo(x, y + 5);
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+
+    function drawHistory() {
+        history.forEach(item => {
+            // 중심점 표시
+            drawCenterPoint(item.x, item.y);
+
+            ctx.beginPath();
+            if (item.type === 'circle') {
+                ctx.arc(item.x, item.y, item.r, 0, Math.PI * 2);
+            } else {
+                const counterClockwise = item.rotation < 0;
+                ctx.arc(item.x, item.y, item.r, item.sAngle, item.eAngle, counterClockwise);
+            }
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        });
+    }
+
+    // 더욱 정밀해진 컴퍼스 그리기 (두 점 고정 방식)
+    function drawCompass(cx, cy, r, angle) {
+        // 1. 바늘 끝 (Needle Tip) = 중심점 (cx, cy)
+        // 2. 연필 끝 (Pencil Tip) = 마우스 위치/호의 끝
+        //    (상태 1에서는 마우스 위치가 그대로 연필 끝이 됨. 상태 2에서는 r과 angle로 계산)
+        
+        const px = cx + r * Math.cos(angle);
+        const py = cy + r * Math.sin(angle);
+
+        // 3. 컴퍼스 헤드 위치 계산
+        //    바늘과 연필을 잇는 선분의 수직이등분선 위에 위치
+        //    V자 모양을 유지하기 위해 높이(h) 계산
+        const legLen = Math.max(220, r * 0.8 + 50); // 다리 길이
+        
+        // 다리 길이보다 반지름이 너무 크면(일직선 이상) 높이 0으로 처리 (물리적 한계)
+        let h = 0;
+        if (legLen > r / 2) {
+            h = Math.sqrt(legLen * legLen - (r / 2) * (r / 2));
+        }
+
+        // 중점
+        const mx = (cx + px) / 2;
+        const my = (cy + py) / 2;
+
+        // 방향 벡터 (Needle -> Pencil)
+        const dx = px - cx;
+        const dy = py - cy;
+        
+        // 정규화된 수직 벡터 (-y, x) -> 왼쪽이냐 오른쪽이냐?
+        // 화면상 컴퍼스가 '입체적'으로 서있는 느낌을 위해 좌표계 고정
+        // 보통 컴퍼스 머리는 회전 방향의 바깥쪽 혹은 위쪽
+        // 여기선 단순하게: 선분 벡터의 직교 방향
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const nx = -dy / dist;
+        const ny = dx / dist;
+
+        // 헤드 좌표: 중점에서 수직 방향으로 h만큼 이동
+        // (nx, ny) 방향으로 이동하면 선분 기준 '왼쪽'으로 튀어나옴
+        const headX = mx + nx * h;
+        const headY = my + ny * h;
+
+        // --- 그리기 시작 ---
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // 그림자
+        ctx.shadowColor = 'rgba(0,0,0,0.2)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetY = 5;
+
+        // 1. 왼쪽 다리 (바늘) : Head -> Center(cx, cy)
+        ctx.beginPath();
+        ctx.moveTo(headX, headY);
+        ctx.lineTo(cx, cy);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = '#94a3b8'; // 은색
+        ctx.stroke();
+
+        // 바늘 팁 (Center 근처) - 정확히 찍히도록 얇게
+        ctx.beginPath();
+        ctx.moveTo(cx + (headX-cx)*0.1, cy + (headY-cy)*0.1); // 다리 하단부
+        ctx.lineTo(cx, cy); // 뾰족한 끝
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#475569';
+        ctx.stroke();
+
+        // 2. 오른쪽 다리 (연필) : Head -> Pencil Tip(px, py)
+        ctx.beginPath();
+        ctx.moveTo(headX, headY);
+        ctx.lineTo(px, py); // 연필 끝 위치로 바로 긋기보다는 연필 홀더까지만
+        // 연필 홀더 위치 계산 (끝에서 약간 위)
+        const holderRatio = 0.85; 
+        const holderX = headX + (px - headX) * holderRatio;
+        const holderY = headY + (py - headY) * holderRatio;
+        
+        // 다리 다시 그리기 (헤드 -> 홀더)
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 10;
+        ctx.stroke(); // 기존 경로 덮어쓰기
+
+        // 3. 연필 그리기
+        // 연필 각도는 다리 각도와 비슷하게
+        ctx.save();
+        ctx.translate(px, py);
+        // 연필 회전각: 다리 방향 + 약간의 보정
+        const pencilAngle = Math.atan2(py - headY, px - headX);
+        ctx.rotate(pencilAngle - Math.PI/2); // 수직 기준 회전
+
+        // 연필 몸통
+        ctx.fillStyle = '#fbbf24'; // 노란색
+        ctx.beginPath();
+        ctx.moveTo(-4, -60); // 다리 쪽
+        ctx.lineTo(4, -60);
+        ctx.lineTo(4, 0);    // 팁 쪽 (0,0 이 붓끝)
+        ctx.lineTo(0, 5);    // 심 뾰족
+        ctx.lineTo(-4, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        
+        // 흑연 심
+        ctx.fillStyle = '#1e293b';
+        ctx.beginPath();
+        ctx.moveTo(-2, 0);
+        ctx.lineTo(2, 0);
+        ctx.lineTo(0, 5); // 진짜 그리는 점
+        ctx.fill();
+
+        // 홀더 (연필 잡는 부분)
+        ctx.fillStyle = '#64748b';
+        ctx.fillRect(-6, -45, 12, 20);
+
+        ctx.restore();
+
+        // 4. 헤드 (손잡이)
+        ctx.shadowColor = 'transparent'; // 손잡이는 깔끔하게
+        ctx.beginPath();
+        ctx.arc(headX, headY, 12, 0, Math.PI * 2);
+        ctx.fillStyle = '#e2e8f0';
+        ctx.fill();
+        ctx.stroke();
+
+        // 손잡이 기둥 (헤드에서 바깥쪽으로 뻗음)
+        // 바늘-연필 선분의 수직 방향 (nx, ny) 그대로 사용
+        const handleLen = 40;
+        ctx.beginPath();
+        ctx.moveTo(headX, headY);
+        ctx.lineTo(headX + nx * handleLen, headY + ny * handleLen);
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = '#64748b';
+        ctx.stroke();
+
+        // 손잡이 끝
+        ctx.beginPath();
+        ctx.arc(headX + nx * handleLen, headY + ny * handleLen, 8, 0, Math.PI*2);
+        ctx.fillStyle = '#475569';
+        ctx.fill();
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+        drawHistory();
+
+        if (state === 1) {
+            // 중심점 표시
+            drawCenterPoint(centerPoint.x, centerPoint.y);
+
+            // 점선 반지름
+            ctx.beginPath();
+            ctx.moveTo(centerPoint.x, centerPoint.y);
+            ctx.lineTo(mousePos.x, mousePos.y);
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = '#aaa';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 컴퍼스: 마우스 위치를 끝점으로 계산
+            const angle = Math.atan2(mousePos.y - centerPoint.y, mousePos.x - centerPoint.x);
+            drawCompass(centerPoint.x, centerPoint.y, radius, angle);
+
+        } else if (state === 2) {
+            drawCenterPoint(centerPoint.x, centerPoint.y);
+
+            // 호 그리기
+            ctx.beginPath();
+            const counterClockwise = totalRotation < 0;
+            
+            // 원 완성 조건 체크 (시각적 피드백)
+            // 1. 거의 360도
+            // 2. 시작점 근처로 돌아옴
+            const isClosedLoop = Math.abs(totalRotation) > Math.PI * 1.5 && 
+                                 Math.abs((currentAngle - startAngle + 2*Math.PI) % (2*Math.PI)) < 0.3;
+            
+            if (Math.abs(totalRotation) >= (Math.PI * 2 * 0.95) || isClosedLoop) {
+                // 원 완성 미리보기
+                ctx.arc(centerPoint.x, centerPoint.y, radius, 0, Math.PI * 2);
+                ctx.strokeStyle = '#2563eb'; // 완성 가능 시 파란색
+            } else {
+                ctx.arc(centerPoint.x, centerPoint.y, radius, startAngle, currentAngle, counterClockwise);
+                ctx.strokeStyle = '#333';
+            }
+            
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            // 컴퍼스
+            drawCompass(centerPoint.x, centerPoint.y, radius, currentAngle);
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    draw();
+
+</script>
+</body>
+</html>

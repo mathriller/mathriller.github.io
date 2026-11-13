@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>환형과 직사각형 넓이 관계</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: 'Inter', 'Segoe UI', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; align-items: center; }
+        .container { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 20px; text-align: center; max-width: 1400px; width: 100%; box-sizing: border-box; }
+        h1 { color: #333; margin-bottom: 20px; font-size: 24px; }
+        canvas { border: 1px solid #e0e0e0; border-radius: 8px; background: white; cursor: default; }
+        .controls { margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        input[type=range] { width: 600px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="canvas" width="1350" height="550"></canvas>
+        <div class="controls">
+            <span>펼치기 (a): </span>
+            <input type="range" id="unrollSlider" min="0" max="360" value="0" step="0.1">
+            <span id="angleValue" style="width: 60px; text-align: left;">0.0°</span>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
