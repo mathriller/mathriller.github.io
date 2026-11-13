@@ -23,9 +23,9 @@
   <main>
     <div class="page-head">
       <div class="wrap">
-        <span class="eyebrow">Apps for the classroom</span>
+        <span class="eyebrow">Mathriller</span>
         <h1>수업용 앱</h1>
-        <p>수학 수업에서 바로 열어 쓸 수 있도록 만든 웹 앱입니다. 설치나 로그인 없이 브라우저에서 실행됩니다.</p>
+        <p>데이터 분석부터 동적 기하까지, 수학 수업에서 바로 열어 쓸 수 있도록 만든 탐구 도구입니다. 설치나 로그인 없이 브라우저에서 실행됩니다.</p>
       </div>
     </div>
 
@@ -34,7 +34,7 @@
         <div class="row"><span class="label">영역</span><div class="chips" id="f-area"></div></div>
         <div class="row" id="f-grade-row"><span class="label">대상</span><div class="chips" id="f-grade"></div></div>
       </div>
-      <div class="apps-grid" id="apps"></div>
+      <div class="apps-grid" id="apps" data-adm-add-app></div>
     </div>
   </main>
 
@@ -42,37 +42,38 @@
 
   <script src="assets/js/common.js"></script>
   <script>
-  (async () => {
-    const data = await loadJSON("apps");
-    const apps = data.items.filter((a) => !a.hidden);
-    const state = { area: "", grade: "" };
+  const state = { area: "", grade: "" };
+  // 대상은 "초등 3–4학년" → "초등"처럼 학교급으로 묶는다
+  const level = (g) => (String(g || "").match(/^(초등|중등|중학|고등|고교|교사|예비교사|대학)/) || [""])[0].replace("중학", "중등").replace("고교", "고등");
 
-    // 대상은 "초등 3–4학년" → "초등"처럼 학교급으로 묶는다
-    const level = (g) => (String(g || "").match(/^(초등|중등|중학|고등|고교|교사|예비교사|대학)/) || [""])[0].replace("중학", "중등").replace("고교", "고등");
-
+  function chips(el, apps, list, key) {
     const count = (fn) => apps.filter(fn).length;
-    const areas = [...AREAS, ...new Set(apps.map((a) => a.area).filter((x) => x && !AREAS.includes(x)))].filter((x) => count((a) => a.area === x));
-    const grades = [...new Set(apps.map((a) => level(a.grade)).filter(Boolean))];
+    el.innerHTML = [`<button class="chip" data-v="">전체<span class="n">${apps.length}</span></button>`,
+      ...list.map((v) => `<button class="chip" data-v="${esc(v)}">${esc(v)}<span class="n">${count((a) => (key === "area" ? a.area : level(a.grade)) === v)}</span></button>`)].join("");
+    el.onclick = (e) => { const b = e.target.closest(".chip"); if (b) { state[key] = b.dataset.v; draw(); } };
+  }
 
-    function chips(el, list, key) {
-      el.innerHTML = [`<button class="chip" data-v="">전체<span class="n">${apps.length}</span></button>`,
-        ...list.map((v) => `<button class="chip" data-v="${esc(v)}">${esc(v)}<span class="n">${count((a) => (key === "area" ? a.area : level(a.grade)) === v)}</span></button>`)].join("");
-      el.addEventListener("click", (e) => {
-        const b = e.target.closest(".chip"); if (!b) return;
-        state[key] = b.dataset.v; render();
-      });
-    }
-    chips($("#f-area"), areas, "area");
-    if (grades.length > 1) chips($("#f-grade"), grades, "grade"); else $("#f-grade-row").remove();
+  let apps = [];
+  function draw() {
+    $$("#f-area .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.area));
+    $$("#f-grade .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.grade));
+    const list = apps.filter((a) => (!state.area || a.area === state.area) && (!state.grade || level(a.grade) === state.grade));
+    $("#apps").innerHTML = list.length ? list.map(appCard).join("") : (adminOn() ? "" : `<div class="empty" style="grid-column:1/-1">해당하는 앱이 없습니다.</div>`);
+    window.Admin?.decorate();
+  }
 
-    function render() {
-      $$("#f-area .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.area));
-      $$("#f-grade .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.grade));
-      const list = apps.filter((a) => (!state.area || a.area === state.area) && (!state.grade || level(a.grade) === state.grade));
-      $("#apps").innerHTML = list.length ? list.map(appCard).join("") : `<div class="empty" style="grid-column:1/-1">해당하는 앱이 없습니다.</div>`;
-    }
-    render();
-  })();
+  window.PAGE = {
+    async render() {
+      apps = visible((await loadJSON("apps")).items);
+      const areas = [...AREAS, ...new Set(apps.map((a) => a.area).filter((x) => x && !AREAS.includes(x)))].filter((x) => apps.some((a) => a.area === x));
+      const grades = [...new Set(apps.map((a) => level(a.grade)).filter(Boolean))];
+      chips($("#f-area"), apps, areas, "area");
+      $("#f-grade-row").hidden = grades.length < 2;
+      if (grades.length > 1) chips($("#f-grade"), apps, grades, "grade");
+      draw();
+    },
+  };
+  PAGE.render();
   </script>
 </body>
 </html>

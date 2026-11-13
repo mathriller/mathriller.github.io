@@ -31,10 +31,8 @@
           <div class="en" id="p-name-en">Inyong Choi</div>
           <div class="role" id="p-role"></div>
           <p class="bio" id="p-bio"></p>
-          <div class="links" id="p-links">
-            <a class="btn" href="apps.html">수업용 앱 보기</a>
-            <a class="btn ghost" href="research.html">연구 목록</a>
-          </div>
+          <div class="links" id="p-links"></div>
+          <div class="links" data-adm-profile style="margin-top:12px"></div>
         </div>
         <figure class="figure-box" style="margin:0">
           <svg class="euclid" viewBox="0 60 380 260" role="img" aria-label="두 원을 이용한 정삼각형 작도">
@@ -89,40 +87,44 @@
 
   <script src="assets/js/common.js"></script>
   <script>
-  (async () => {
-    const [p, apps, res] = await Promise.all([loadJSON("profile"), loadJSON("apps"), loadJSON("research")]);
+  window.PAGE = {
+    async render() {
+      const [p, apps, res] = await Promise.all([loadJSON("profile"), loadJSON("apps"), loadJSON("research")]);
 
-    $("#p-affil").textContent = p.university || "";
-    $("#p-name").textContent = p.name;
-    $("#p-name-en").textContent = p.name_en || "";
-    $("#p-role").textContent = [p.department, p.position].filter(Boolean).join(" ");
-    $("#p-bio").textContent = p.bio || "";
-    const extra = (p.links || []).map((l) => `<a class="btn ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("");
-    $("#p-links").insertAdjacentHTML("beforeend", extra);
-    document.title = `${p.name} · ${p.university} ${p.department}`;
+      $("#p-affil").textContent = p.university || "";
+      $("#p-name").textContent = p.name;
+      $("#p-name-en").textContent = p.name_en || "";
+      $("#p-role").textContent = [p.department, p.position].filter(Boolean).join(" ");
+      $("#p-bio").textContent = p.bio || "";
+      $("#p-links").innerHTML = `<a class="btn" href="apps.html">수업용 앱 보기</a><a class="btn ghost" href="research.html">연구 목록</a>` +
+        (p.links || []).map((l) => `<a class="btn ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("");
+      document.title = `${p.name} · ${p.university} ${p.department}`;
 
-    const visibleApps = apps.items.filter((a) => !a.hidden);
-    const homeApps = (visibleApps.filter((a) => a.featured).length ? visibleApps.filter((a) => a.featured) : visibleApps).slice(0, 3);
-    $("#home-apps").innerHTML = homeApps.length ? homeApps.map(appCard).join("") : `<div class="empty" style="grid-column:1/-1">아직 등록된 앱이 없습니다.</div>`;
+      const shown = visible(apps.items), featured = shown.filter((a) => a.featured);
+      const homeApps = (featured.length ? featured : shown).slice(0, 4);
+      $("#home-apps").innerHTML = homeApps.length ? homeApps.map(appCard).join("") : `<div class="empty" style="grid-column:1/-1">아직 등록된 앱이 없습니다.</div>`;
 
-    const pubs = res.items.filter((r) => !r.hidden).slice(0, 5);
-    $("#home-research").innerHTML = pubs.map((r) => `<li>
-        <span class="y">${esc(r.year)}</span>
-        <div><a href="research.html#${esc(r.id)}">${esc(r.title)}</a>
-        <div class="v">${esc(r.journal || "")}${r.volume ? ` ${esc(r.volume)}${r.issue ? `(${esc(r.issue)})` : ""}` : ""}</div></div>
-      </li>`).join("") || `<li class="empty" style="display:block">아직 등록된 연구가 없습니다.</li>`;
+      const pubs = res.items.filter((r) => !r.hidden).slice(0, 5);
+      $("#home-research").innerHTML = pubs.map((r) => `<li>
+          <span class="y">${esc(dateText(r))}</span>
+          <div><a href="research.html#${esc(r.id)}">${esc(r.title)}</a>
+          <div class="v">${esc(r.journal || "")}${r.volume ? ` ${esc(r.volume)}${r.issue ? `(${esc(r.issue)})` : ""}` : ""}</div></div>
+        </li>`).join("") || `<li class="empty" style="display:block">아직 등록된 연구가 없습니다.</li>`;
 
-    $("#p-interests").innerHTML = (p.interests || []).map((t) => `<li>${esc(t)}</li>`).join("");
-    const tl = (title, rows) => rows && rows.length ? `<h3>${title}</h3><ul class="timeline">${rows.map((r) => {
-      const [when, ...rest] = String(r).split("|");
-      return rest.length ? `<li><span>${esc(when.trim())}</span><span>${esc(rest.join("|").trim())}</span></li>` : `<li><span></span><span>${esc(when)}</span></li>`;
-    }).join("")}</ul>` : "";
-    const photo = p.photo ? `<img class="profile-photo" src="${esc(p.photo)}" alt="${esc(p.name)} 사진">` : "";
-    $("#p-cv").innerHTML = photo + tl("학력", p.education) + tl("경력", p.career) + `<h3>연락처</h3><ul class="timeline">
-      ${p.email ? `<li><span>이메일</span><span><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></span></li>` : ""}
-      ${p.office ? `<li><span>연구실</span><span>${esc(p.office)}</span></li>` : ""}
-      <li><span>소속</span><span>${esc(p.university)} ${esc(p.department)}</span></li></ul>`;
-  })();
+      $("#p-interests").innerHTML = (p.interests || []).map((t) => `<li>${esc(t)}</li>`).join("");
+      const tl = (title, rows) => rows && rows.length ? `<h3>${title}</h3><ul class="timeline">${rows.map((r) => {
+        const [when, ...rest] = String(r).split("|");
+        return rest.length ? `<li><span>${esc(when.trim())}</span><span>${esc(rest.join("|").trim())}</span></li>` : `<li><span></span><span>${esc(when)}</span></li>`;
+      }).join("")}</ul>` : "";
+      const photo = p.photo ? `<img class="profile-photo" src="${esc(p.photo)}" alt="${esc(p.name)} 사진">` : "";
+      $("#p-cv").innerHTML = photo + tl("학력", p.education) + tl("경력", p.career) + `<h3>연락처</h3><ul class="timeline">
+        ${p.email ? `<li><span>이메일</span><span><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></span></li>` : ""}
+        ${p.office ? `<li><span>연구실</span><span>${esc(p.office)}</span></li>` : ""}
+        <li><span>소속</span><span>${esc(p.university)} ${esc(p.department)}</span></li></ul>`;
+      window.Admin?.decorate();
+    },
+  };
+  PAGE.render();
   </script>
 </body>
 </html>

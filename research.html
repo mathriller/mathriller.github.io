@@ -30,6 +30,7 @@
     </div>
 
     <div class="wrap">
+      <div data-adm-kci></div>
       <div class="research-tools">
         <input class="search" id="q" type="search" placeholder="제목, 저자, 학술지, 키워드로 찾기" aria-label="연구 검색">
         <div class="count" id="count"></div>
@@ -43,73 +44,77 @@
 
   <script src="assets/js/common.js"></script>
   <script>
-  (async () => {
-    const [p, data] = await Promise.all([loadJSON("profile"), loadJSON("research")]);
-    const items = data.items.filter((r) => !r.hidden);
-    const me = { name: p.name, orcid: p.orcid };
-    const state = { q: "", kw: "" };
+  const state = { q: "", kw: "" };
+  let items = [], me = {};
 
-    // 자주 쓴 키워드
-    const freq = {};
-    items.forEach((r) => (r.keywords || []).forEach((k) => (freq[k] = (freq[k] || 0) + 1)));
-    const topKw = Object.entries(freq).filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1]).slice(0, 12);
-    const kwEl = $("#kw");
-    if (topKw.length) {
-      kwEl.innerHTML = `<button class="chip" data-v="">전체</button>` + topKw.map(([k, n]) => `<button class="chip" data-v="${esc(k)}">${esc(k)}<span class="n">${n}</span></button>`).join("");
-      kwEl.addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) { state.kw = b.dataset.v; render(); } });
-    } else kwEl.remove();
+  const hay = (r) => [r.title, r.title_en, r.journal, r.publisher, r.year, r.date, ...(r.keywords || []), ...(r.keywords_en || []), ...(r.authors || []).map((a) => a.name + " " + (a.name_en || ""))].join(" ").toLowerCase();
+  const mark = (text) => {
+    const s = esc(text); if (!state.q) return s;
+    const q = esc(state.q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return s.replace(new RegExp(q, "gi"), (m) => `<mark>${m}</mark>`);
+  };
 
-    const hay = (r) => [r.title, r.title_en, r.journal, r.publisher, r.year, ...(r.keywords || []), ...(r.keywords_en || []), ...(r.authors || []).map((a) => a.name + " " + (a.name_en || ""))].join(" ").toLowerCase();
-    const mark = (text) => {
-      const s = esc(text); if (!state.q) return s;
-      const q = esc(state.q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return s.replace(new RegExp(q, "gi"), (m) => `<mark>${m}</mark>`);
-    };
+  function pub(r) {
+    const links = [];
+    if (r.abstract || r.abstract_en) links.push(`<button class="linkish" data-abs>초록</button>`);
+    if (r.url) links.push(`<a href="${esc(r.url)}" target="_blank" rel="noopener">${r.source === "kci" ? "KCI" : "링크"} ↗</a>`);
+    if (r.doi) links.push(`<a href="https://doi.org/${esc(r.doi)}" target="_blank" rel="noopener">DOI</a>`);
+    (r.links || []).forEach((l) => links.push(`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`));
+    const type = r.type && r.type !== "journal" ? `<span class="type">${esc(TYPE_LABEL[r.type] || r.type)}</span>` : "";
+    const title = r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${mark(r.title)}</a>` : mark(r.title);
+    return `<article class="pub" id="${esc(r.id)}" data-id="${esc(r.id)}">
+      <h3>${type}${title}</h3>
+      ${r.title_en ? `<div class="en">${mark(r.title_en)}</div>` : ""}
+      <div class="authors">${authorsHTML(r, me)}</div>
+      <div class="venue">${venueText(r)}${r.date ? ` · ${esc(dateText(r))}` : ""}${r.kci_level ? ` · ${esc(r.kci_level)}` : ""}</div>
+      ${(r.keywords || []).length ? `<div class="kws">${r.keywords.map((k) => `<span class="tag" data-kw="${esc(k)}">${mark(k)}</span>`).join("")}</div>` : ""}
+      <div class="row">${links.join('<span class="sep">|</span>')}</div>
+      <div class="abstract" hidden>${r.abstract ? `<p>${esc(r.abstract)}</p>` : ""}${r.abstract_en ? `<p>${esc(r.abstract_en)}</p>` : ""}</div>
+    </article>`;
+  }
 
-    function pub(r) {
-      const links = [];
-      if (r.abstract || r.abstract_en) links.push(`<button class="linkish" data-abs="${esc(r.id)}">초록</button>`);
-      if (r.url) links.push(`<a href="${esc(r.url)}" target="_blank" rel="noopener">${r.source === "kci" ? "KCI" : "링크"} ↗</a>`);
-      if (r.doi) links.push(`<a href="https://doi.org/${esc(r.doi)}" target="_blank" rel="noopener">DOI</a>`);
-      (r.links || []).forEach((l) => links.push(`<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`));
-      const type = r.type && r.type !== "journal" ? `<span class="type">${esc(TYPE_LABEL[r.type] || r.type)}</span>` : "";
-      const title = r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${mark(r.title)}</a>` : mark(r.title);
-      return `<article class="pub" id="${esc(r.id)}">
-        <h3>${type}${title}</h3>
-        ${r.title_en ? `<div class="en">${mark(r.title_en)}</div>` : ""}
-        <div class="authors">${authorsHTML(r, me)}</div>
-        <div class="venue">${venueText(r)}${r.kci_level ? ` · ${esc(r.kci_level)}` : ""}</div>
-        ${(r.keywords || []).length ? `<div class="kws">${r.keywords.map((k) => `<span class="tag" data-kw="${esc(k)}">${mark(k)}</span>`).join("")}</div>` : ""}
-        <div class="row">${links.join('<span class="sep">|</span>')}</div>
-        <div class="abstract" hidden>${r.abstract ? `<p>${esc(r.abstract)}</p>` : ""}${r.abstract_en ? `<p>${esc(r.abstract_en)}</p>` : ""}</div>
-      </article>`;
-    }
+  function draw() {
+    $$("#kw .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.kw));
+    const q = state.q.toLowerCase();
+    const list = items.filter((r) => (!q || hay(r).includes(q)) && (!state.kw || (r.keywords || []).includes(state.kw)));
+    const years = {};
+    list.forEach((r) => (years[r.year || "연도 미상"] ||= []).push(r));
+    $("#count").innerHTML = `<b>${list.length}</b>편${list.length !== items.length ? ` / 전체 ${items.length}편` : ""}`;
+    $("#list").innerHTML = list.length
+      ? Object.keys(years).sort((a, b) => b.localeCompare(a)).map((y) => `<section class="year-group"><h2>${esc(y)}</h2><div>${years[y].map(pub).join("")}</div></section>`).join("")
+      : `<div class="empty">조건에 맞는 연구가 없습니다.</div>`;
+    window.Admin?.decorate();
+  }
 
-    function render() {
-      $$("#kw .chip").forEach((b) => b.setAttribute("aria-pressed", b.dataset.v === state.kw));
-      const q = state.q.toLowerCase();
-      const list = items.filter((r) => (!q || hay(r).includes(q)) && (!state.kw || (r.keywords || []).includes(state.kw)));
-      const years = {};
-      list.forEach((r) => (years[r.year || "연도 미상"] ||= []).push(r));
-      $("#count").innerHTML = `<b>${list.length}</b>편${list.length !== items.length ? ` / 전체 ${items.length}편` : ""}`;
-      $("#list").innerHTML = list.length
-        ? Object.keys(years).sort((a, b) => b.localeCompare(a)).map((y) => `<section class="year-group"><h2>${esc(y)}</h2><div>${years[y].map(pub).join("")}</div></section>`).join("")
-        : `<div class="empty">조건에 맞는 연구가 없습니다.</div>`;
-    }
+  window.PAGE = {
+    async render() {
+      const [p, data] = await Promise.all([loadJSON("profile"), loadJSON("research")]);
+      items = visible(data.items);
+      me = { name: p.name, orcid: p.orcid };
 
-    $("#q").addEventListener("input", (e) => { state.q = e.target.value.trim(); render(); });
-    $("#list").addEventListener("click", (e) => {
-      const b = e.target.closest("[data-abs]");
-      if (b) { const box = b.closest(".pub").querySelector(".abstract"); box.hidden = !box.hidden; b.textContent = box.hidden ? "초록" : "초록 닫기"; }
-      const t = e.target.closest("[data-kw]");
-      if (t) { state.kw = t.dataset.kw; state.q = ""; $("#q").value = ""; render(); window.scrollTo({ top: $("#kw").offsetTop - 100, behavior: "smooth" }); }
-    });
+      // 자주 쓴 키워드
+      const freq = {};
+      items.forEach((r) => (r.keywords || []).forEach((k) => (freq[k] = (freq[k] || 0) + 1)));
+      const topKw = Object.entries(freq).filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1]).slice(0, 12);
+      $("#kw").hidden = !topKw.length;
+      $("#kw").innerHTML = `<button class="chip" data-v="">전체</button>` + topKw.map(([k, n]) => `<button class="chip" data-v="${esc(k)}">${esc(k)}<span class="n">${n}</span></button>`).join("");
 
-    const first = items.map((r) => +r.year).filter(Boolean).sort()[0];
-    if (first) $("#r-lead").textContent = `${first}년부터 지금까지의 학술지 게재 논문을 최신순으로 정리했습니다. 제목을 누르면 원문 정보로 이동합니다.`;
-    render();
-    if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
-  })();
+      const first = items.map((r) => +r.year).filter(Boolean).sort()[0];
+      if (first) $("#r-lead").textContent = `${first}년부터 지금까지의 학술지 게재 논문을 최신순으로 정리했습니다. 제목을 누르면 원문 정보로 이동합니다.`;
+      draw();
+    },
+  };
+
+  $("#kw").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (b) { state.kw = b.dataset.v; draw(); } });
+  $("#q").addEventListener("input", (e) => { state.q = e.target.value.trim(); draw(); });
+  $("#list").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-abs]");
+    if (b) { const box = b.closest(".pub").querySelector(".abstract"); box.hidden = !box.hidden; b.textContent = box.hidden ? "초록" : "초록 닫기"; }
+    const t = e.target.closest("[data-kw]");
+    if (t) { state.kw = t.dataset.kw; state.q = ""; $("#q").value = ""; draw(); window.scrollTo({ top: $("#kw").offsetTop - 100, behavior: "smooth" }); }
+  });
+
+  PAGE.render().then(() => { if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView(); });
   </script>
 </body>
 </html>

@@ -7,7 +7,6 @@
   <title>관리 · 최인용</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/admin.css">
 </head>
 <body>
   <header class="site-head">
@@ -20,164 +19,23 @@
       </nav>
     </div>
   </header>
-
-  <main class="wrap admin">
+  <main class="wrap" style="padding-top:64px">
     <span class="eyebrow">Admin</span>
-    <h1>홈페이지 관리</h1>
-
-    <!-- 연결 -->
-    <section id="login" hidden>
-      <p class="lead">GitHub 저장소에 직접 저장하는 방식입니다. 처음 한 번만 토큰을 입력하면 이 기기에서 계속 쓸 수 있습니다.</p>
-      <div class="panel">
-        <h2>GitHub 연결</h2>
-        <p class="hint">토큰은 이 브라우저에만 저장되고, GitHub 외의 곳으로는 보내지 않습니다.</p>
-        <form class="form" id="login-form" autocomplete="off">
-          <label for="l-repo">저장소<span class="req">*</span></label>
-          <div><input type="text" id="l-repo" placeholder="아이디/저장소이름 (예: inyongchoi/inyongchoi.github.io)" required>
-            <div class="help">홈페이지 파일이 올라가 있는 GitHub 저장소입니다.</div></div>
-          <label for="l-branch">브랜치</label>
-          <div><input type="text" id="l-branch" value="main"></div>
-          <label for="l-token">토큰<span class="req">*</span></label>
-          <div><input type="password" id="l-token" placeholder="github_pat_로 시작하는 문자열" required>
-            <div class="check" style="padding-top:10px"><label><input type="checkbox" id="l-remember" checked> 이 기기에서 기억하기</label></div></div>
-          <div class="full actions" style="border:0;padding-top:0"><button class="btn" type="submit">연결</button></div>
-        </form>
-        <details class="guide">
-          <summary>토큰 만드는 방법</summary>
-          <ol>
-            <li>GitHub에 로그인한 뒤 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">새 Fine-grained 토큰 만들기</a> 페이지를 엽니다.</li>
-            <li><b>Token name</b>에 아무 이름(예: 홈페이지 관리)을 적고, <b>Expiration</b>은 원하는 기간으로 정합니다.</li>
-            <li><b>Repository access</b>에서 <code>Only select repositories</code>를 고르고 홈페이지 저장소 하나만 선택합니다.</li>
-            <li><b>Permissions → Repository permissions</b>에서 <code>Contents</code>와 <code>Actions</code>를 각각 <code>Read and write</code>로 바꿉니다.</li>
-            <li><b>Generate token</b>을 누르고 나온 문자열을 복사해 위 칸에 붙여 넣습니다.</li>
-          </ol>
-        </details>
-      </div>
-    </section>
-
-    <!-- 관리 화면 -->
-    <section id="panel" hidden>
-      <div class="repo-bar">
-        <div>연결된 저장소 <code id="repo-label"></code> · 저장하면 1~2분 뒤 사이트에 반영됩니다.</div>
-        <button class="btn ghost small" id="logout">연결 해제</button>
-      </div>
-
-      <div class="tabs" role="tablist">
-        <button role="tab" data-tab="apps" aria-selected="true">수업용 앱</button>
-        <button role="tab" data-tab="research" aria-selected="false">연구</button>
-        <button role="tab" data-tab="profile" aria-selected="false">프로필</button>
-      </div>
-
-      <!-- 앱 -->
-      <div data-pane="apps">
-        <div class="toolbar">
-          <span class="note" id="apps-note"></span>
-          <div style="display:flex;gap:8px">
-            <button class="btn ghost small" id="apps-clear-sample" hidden>예시 앱 모두 지우기</button>
-            <button class="btn small" id="apps-new">+ 새 앱 추가</button>
-          </div>
-        </div>
-        <div class="rows" id="apps-rows"></div>
-      </div>
-
-      <!-- 연구 -->
-      <div data-pane="research" hidden>
-        <div class="panel">
-          <h2>KCI 논문 가져오기</h2>
-          <p class="hint">KCI 논문 상세 페이지 주소를 붙여 넣으면 제목, 저자, 소속, 학술지, 권호, 초록, 키워드를 자동으로 정리합니다. 여러 편은 줄을 바꿔 넣으세요.</p>
-          <div class="kci-box">
-            <textarea class="input" id="kci-urls" placeholder="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART00..."></textarea>
-            <button class="btn" id="kci-go">가져오기</button>
-          </div>
-          <div class="status" id="kci-status"></div>
-        </div>
-        <div class="toolbar">
-          <span class="note" id="res-note"></span>
-          <div style="display:flex;gap:8px">
-            <input class="input" id="res-q" type="search" placeholder="목록에서 찾기" style="width:200px;padding:6px 10px;font-size:14px">
-            <button class="btn ghost small" id="res-new">+ 직접 입력</button>
-          </div>
-        </div>
-        <div class="rows" id="res-rows"></div>
-      </div>
-
-      <!-- 프로필 -->
-      <div data-pane="profile" hidden>
-        <div class="panel">
-          <form class="form" id="profile-form">
-            <label>이름<span class="req">*</span></label>
-            <div class="two"><input type="text" name="name" required placeholder="국문"><input type="text" name="name_en" placeholder="영문"></div>
-            <label>소속</label>
-            <div class="three"><input type="text" name="university" placeholder="대학"><input type="text" name="department" placeholder="학과"><input type="text" name="position" placeholder="직위"></div>
-            <label>연락처</label>
-            <div class="two"><input type="email" name="email" placeholder="이메일"><input type="text" name="office" placeholder="연구실 위치 (예: 과학관 301호)"></div>
-            <label>ORCID</label>
-            <div><input type="text" name="orcid" placeholder="0000-0000-0000-0000"><div class="help">연구 목록에서 본인 이름을 굵게 표시할 때 사용합니다.</div></div>
-            <label>소개 글</label>
-            <div><textarea name="bio" rows="4"></textarea><div class="help">첫 화면 이름 아래에 나옵니다. 줄바꿈은 그대로 보입니다.</div></div>
-            <label>연구 관심</label>
-            <div><textarea name="interests" rows="6"></textarea><div class="help">한 줄에 하나씩 적습니다.</div></div>
-            <label>학력</label>
-            <div><textarea name="education" rows="4" placeholder="2016 | 서울대학교 수학교육과 박사"></textarea><div class="help">한 줄에 하나, <code>연도 | 내용</code> 형식.</div></div>
-            <label>경력</label>
-            <div><textarea name="career" rows="4" placeholder="2022– | 서울교육대학교 수학교육과 교수"></textarea></div>
-            <label>링크</label>
-            <div><textarea name="links" rows="3" placeholder="Google Scholar | https://scholar.google.com/..."></textarea><div class="help">한 줄에 하나, <code>이름 | 주소</code> 형식. 첫 화면에 버튼으로 나옵니다.</div></div>
-            <label>사진</label>
-            <div><input type="file" name="photo_file" accept="image/*"><div class="help" id="photo-now"></div>
-              <div class="check"><label><input type="checkbox" name="photo_remove"> 사진 빼기</label></div></div>
-          </form>
-          <div class="actions"><button class="btn" id="profile-save">프로필 저장</button></div>
-        </div>
-      </div>
-    </section>
+    <h1 style="font-size:30px;margin-top:14px">관리 모드</h1>
+    <p style="color:var(--ink-2);max-width:620px">관리는 각 페이지에서 바로 합니다. 오른쪽 위 <b>관리</b> 버튼을 누르면 앱 카드와 논문마다 수정·삭제 버튼이 나타나고,
+      연구 페이지에는 KCI 주소로 논문을 추가하는 칸이 생깁니다.</p>
+    <p><button class="btn" id="go">관리 모드 켜기</button> <a class="btn ghost" href="apps.html">수업용 앱으로</a></p>
   </main>
-
-  <!-- 앱 편집 -->
-  <dialog id="app-dlg">
-    <div class="dhead"><h2 id="app-dlg-title">앱 추가</h2><button class="btn ghost small" data-close>닫기</button></div>
-    <form class="dbody form" id="app-form" autocomplete="off">
-      <label>앱 이름<span class="req">*</span></label><div><input type="text" name="title" required></div>
-      <label>주소(URL)<span class="req">*</span></label><div><input type="url" name="url" required placeholder="https://"></div>
-      <label>한 줄 소개<span class="req">*</span></label><div><textarea name="summary" rows="2" required placeholder="학생이 이 앱으로 무엇을 하는지 한두 문장으로"></textarea></div>
-      <label>영역</label>
-      <div><select name="area"><option value="">선택 안 함</option><option>수와 연산</option><option>변화와 관계</option><option>도형과 측정</option><option>자료와 가능성</option><option>기타</option></select>
-        <div class="help">2022 개정 교육과정 영역. 이미지가 없으면 영역에 맞는 그림이 자동으로 들어갑니다.</div></div>
-      <label>대상</label><div><input type="text" name="grade" list="grade-list" placeholder="예: 초등 5–6학년"><datalist id="grade-list"><option>초등 1–2학년</option><option>초등 3–4학년</option><option>초등 5–6학년</option><option>중학교</option><option>고등학교</option><option>예비교사</option></datalist></div>
-      <label>태그</label><div><input type="text" name="tags" placeholder="쉼표로 구분 (예: 분수, 시각화)"></div>
-      <label>대표 이미지</label>
-      <div><input type="file" name="image_file" accept="image/*"><div class="help" id="img-now"></div>
-        <input type="text" name="image" placeholder="또는 이미지 주소" style="margin-top:8px"></div>
-      <label>표시</label>
-      <div class="check"><label><input type="checkbox" name="featured"> 첫 화면에 표시</label><label><input type="checkbox" name="hidden"> 숨기기</label></div>
-    </form>
-    <div class="actions"><button class="btn ghost" data-close>취소</button><button class="btn" id="app-save">저장</button></div>
-  </dialog>
-
-  <!-- 연구 편집 -->
-  <dialog id="res-dlg">
-    <div class="dhead"><h2 id="res-dlg-title">연구 수정</h2><button class="btn ghost small" data-close>닫기</button></div>
-    <form class="dbody form" id="res-form" autocomplete="off">
-      <label>구분</label>
-      <div><select name="type"><option value="journal">국내 학술지</option><option value="intl">국외 학술지</option><option value="conference">학술발표</option><option value="book">저서</option><option value="report">연구보고서</option><option value="etc">기타</option></select></div>
-      <label>제목<span class="req">*</span></label><div><input type="text" name="title" required></div>
-      <label>영문 제목</label><div><input type="text" name="title_en"></div>
-      <label>저자</label><div><input type="text" name="authors" placeholder="쉼표로 구분 (예: 김화경, 송민호, 최인용)"><div class="help">이름 뒤에 *를 붙이면 교신저자로 표시됩니다.</div></div>
-      <label>학술지 / 발행처</label><div class="two"><input type="text" name="journal" placeholder="학술지명"><input type="text" name="publisher" placeholder="학회·발행기관"></div>
-      <label>연도 · 권 · 호</label><div class="three"><input type="text" name="year" placeholder="연도"><input type="text" name="volume" placeholder="권"><input type="text" name="issue" placeholder="호"></div>
-      <label>쪽 · DOI</label><div class="two"><input type="text" name="pages" placeholder="예: 223–246"><input type="text" name="doi" placeholder="10.xxxx/..."></div>
-      <label>링크</label><div><input type="url" name="url" placeholder="https://"></div>
-      <label>키워드</label><div><input type="text" name="keywords" placeholder="쉼표로 구분"></div>
-      <label>초록</label><div><textarea name="abstract" rows="5"></textarea></div>
-      <label>영문 초록</label><div><textarea name="abstract_en" rows="4"></textarea></div>
-      <label>표시</label><div class="check"><label><input type="checkbox" name="hidden"> 숨기기</label></div>
-    </form>
-    <div class="actions"><button class="btn ghost" data-close>취소</button><button class="btn" id="res-save">저장</button></div>
-  </dialog>
-
-  <div class="toast" id="toast"></div>
-
   <script src="assets/js/common.js"></script>
-  <script src="assets/js/admin.js"></script>
+  <script>
+    $("#go").addEventListener("click", async () => {
+      await window.adminReady;
+      if (window.Admin?.on) return (location.href = "apps.html");
+      if (!window.Admin) await loadScript("assets/js/admin-inline.js");
+      sessionStorage.setItem("hp-admin-next", "apps.html");
+      window.Admin.enter();
+    });
+    window.adminReady.then((on) => { if (on && sessionStorage.getItem("hp-admin-next")) { const n = sessionStorage.getItem("hp-admin-next"); sessionStorage.removeItem("hp-admin-next"); location.href = n; } });
+  </script>
 </body>
 </html>

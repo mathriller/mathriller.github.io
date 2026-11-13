@@ -4,11 +4,31 @@ const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+/* 관리 모드: 이 탭에서 켜 두었으면 관리 기능을 먼저 불러온다 */
+const ADMIN_MODE_KEY = "hp-admin-mode";
+function loadScript(src) {
+  return new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+}
+window.adminReady = sessionStorage.getItem(ADMIN_MODE_KEY) === "on"
+  ? loadScript("assets/js/admin-inline.js").then(() => window.Admin.start()).catch(() => false)
+  : Promise.resolve(false);
+const adminOn = () => !!window.Admin?.on;
+
 async function loadJSON(name) {
+  await window.adminReady;
+  if (adminOn()) return window.Admin.data(name); // 관리 중에는 GitHub의 최신 내용을 바로 보여 준다
   // 수정 직후에도 바로 반영되도록 캐시를 피한다
   const res = await fetch(`data/${name}.json?v=${Date.now()}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`${name}.json을 불러오지 못했습니다`);
   return res.json();
+}
+const visible = (list) => list.filter((x) => adminOn() || !x.hidden);
+
+async function toggleAdmin() {
+  await window.adminReady;
+  if (adminOn()) return window.Admin.exit();
+  if (!window.Admin) await loadScript("assets/js/admin-inline.js");
+  window.Admin.enter();
 }
 
 function hash(str) {
@@ -91,7 +111,7 @@ function appCard(app) {
   const tags = (app.tags || []).slice(0, 3).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
   const sample = app.sample ? `<span class="tag sample">예시</span>` : "";
   const href = app.url || "#";
-  return `<a class="app" href="${esc(href)}" target="_blank" rel="noopener">
+  return `<a class="app" data-id="${esc(app.id)}" href="${esc(href)}" target="_blank" rel="noopener">
     <div class="thumb">${thumb}</div>
     <div class="body">
       <div class="meta">${meta}</div>
@@ -113,6 +133,8 @@ function authorsHTML(item, me) {
   }).join(", ");
 }
 
+const dateText = (it) => (it.date ? it.date.replace("-", ".") : it.year || "");
+
 function venueText(it) {
   let v = it.journal || it.publisher || "";
   const vol = it.volume ? `${it.volume}${it.issue ? `(${it.issue})` : ""}` : (it.issue ? `(${it.issue})` : "");
@@ -127,8 +149,17 @@ async function renderFooter() {
     const addr = [p.university, p.department].filter(Boolean).join(" ");
     foot.innerHTML = `<div class="wrap">
       <div>${esc(addr)}${p.office ? ` · ${esc(p.office)}` : ""}${p.email ? ` · <a href="mailto:${esc(p.email)}">${esc(p.email)}</a>` : ""}</div>
-      <div>© ${new Date().getFullYear()} ${esc(p.name)} · <a href="admin.html">관리</a></div>
+      <div>© ${new Date().getFullYear()} ${esc(p.name)}</div>
     </div>`;
   } catch { /* 바닥글은 없어도 된다 */ }
 }
-document.addEventListener("DOMContentLoaded", renderFooter);
+function addAdminButton() {
+  const nav = $(".site-head .nav");
+  if (!nav || $(".nav-admin", nav)) return;
+  nav.insertAdjacentHTML("beforeend", `<button class="nav-admin" type="button" title="관리 모드" aria-label="관리 모드">
+    <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M3 17 L10 4 L17 17 Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="10" cy="12.6" r="2" fill="currentColor"/></svg>
+    <span>관리</span></button>`);
+  $(".nav-admin", nav).addEventListener("click", toggleAdmin);
+  window.adminReady.then((on) => { if (on) { const b = $(".nav-admin", nav); b.classList.add("on"); $("span", b).textContent = "관리 끄기"; } });
+}
+document.addEventListener("DOMContentLoaded", () => { renderFooter(); addAdminButton(); });

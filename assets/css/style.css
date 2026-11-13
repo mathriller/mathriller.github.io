@@ -39,6 +39,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; display: block; }
+[hidden] { display: none !important; }
 a { color: var(--blue); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 ::selection { background: #f1d9a8; }
@@ -62,6 +63,13 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoratio
 }
 .nav a:hover { color: var(--ink); background: var(--paper-2); text-decoration: none; }
 .nav a[aria-current="page"] { color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--red); border-radius: 0; }
+.nav { align-items: center; }
+.nav-admin {
+  display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 6px 10px;
+  font: 500 13px/1 var(--sans); color: var(--ink-3); background: none; border: 1px solid transparent; border-radius: var(--r); cursor: pointer;
+}
+.nav-admin:hover { color: var(--ink); border-color: var(--rule); }
+.nav-admin.on { color: var(--paper); background: var(--red); border-color: var(--red); }
 
 /* ---------- 바닥글 ---------- */
 .site-foot { border-top: 1px solid var(--rule); margin-top: 96px; padding: 28px 0 40px; color: var(--ink-3); font-size: 13.5px; }
@@ -154,7 +162,7 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -.01em
 .profile-photo { width: 132px; aspect-ratio: 3/4; object-fit: cover; border: 1px solid var(--rule); margin-bottom: 20px; filter: grayscale(.15); }
 
 /* ---------- 앱 카드 ---------- */
-.apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.apps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
 .app {
   display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--rule);
   border-radius: var(--r); color: inherit; transition: border-color .15s, transform .15s;
@@ -162,12 +170,12 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -.01em
 .app:hover { text-decoration: none; border-color: var(--ink-2); }
 .app:hover .thumb svg .accent, .app:hover .thumb svg .accent-fill { opacity: 1; }
 .app .thumb { aspect-ratio: 16/10; border-bottom: 1px solid var(--rule); overflow: hidden; background: var(--paper); }
-.app .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.app .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .app .thumb svg { width: 100%; height: 100%; display: block; }
-.app .body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+.app .body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; }
 .app .meta { font-size: 12.5px; color: var(--ink-3); display: flex; gap: 8px; align-items: center; letter-spacing: .01em; }
 .app .meta i { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-3); display: inline-block; }
-.app h3 { font-size: 19px; margin: 8px 0 6px; }
+.app h3 { font-size: 18px; margin: 8px 0 6px; }
 .app p { margin: 0; color: var(--ink-2); font-size: 14.5px; line-height: 1.65; }
 .app .foot { margin-top: auto; padding-top: 16px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .app .go { font-size: 14px; font-weight: 600; color: var(--blue); white-space: nowrap; }
@@ -220,12 +228,15 @@ mark { background: #f3dfa9; color: inherit; padding: 0 1px; }
 
 /* 첫 화면의 최근 연구 (간단 목록) */
 .pub-list-simple { list-style: none; margin: 0; padding: 0; }
-.pub-list-simple li { display: grid; grid-template-columns: 64px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule-2); }
+.pub-list-simple li { display: grid; grid-template-columns: 76px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--rule-2); }
 .pub-list-simple .y { font-family: var(--latin); color: var(--ink-3); }
 .pub-list-simple a { color: var(--ink); font-weight: 500; }
 .pub-list-simple .v { font-size: 13.5px; color: var(--ink-3); margin-top: 2px; }
 
 /* ---------- 반응형 ---------- */
+@media (max-width: 1100px) {
+  .apps-grid { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 920px) {
   .hero .wrap { grid-template-columns: 1fr; gap: 28px; padding-top: 48px; padding-bottom: 48px; }
   .figure-box { max-width: 380px; }
@@ -235,7 +246,7 @@ mark { background: #f3dfa9; color: inherit; padding: 0 1px; }
 @media (max-width: 620px) {
   .wrap { padding: 0 18px; }
   .site-head .wrap { height: auto; padding-top: 12px; padding-bottom: 6px; flex-direction: column; align-items: flex-start; gap: 4px; }
-  .nav { margin-left: -14px; }
+  .nav { margin-left: -14px; flex-wrap: wrap; }
   .site-head { position: static; }
   .hero h1 { font-size: 42px; }
   .page-head h1 { font-size: 30px; }

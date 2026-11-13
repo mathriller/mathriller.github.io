@@ -17,6 +17,7 @@ import os
 import re
 import sys
 import time
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -41,8 +42,11 @@ def article_id(text: str) -> str:
     return m.group(0)
 
 
-def fetch_html(arti_id: str) -> str:
-    req = urllib.request.Request(VIEW_URL.format(arti_id), headers={"User-Agent": UA, "Accept-Language": "ko"})
+SEARCH_URL = "https://www.kci.go.kr/kciportal/po/search/poArtiSearList.kci?poSearchBean.queryText={}&poSearchBean.docsCount=20"
+
+
+def get(url: str) -> str:
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "ko"})
     last = None
     for attempt in range(3):
         try:
@@ -51,7 +55,24 @@ def fetch_html(arti_id: str) -> str:
         except Exception as e:  # 네트워크 일시 오류 재시도
             last = e
             time.sleep(2 * (attempt + 1))
-    raise KciError(f"KCI 페이지를 불러오지 못했습니다 ({arti_id}): {last}")
+    raise KciError(f"KCI 페이지를 불러오지 못했습니다: {last}")
+
+
+def fetch_html(arti_id: str) -> str:
+    return get(VIEW_URL.format(arti_id))
+
+
+def publication_month(arti_id: str, title: str) -> str:
+    """상세 페이지에는 발행 월이 없어서, 제목으로 검색한 결과 목록에서 'YYYY.MM'을 찾는다."""
+    try:
+        page = get(SEARCH_URL.format(urllib.parse.quote(title[:80])))
+    except KciError:
+        return ""
+    i = page.find(f"artiId={arti_id}")
+    if i < 0:
+        return ""
+    m = re.search(r"(\d{4})\.(\d{2})\s*<", page[i:i + 6000])
+    return f"{m.group(1)}-{m.group(2)}" if m else ""
 
 
 def _clean(s: str | None) -> str:
@@ -184,7 +205,11 @@ def parse(page: str, arti_id: str) -> dict:
 
 def fetch(text: str) -> dict:
     aid = article_id(text)
-    return parse(fetch_html(aid), aid)
+    item = parse(fetch_html(aid), aid)
+    date = publication_month(aid, item["title"])
+    if date and date[:4] == str(item["year"]):
+        item["date"] = date
+    return item
 
 
 def load() -> dict:
@@ -197,7 +222,7 @@ def sort_key(it: dict):
     def num(x):
         m = re.match(r"\d+", str(x or ""))
         return int(m.group(0)) if m else 0
-    return (num(it.get("year")), num(it.get("volume")), num(it.get("issue")), it.get("added", ""))
+    return (num(it.get("year")), str(it.get("date", "")), num(it.get("volume")), num(it.get("issue")), it.get("added", ""))
 
 
 def save(data: dict) -> None:
@@ -244,6 +269,8 @@ def cmd_add(args: list[str]) -> int:
             for k in ("hidden", "featured", "note", "category", "added", "links"):
                 if k in old:
                     item[k] = old[k]
+            if not item.get("date") and old.get("date"):
+                item["date"] = old["date"]
             old.clear()
             old.update(item)
             lines.append(f"- 갱신: {item['title']} ({item['journal']}, {item['year']})")
