@@ -6,33 +6,32 @@
 <header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag B">B 인지적 충실성</span></header>
 <main>
 <h1><span class="num">원리 2</span>학습 목표에 맞게 블랙박스의 범위를 정하라</h1>
-<p class="lead">학생이 해야 할 사고는 남기고, 이미 익힌 절차만 도구에 맡긴다</p>
+<p class="lead">핵심 사고·조작은 학생에게 남기고, 비본질적인 처리는 도구가 맡는다</p>
 <div class="tabs" role="tablist">
   <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
   <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
 </div>
 <section class="view" id="bad">
 
-<div class="try"><b>이렇게 해 보세요</b> · '모형 놓기'를 누르고 지켜보세요. 학생이 할 일이 남아 있나요?</div>
+<div class="try"><b>이렇게 해 보세요</b> · 위의 두 수 모형을 아래 판으로 끌어 옮겨 보세요. · 일의 자리 낱개가 10개가 되는 순간 무슨 일이 일어나나요? 학생이 할 생각이 남아 있나요?</div>
 <div class="panel">
-  <div class="row"><b id="bq" style="font-size:26px"></b></div>
-  <svg id="bmat" viewBox="0 0 520 250" style="margin:10px 0"></svg>
-  <div class="row"><button class="btn orange" id="bgo">모형 놓기</button><button class="btn ghost" id="bnew">새 문제</button></div>
+  <div class="row"><b id="bq" style="font-size:26px"></b><button class="btn ghost" id="bnew">새 문제</button></div>
+  <svg id="bsvg" viewBox="0 0 560 520" style="margin-top:8px;touch-action:none"></svg>
   <div class="feedback" id="bfb"></div>
 </div>
 </section>
 <section class="view" id="good" hidden>
 
-<div class="try"><b>살펴볼 점</b> · 낱개가 10개 넘게 모이면 '묶기'가 켜집니다. 묶는 것은 학생이 합니다. · 답은 학생이 먼저 쓰고, 앱은 모형과 비교해 줍니다.</div>
+<div class="try"><b>살펴볼 점</b> · 모형을 아래 판으로 끌어 옮기세요. · 일의 자리에서 낱개를 눌러 <b>10개를 직접 고르고</b> '묶기'를 누른 뒤, 묶은 십 모형을 알맞은 자리로 <b>직접 옮겨</b> 보세요. · 모형을 가지런히 놓는 일(비본질적 처리)은 앱이 합니다.</div>
 <div class="panel">
-  <div class="row"><b id="gq" style="font-size:26px"></b></div>
-  <svg id="gmat" viewBox="0 0 520 250" style="margin:10px 0"></svg>
-  <div class="row"><button class="btn" id="gbundle">낱개 10개 묶기</button><button class="btn ghost" id="gunbundle">십 모형 1개 풀기</button><button class="btn ghost" id="gnew">새 문제</button></div>
+  <div class="row"><b id="gq" style="font-size:26px"></b><button class="btn ghost" id="gnew">새 문제</button></div>
+  <svg id="gsvg" viewBox="0 0 560 520" style="margin-top:8px;touch-action:none"></svg>
+  <div class="row" style="margin-top:10px"><button class="btn" id="gbundle" disabled>묶기</button><span id="gsel" class="muted">일의 자리에서 낱개를 눌러 고르세요</span></div>
   <div class="row" style="margin-top:12px"><span id="gq2" style="font-size:20px"></span><input type="number" id="gans" inputmode="numeric"><button class="btn slate" id="gcheck">확인</button></div>
   <div class="feedback" id="gfb"></div>
 </div>
 </section>
-<details class="think"><summary>점검 질문</summary><p>이 차시에서 학생이 직접 해야 할 생각은 무엇인가? 앱은 그 생각을 대신하는가, 드러나게 하는가?</p></details>
+<details class="think"><summary>점검 질문</summary><p>이 차시의 핵심 사고와 조작은 무엇인가? 앱이 그것을 대신하지는 않는가? 모형 정렬, 복잡한 계산 같은 비본질적 처리는 도구가 덜어 주는가?</p></details>
 <footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
 </main>
 <script src="common.js"></script>
@@ -43,66 +42,126 @@ function newProblem() {
   do { a = rnd(11, 68); b = rnd(11, 68); } while ((a % 10) + (b % 10) < 10 || a + b > 99);
   return { a, b };
 }
-function drawMat(svg, tens, ones, colorT, colorO, stroke) {
-  svg.innerHTML = '';
-  el('rect', { x: 0, y: 0, width: 255, height: 250, fill: '#fff', stroke: '#C5D1D7' }, svg);
-  el('rect', { x: 265, y: 0, width: 255, height: 250, fill: '#fff', stroke: '#C5D1D7' }, svg);
-  el('text', { x: 127, y: 22, 'text-anchor': 'middle', 'font-size': 16, fill: '#6E7585' }, svg).textContent = '십 모형';
-  el('text', { x: 392, y: 22, 'text-anchor': 'middle', 'font-size': 16, fill: '#6E7585' }, svg).textContent = '낱개 모형';
-  for (let i = 0; i < tens; i++) {
-    const x = 16 + i * 26;
-    el('rect', { x, y: 40, width: 18, height: 190, fill: colorT, stroke }, svg);
-    for (let j = 1; j < 10; j++) el('line', { x1: x, x2: x + 18, y1: 40 + j * 19, y2: 40 + j * 19, stroke, 'stroke-width': .6 }, svg);
+// a place-value board: two source panels (A, B) on top, a sum mat (T = 십의 자리, O = 일의 자리) below
+function board(svg, pal, hooks) {
+  const st = { a: 27, b: 15, blocks: [], sel: new Set() };
+  let uid = 0, drag = null;
+  const ZONES = { A: [10, 10, 260, 190], B: [290, 10, 260, 190], T: [10, 240, 260, 270], O: [290, 240, 260, 270] };
+  st.add = (type, loc, src, fresh) => { const b = { id: uid++, type, loc, src, fresh: !!fresh }; st.blocks.push(b); return b; };
+  st.reset = (a, b) => {
+    st.a = a; st.b = b; st.blocks = []; st.sel.clear();
+    for (let i = 0; i < Math.floor(a / 10); i++) st.add('ten', 'A', 'A');
+    for (let i = 0; i < a % 10; i++) st.add('one', 'A', 'A');
+    for (let i = 0; i < Math.floor(b / 10); i++) st.add('ten', 'B', 'B');
+    for (let i = 0; i < b % 10; i++) st.add('one', 'B', 'B');
+    st.render();
+  };
+  st.count = (loc, type) => st.blocks.filter(b => b.loc === loc && b.type === type).length;
+  function pos(b, i) { // automatic tidy placement (the non-essential part)
+    const [zx, zy] = ZONES[b.loc];
+    if (b.loc === 'A' || b.loc === 'B') return b.type === 'ten' ? [zx + 14 + i * 26, zy + 50] : [zx + 175 + (i % 3) * 28, zy + 56 + Math.floor(i / 3) * 30];
+    if (b.loc === 'T') return b.type === 'ten' ? [zx + 14 + i * 26, zy + 34] : [zx + 14 + (i % 8) * 30, zy + 166 + Math.floor(i / 8) * 30];
+    return b.type === 'one' ? [zx + 14 + (i % 7) * 34, zy + 34 + Math.floor(i / 7) * 34] : [zx + 14 + i * 26, zy + 140];
   }
-  for (let i = 0; i < ones; i++) {
-    const r = Math.floor(i / 6), c = i % 6;
-    el('rect', { x: 290 + c * 36, y: 44 + r * 36, width: 22, height: 22, fill: colorO, stroke }, svg);
-  }
+  st.render = () => {
+    svg.innerHTML = '';
+    const lab = { A: String(st.a), B: String(st.b), T: '십의 자리', O: '일의 자리' };
+    for (const z in ZONES) {
+      const [x, y, w, h] = ZONES[z], mat = z === 'T' || z === 'O';
+      el('rect', { x, y, width: w, height: h, rx: 10, fill: mat ? '#fff' : '#F4F6F8', stroke: mat ? '#646B86' : '#C5D1D7', 'stroke-width': mat ? 2 : 1.5, 'stroke-dasharray': mat ? '' : '6 4' }, svg);
+      el('text', { x: x + 12, y: y + 22, 'font-size': mat ? 15 : 20, 'font-weight': 700, fill: mat ? '#646B86' : '#3A3F52' }, svg).textContent = lab[z];
+    }
+    el('text', { x: 280, y: 228, 'text-anchor': 'middle', 'font-size': 13, fill: '#6E7585' }, svg).textContent = '▼ 모형을 아래 판으로 끌어 옮기세요 ▼';
+    const idx = {};
+    st.blocks.forEach(b => {
+      const k = b.loc + b.type, i = idx[k] = (idx[k] ?? -1) + 1, [x, y] = pos(b, i);
+      const g = el('g', { 'data-id': b.id, transform: `translate(${x},${y})`, style: 'cursor:grab' }, svg);
+      const fill = b.src === 'A' ? pal.a : b.src === 'B' ? pal.b : pal.mix;
+      const selected = st.sel.has(b.id), stroke = selected || b.fresh ? '#D16349' : pal.stroke, sw = selected || b.fresh ? 3 : 1.2;
+      if (b.type === 'ten') {
+        el('rect', { x: 0, y: 0, width: 18, height: 120, fill, stroke, 'stroke-width': sw }, g);
+        for (let j = 1; j < 10; j++) el('line', { x1: 0, x2: 18, y1: j * 12, y2: j * 12, stroke: pal.stroke, 'stroke-width': .6 }, g);
+      } else el('rect', { x: 0, y: 0, width: 22, height: 22, fill, stroke, 'stroke-width': sw }, g);
+    });
+  };
+  function pt(e) { const r = svg.getBoundingClientRect(); return [(e.clientX - r.left) * 560 / r.width, (e.clientY - r.top) * 520 / r.height]; }
+  svg.addEventListener('pointerdown', e => {
+    const g = e.target.closest('g[data-id]'); if (!g) return;
+    const [x, y] = pt(e), t = g.getAttribute('transform').match(/translate\(([-\d.]+),([-\d.]+)\)/);
+    drag = { g, id: +g.dataset.id, x, y, tx: +t[1], ty: +t[2], moved: false };
+    svg.appendChild(g); svg.setPointerCapture(e.pointerId);
+  });
+  svg.addEventListener('pointermove', e => {
+    if (!drag) return; const [x, y] = pt(e), dx = x - drag.x, dy = y - drag.y;
+    if (Math.hypot(dx, dy) > 6) drag.moved = true;
+    if (drag.moved) drag.g.setAttribute('transform', `translate(${drag.tx + dx},${drag.ty + dy})`);
+  });
+  svg.addEventListener('pointerup', e => {
+    if (!drag) return; const d = drag; drag = null;
+    const b = st.blocks.find(q => q.id === d.id);
+    if (!d.moved) { hooks.tap && hooks.tap(b); st.render(); return; }
+    const [x, y] = pt(e); let zone = null;
+    for (const z of ['T', 'O']) { const [zx, zy, w, h] = ZONES[z]; if (x >= zx && x <= zx + w && y >= zy && y <= zy + h) zone = z; }
+    if (zone && zone !== b.loc) { b.loc = zone; b.fresh = false; st.sel.delete(b.id); st.render(); hooks.drop && hooks.drop(b); }
+    else st.render();
+  });
+  return st;
 }
-// ---------- X: the app does the regrouping and the answer
-let B = newProblem(), bT, bO;
-function badReset() {
-  bT = Math.floor(B.a / 10) + Math.floor(B.b / 10); bO = B.a % 10 + B.b % 10;
-  bq.textContent = `${B.a} + ${B.b} = ?`; bfb.textContent = '';
-  drawMat(bmat, 0, 0, '#E9A896', '#E9A896', '#D16349');
-}
-bgo.onclick = () => {
-  drawMat(bmat, bT, bO, '#E9A896', '#E9A896', '#D16349');
-  bfb.textContent = '모형을 놓았어요...';
-  setTimeout(() => {
-    const t = bT + Math.floor(bO / 10), o = bO % 10;
-    drawMat(bmat, t, o, '#E9A896', '#E9A896', '#D16349');
-    bq.innerHTML = `${B.a} + ${B.b} = <span style="color:#D16349">${B.a + B.b}</span>`;
-    bfb.innerHTML = '자동 변환 완료! 낱개 10개 → 십 모형 1개<br>정답은 <b>' + (B.a + B.b) + '</b>입니다 ✅';
-  }, 900);
-};
-bnew.onclick = () => { B = newProblem(); badReset(); };
-badReset();
+const sourcesEmpty = st => !st.blocks.some(b => b.loc === 'A' || b.loc === 'B');
 
-// ---------- O: student regroups, student answers, app compares with the blocks
-let G = { a: 27, b: 15 }, gT, gO;
-function goodReset() {
-  gT = Math.floor(G.a / 10) + Math.floor(G.b / 10); gO = G.a % 10 + G.b % 10;
-  gq.textContent = `${G.a} + ${G.b}`; gq2.textContent = `${G.a} + ${G.b} =`; gans.value = ''; gfb.textContent = '두 수만큼 모형을 놓았어요. 낱개를 보세요.';
-  goodDraw();
+// ---------- X: the moment 10 ones gather, the app bundles them and carries the ten over by itself
+const BX = board(bsvg, { a: '#E9A896', b: '#F2C4B6', mix: '#E9A896', stroke: '#D16349' }, {
+  drop() {
+    if (BX.count('O', 'one') >= 10) {
+      setTimeout(() => {
+        let k = 0; BX.blocks = BX.blocks.filter(b => !(b.loc === 'O' && b.type === 'one' && k++ < 10));
+        BX.add('ten', 'T', 'mix', true); BX.render();
+        bfb.innerHTML = '✨ 자동 묶음! 낱개 10개를 십 모형으로 바꿔 십의 자리로 옮겼어요.';
+        done();
+      }, 300);
+    } else done();
+  }
+});
+function done() {
+  if (!sourcesEmpty(BX)) return;
+  setTimeout(() => { bq.innerHTML = `${BX.a} + ${BX.b} = <span style="color:#D16349">${BX.a + BX.b}</span>`; bfb.innerHTML += '<br>정답은 <b>' + (BX.a + BX.b) + '</b>입니다 ✅'; }, 400);
 }
-function goodDraw() {
-  drawMat(gmat, gT, gO, '#8CADAE', '#8CADAE', '#646B86');
-  gbundle.disabled = gO < 10; gunbundle.disabled = gT < 1;
+function badReset(p) { BX.reset(p.a, p.b); bq.textContent = `${p.a} + ${p.b} = ?`; bfb.textContent = ''; }
+bnew.onclick = () => badReset(newProblem());
+badReset({ a: 27, b: 15 });
+
+// ---------- O: the student chooses ten ones, bundles them, and moves the ten; the app only tidies
+const GX = board(gsvg, { a: '#8CADAE', b: '#B8BFD6', mix: '#9DB8A0', stroke: '#646B86' }, {
+  tap(b) {
+    if (b.type !== 'one' || b.loc !== 'O') return;
+    if (GX.sel.has(b.id)) GX.sel.delete(b.id); else GX.sel.add(b.id);
+    selUI();
+  },
+  drop() { selUI(); gfb.textContent = ''; }
+});
+function selUI() {
+  const n = GX.sel.size; gbundle.disabled = n !== 10;
+  gsel.textContent = n ? `고른 낱개 ${n}개` : '일의 자리에서 낱개를 눌러 고르세요';
 }
-gbundle.onclick = () => { gO -= 10; gT += 1; goodDraw(); gfb.textContent = '낱개 10개를 십 모형 1개로 묶었어요.'; };
-gunbundle.onclick = () => { gT -= 1; gO += 10; goodDraw(); gfb.textContent = '십 모형 1개를 낱개 10개로 풀었어요.'; };
-gnew.onclick = () => { G = newProblem(); goodReset(); };
+gbundle.onclick = () => {
+  GX.blocks = GX.blocks.filter(b => !GX.sel.has(b.id)); GX.sel.clear();
+  GX.add('ten', 'O', 'mix', true); GX.render(); selUI();
+  gfb.textContent = '낱개 10개를 십 모형 1개로 묶었어요. (주황 테두리)';
+};
 gcheck.onclick = () => {
   const v = parseInt(gans.value, 10);
   if (isNaN(v)) { gfb.textContent = '먼저 답을 써 보세요.'; return; }
-  const onMat = `지금 판 위에는 십 모형 ${gT}개, 낱개 ${gO}개가 있어요.`;
-  if (gO >= 10) { gfb.innerHTML = onMat + '<br>낱개가 10개 넘게 있네요. 묶을 수 있을까요?'; return; }
-  const mat = gT * 10 + gO;
-  gfb.innerHTML = v === mat ? onMat + `<br>모형이 나타내는 수와 네가 쓴 수 <b>${v}</b>가 같아요.`
-    : onMat + `<br>네가 쓴 수는 <b>${v}</b>이에요. 모형을 다시 세어 보고 비교해 볼까요?`;
+  if (!sourcesEmpty(GX)) { gfb.textContent = '아직 판으로 옮기지 않은 모형이 있어요.'; return; }
+  const tT = GX.count('T', 'ten'), oO = GX.count('O', 'one'), tO = GX.count('O', 'ten'), oT = GX.count('T', 'one');
+  const desc = `지금 판에는 십의 자리에 십 모형 ${tT}개${oT ? `, 낱개 ${oT}개` : ''}, 일의 자리에 ${tO ? `십 모형 ${tO}개, ` : ''}낱개 ${oO}개가 있어요.`;
+  if (oO >= 10) { gfb.innerHTML = desc + '<br>일의 자리 낱개가 10개 넘게 있네요. 어떻게 할 수 있을까요?'; return; }
+  if (tO || oT) { gfb.innerHTML = desc + '<br>각 모형이 알맞은 자리에 있는지 살펴볼까요?'; return; }
+  const mat = tT * 10 + oO;
+  gfb.innerHTML = desc + (v === mat ? `<br>판의 모형이 나타내는 수와 네가 쓴 수 <b>${v}</b>가 같아요.` : `<br>네가 쓴 수는 <b>${v}</b>이에요. 판의 모형과 비교해 볼까요?`);
 };
-goodReset();
+function goodReset(p) { GX.reset(p.a, p.b); gq.textContent = `${p.a} + ${p.b}`; gq2.textContent = `${p.a} + ${p.b} =`; gans.value = ''; gfb.textContent = ''; selUI(); }
+gnew.onclick = () => goodReset(newProblem());
+goodReset({ a: 27, b: 15 });
 
 </script>
 </body></html>
