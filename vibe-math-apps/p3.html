@@ -13,13 +13,10 @@
 </div>
 <section class="view" id="bad">
 
-<div class="try"><b>이렇게 해 보세요</b> · 모형으로 덧셈을 하고 옆의 세로셈도 채워 보세요. 받아올림 1은 모형의 어떤 조작일까요?</div>
+<div class="try"><b>이렇게 해 보세요</b> · 모형으로 덧셈을 하고 답을 써 보세요. 모형에서 한 '바꾸기'는 식의 어디에 나타나나요?</div>
 <div class="panel">
-  <div class="row"><b id="bq" style="font-size:24px"></b><button class="btn ghost" id="bnew">새 문제</button></div>
-  <div class="row" style="align-items:flex-start;gap:14px;margin-top:8px">
-    <svg id="bsvg" viewBox="0 0 560 520" style="flex:1 1 330px;max-width:560px;touch-action:none"></svg>
-    <div style="flex:0 0 190px"><b>세로셈</b><div id="bvert" style="margin-top:6px"></div></div>
-  </div>
+  <div class="row"><span id="bq" style="font-size:26px"></span><input type="number" id="bans" inputmode="numeric" style="width:90px;font-size:22px"><span style="font-size:26px">)</span><button class="btn ghost" id="bnew">새 문제</button></div>
+  <svg id="bsvg" viewBox="0 0 560 520" style="margin-top:8px;max-width:560px;touch-action:none"></svg>
 </div>
 </section>
 <section class="view" id="good" hidden>
@@ -138,19 +135,9 @@ function bundler(svg, pal, after) {
   return B;
 }
 
-// ---------- X: blocks and a written algorithm on the same screen, but not connected
+// ---------- X: blocks with only a horizontal number sentence; the regrouping has nowhere to appear
 const BX = bundler(bsvg, { a: '#E9A896', b: '#F2C4B6', mix: '#E9A896', stroke: '#D16349' }, null);
-function badVert(a, b) {
-  const box = 'width:34px;height:40px;font-size:24px;text-align:center;border:1.5px solid #C5D1D7;border-radius:6px;padding:0';
-  const d = 'width:40px;height:44px;text-align:center;font-size:30px';
-  bvert.innerHTML = `<table style="border-collapse:collapse;background:#fff;border-radius:10px">
-    <tr><td style="${d}"></td><td style="${d}"><input style="${box};width:26px;height:28px;font-size:16px" inputmode="numeric"></td><td style="${d}"></td></tr>
-    <tr><td style="${d}"></td><td style="${d}">${Math.floor(a / 10)}</td><td style="${d}">${a % 10}</td></tr>
-    <tr><td style="${d}">+</td><td style="${d}">${Math.floor(b / 10)}</td><td style="${d}">${b % 10}</td></tr>
-    <tr><td colspan="3" style="border-top:2.5px solid #3A3F52;height:6px"></td></tr>
-    <tr><td style="${d}"></td><td style="${d}"><input style="${box}" inputmode="numeric"></td><td style="${d}"><input style="${box}" inputmode="numeric"></td></tr></table>`;
-}
-function badReset(p) { BX.reset(p.a, p.b); bq.textContent = `${p.a} + ${p.b}`; badVert(p.a, p.b); }
+function badReset(p) { BX.reset(p.a, p.b); bq.textContent = `${p.a} + ${p.b} = (`; bans.value = ''; }
 bnew.onclick = () => badReset(newProblem());
 badReset({ a: 27, b: 15 });
 
