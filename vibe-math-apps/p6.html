@@ -22,16 +22,15 @@
 </section>
 <section class="view" id="good" hidden>
 
-<div class="try">전개도를 만들고 '접어 보기'를 눌러 보세요. 접기 전에 겹칠 면을 예상해 표시할 수도 있어요.</div>
+<div class="try">전개도를 만들고 '접어 보기'를 눌러 보세요.</div>
 <div class="panel">
   <div class="row" style="align-items:flex-start;gap:16px">
     <div><div id="ggrid"></div>
-      <div class="row" style="margin-top:10px"><button class="btn" id="gfold">접어 보기</button><button class="btn ghost" id="gpred">예상 표시</button><button class="btn ghost" id="gclr">지우기</button></div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="gfold">접어 보기</button><button class="btn ghost" id="gclr">지우기</button></div>
       <div class="row" style="margin-top:8px"><span class="small muted">접는 정도</span><input type="range" id="gang" min="0" max="90" value="0" style="width:150px"></div>
     </div>
     <div id="gscene" style="flex:1;min-width:280px;height:340px;perspective:900px;position:relative;touch-action:none;cursor:grab;background:#fff;border-radius:12px;overflow:hidden"></div>
   </div>
-  <div class="feedback" id="gfb"></div>
 </div>
 </section>
 <details class="think"><summary>점검 질문</summary><p>틀린 시도에 앱은 판정하는가, 결과를 보여 주는가? 피드백이 다음 생각을 여는가, 닫는가?</p></details>
@@ -50,7 +49,6 @@ function makeGrid(host, color, onChange) {
     d.style.cssText = 'width:48px;height:48px;border:1.5px dashed #C5D1D7;border-radius:4px;display:grid;place-items:center;font-weight:700;cursor:pointer;background:#fff';
     d.onclick = () => {
       const k = r + ',' + c, i = st.order.indexOf(k);
-      if (st.tapOverride && st.tapOverride(k, i)) return;
       if (i >= 0) st.order.splice(i, 1); else st.order.push(k);
       onChange();
     };
@@ -60,7 +58,7 @@ function makeGrid(host, color, onChange) {
     const i = st.order.indexOf(k);
     d.textContent = i >= 0 ? (LAB[i] || i + 1) : '';
     d.style.background = i < 0 ? '#fff' : hl.has(k) ? '#F6C9BC' : off.has(k) ? '#eee' : color;
-    d.style.border = i < 0 ? '1.5px dashed #C5D1D7' : hl.has(k) ? '2.5px solid #D16349' : (st.pred && st.pred.has(k)) ? '3px dashed #D16349' : '1.5px solid #646B86';
+    d.style.border = i < 0 ? '1.5px dashed #C5D1D7' : hl.has(k) ? '2.5px solid #D16349' : '1.5px solid #646B86';
     d.style.color = '#3A3F52';
   });
   st.clear = () => { st.order = []; onChange(); };
@@ -104,18 +102,8 @@ bclr.onclick = () => B.clear();
 B.paint();
 
 // ---------- O: real CSS-3D folding of the student's net
-let predMode = false, folded = false;
-const G = makeGrid(ggrid, '#8CADAE', () => { gang.value = 0; folded = false; G.pred.forEach(k => { if (!G.order.includes(k)) G.pred.delete(k); }); build(); describe(false); });
-G.pred = new Set();
-G.tapOverride = (k, i) => {
-  if (!predMode) return false;
-  if (i >= 0) { if (G.pred.has(k)) G.pred.delete(k); else G.pred.add(k); build(); describe(false); }
-  return true;
-};
-gpred.onclick = () => {
-  predMode = !predMode; gpred.textContent = predMode ? '예상 표시 끝' : '예상 표시';
-  gpred.className = predMode ? 'btn orange' : 'btn ghost'; describe(false);
-};
+let folded = false;
+const G = makeGrid(ggrid, '#8CADAE', () => { gang.value = 0; folded = false; build(); });
 const F = 70; let rx = 58, rz = -25, faces = {}, A = null;
 function build() {
   A = analyse(G.order); gscene.innerHTML = ''; faces = {};
@@ -148,30 +136,9 @@ function setAngle(a) {
     if (t) d.style.transform = t;
   });
 }
-function describe(show) {
-  if (show) folded = true;
-  if (!A) { gfb.textContent = '칸을 눌러 전개도를 만들어 보세요.'; return; }
-  if (!folded) {
-    gfb.textContent = predMode ? '겹칠 것 같은 면을 눌러 표시해 보세요.' : `${G.order.length}개의 면을 골랐어요. '접어 보기'를 눌러 보세요.`;
-    return;
-  }
-  const msgs = [];
-  A.overlaps.forEach(g => msgs.push(`<b style="color:#D16349">${g.map(k => LAB[G.order.indexOf(k)]).join('·')} 면</b>이 같은 자리로 접혀 겹쳐요.`));
-  if (A.detached.length) msgs.push('떨어져 있는 면은 함께 접히지 않아요.');
-  const empty = 6 - A.distinct;
-  if (empty > 0) msgs.push(`정육면체에서 면이 비는 자리가 <b>${empty}곳</b> 있어요.`);
-  if (!msgs.length) msgs.push('여섯 면이 모두 서로 다른 자리로 접혔어요. 그림을 돌려서 확인해 보세요.');
-  else msgs.push('어느 면을 어디로 옮기면 좋을까요?');
-  if (G.pred.size) {
-    const name = ks => ks.length ? ks.map(k => LAB[G.order.indexOf(k)]).join('·') : '없음';
-    const real = A.overlaps.flat();
-    msgs.push(`<span class="muted">예상한 면: ${name([...G.pred])} / 접어 보니 겹친 면: ${name(real)}</span>`);
-  }
-  gfb.innerHTML = msgs.join('<br>');
-}
-gang.oninput = () => { setAngle(+gang.value); if (+gang.value === 90 && !folded) { describe(true); build(); setAngle(90); } };
+gang.oninput = () => { setAngle(+gang.value); if (+gang.value === 90 && !folded) { folded = true; build(); setAngle(90); } };
 gfold.onclick = () => {
-  let a = +gang.value; const t = setInterval(() => { a = Math.min(90, a + 3); gang.value = a; setAngle(a); if (a >= 90) { clearInterval(t); describe(true); build(); setAngle(90); gang.value = 90; } }, 25);
+  let a = +gang.value; const t = setInterval(() => { a = Math.min(90, a + 3); gang.value = a; setAngle(a); if (a >= 90) { clearInterval(t); folded = true; build(); setAngle(90); gang.value = 90; } }, 25);
 };
 gclr.onclick = () => G.clear();
 let rot = null;
@@ -182,7 +149,7 @@ gscene.addEventListener('pointermove', e => {
 });
 gscene.addEventListener('pointerup', () => rot = null);
 // a starter net: the 2x3 block (does not fold into a cube)
-G.order = ['1,2', '2,1', '2,2', '2,3', '3,1', '3,2']; build(); describe(false);
+G.order = ['1,2', '2,1', '2,2', '2,3', '3,1', '3,2']; build();
 
 </script>
 </body></html>
