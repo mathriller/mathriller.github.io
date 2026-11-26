@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원리 7 · 교사가 수업 안에서 조율할 수 있게 하라</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag D">D 수업 정합성</span></header>
+<main>
+<h1><span class="num">원리 7</span>교사가 수업 안에서 조율할 수 있게 하라</h1>
+<p class="lead">학생의 흔적이 남고 공유되며, 교사가 단계를 조율할 수 있게 만든다</p>
+<div class="tabs" role="tablist">
+  <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
+  <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
+</div>
+<section class="view" id="bad">
+
+<div class="try"><b>이렇게 해 보세요</b> · 문제를 풀고 다음으로 넘어가 보세요. 수업 후 교사가 학생들의 생각을 모아 볼 수 있을까요?</div>
+<div class="panel">
+  <svg id="barr" viewBox="0 0 520 170"></svg>
+  <div class="row" style="margin-top:10px"><span id="bq" style="font-size:22px"></span><input type="number" id="bans" inputmode="numeric"><button class="btn orange" id="bsub">제출</button></div>
+  <div class="feedback" id="bfb"></div>
+</div>
+</section>
+<section class="view" id="good" hidden>
+
+<div class="try"><b>살펴볼 점</b> · 배열 사이의 틈을 눌러 나누어 보세요. · '내 방법 저장'은 그림 파일로 내려받고 아래 모아 보기에도 남깁니다(패들렛 등에 올려 공유). · 교사 모드에서 2단계를 엽니다.</div>
+<div class="panel">
+  <div class="row" style="justify-content:space-between"><b id="gstep">1단계 · 12×4를 여러 가지 방법으로 나누어 계산해 보세요</b>
+    <button class="btn ghost" id="gteacher">교사 모드</button></div>
+  <div id="gtpanel" class="panel" hidden style="background:#F4F6F8;margin-top:8px">
+    <b>교사 모드</b> <span class="muted small">학생 화면을 보며 단계를 조율합니다</span>
+    <div class="row" style="margin-top:6px"><button class="btn slate" id="gopen2">2단계 열기 (16×3, 23×4)</button><button class="btn ghost" id="gwipe">모아 보기 지우기</button></div>
+  </div>
+  <div class="row" style="margin-top:6px" id="gprobs"></div>
+  <svg id="garr" viewBox="0 0 560 200" style="margin-top:8px;touch-action:manipulation"></svg>
+  <div class="feedback" id="gexpr"></div>
+  <div class="row" style="margin-top:10px"><input type="text" id="gname" placeholder="이름" style="width:120px"><button class="btn" id="gsave">내 방법 저장</button><button class="btn ghost" id="greset">나누기 지우기</button></div>
+</div>
+<div class="panel"><b>모아 보기</b> <span class="muted small">이 기기에 저장된 방법들 — 전체 토의에서 비교해 보세요</span><div id="ggal" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:8px"></div></div>
+</section>
+<details class="think"><summary>점검 질문</summary><p>앱이 토의할 거리(시도 기록, 비교할 화면)를 남기는가? 지도안의 발문과 활동 흐름에 앱 기능이 맞물리는가?</p></details>
+<footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
+</main>
+<script src="common.js"></script>
+<script>
+
+function drawArray(svg, a, b, splits, color, W = 520) {
+  svg.innerHTML = '';
+  const cw = Math.min(40, (W - 40) / a), ch = 34, x0 = 20, y0 = 20;
+  svg.setAttribute('viewBox', `0 0 ${W + 40} ${y0 + b * ch + 60}`);
+  const cuts = [0, ...splits.slice().sort((p, q) => p - q), a];
+  const shades = ['#8CADAE', '#C5D1D7', '#B7C9A8', '#E8D9A8'];
+  for (let s = 0; s < cuts.length - 1; s++) {
+    const w = cuts[s + 1] - cuts[s];
+    el('rect', { x: x0 + cuts[s] * cw, y: y0, width: w * cw, height: b * ch, fill: color || shades[s % 4], 'fill-opacity': .45, stroke: '#646B86', 'stroke-width': 2 }, svg);
+    if (!color) el('text', { x: x0 + (cuts[s] + w / 2) * cw, y: y0 + b * ch + 26, 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 700, fill: '#3A3F52' }, svg).textContent = `${w}×${b}`;
+  }
+  for (let r = 0; r < b; r++) for (let c = 0; c < a; c++) el('circle', { cx: x0 + c * cw + cw / 2, cy: y0 + r * ch + ch / 2, r: Math.min(9, cw / 3), fill: '#3A3F52' }, svg);
+  return { cw, x0, y0, ch };
+}
+// ---------- X
+let BP;
+function badNext() { BP = { a: rnd(11, 25), b: rnd(2, 5) }; drawArray(barr, BP.a, BP.b, [], '#E9A896'); bq.textContent = `${BP.a} × ${BP.b} =`; bans.value = ''; }
+bsub.onclick = () => {
+  if (+bans.value === BP.a * BP.b) { bfb.textContent = '완료! 다음 문제 ▶'; setTimeout(() => { bfb.textContent = ''; badNext(); }, 900); }
+  else bfb.textContent = '다시 해 보세요.';
+};
+badNext();
+
+// ---------- O
+const PROBS = [[12, 4], [16, 3], [23, 4]];
+let open2 = false, P = [12, 4], splits = [], geo;
+function key() { return 'vibe-p7-gallery'; }
+function load() { try { return JSON.parse(localStorage.getItem(key()) || '[]'); } catch (e) { return []; } }
+function store(g) { try { localStorage.setItem(key(), JSON.stringify(g)); } catch (e) {} }
+function probs() {
+  gprobs.innerHTML = '';
+  PROBS.forEach(([a, b], i) => {
+    const btn = document.createElement('button'); btn.className = 'btn ' + (P[0] === a && P[1] === b ? 'slate' : 'ghost');
+    const locked = i > 0 && !open2; btn.disabled = locked; btn.textContent = (locked ? '🔒 ' : '') + `${a}×${b}`;
+    btn.onclick = () => { P = [a, b]; splits = []; gstep.textContent = (i ? '2단계 · ' : '1단계 · ') + `${a}×${b}를 여러 가지 방법으로 나누어 계산해 보세요`; probs(); drawGood(); };
+    gprobs.appendChild(btn);
+  });
+}
+function expr() {
+  const cuts = [0, ...splits.slice().sort((p, q) => p - q), P[0]], parts = [];
+  for (let s = 0; s < cuts.length - 1; s++) parts.push(cuts[s + 1] - cuts[s]);
+  const b = P[1];
+  return parts.length === 1 ? `${P[0]}×${b} = ?  배열 사이의 틈을 눌러 나누어 보세요.` :
+    `${parts.map(p => `${p}×${b}`).join(' + ')} = ${parts.map(p => p * b).join(' + ')} = ${P[0] * b}`;
+}
+function drawGood() {
+  geo = drawArray(garr, P[0], P[1], splits, null, 520);
+  for (let c = 1; c < P[0]; c++) {
+    const x = geo.x0 + c * geo.cw;
+    el('line', { x1: x, x2: x, y1: geo.y0 - 8, y2: geo.y0 + P[1] * geo.ch + 8, stroke: splits.includes(c) ? '#D16349' : '#C5D1D7', 'stroke-width': splits.includes(c) ? 4 : 1.5, 'stroke-dasharray': splits.includes(c) ? '' : '4 4' }, garr);
+  }
+  gexpr.textContent = expr();
+}
+garr.addEventListener('pointerdown', e => {
+  const r = garr.getBoundingClientRect(), vb = garr.viewBox.baseVal, x = (e.clientX - r.left) * vb.width / r.width;
+  const c = Math.round((x - geo.x0) / geo.cw);
+  if (c <= 0 || c >= P[0] || Math.abs(x - (geo.x0 + c * geo.cw)) > geo.cw * .4) return;
+  const i = splits.indexOf(c); if (i >= 0) splits.splice(i, 1); else splits.push(c); drawGood();
+});
+greset.onclick = () => { splits = []; drawGood(); };
+gsave.onclick = () => {
+  const name = gname.value.trim() || '이름 없음', item = { name, p: P.slice(), splits: splits.slice(), t: Date.now() };
+  const g = load(); g.push(item); store(g); gallery();
+  // PNG download for sharing (e.g., Padlet)
+  const cv = document.createElement('canvas'), cw = 36, ch = 32, W = P[0] * cw + 40, H = P[1] * ch + 110;
+  cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+  const cuts = [0, ...splits.slice().sort((a, b) => a - b), P[0]], sh = ['#C6D8D8', '#E3E9EC', '#D9E3D0', '#F1E9D1'];
+  for (let s = 0; s < cuts.length - 1; s++) { x.fillStyle = sh[s % 4]; x.fillRect(20 + cuts[s] * cw, 40, (cuts[s + 1] - cuts[s]) * cw, P[1] * ch); x.strokeStyle = '#646B86'; x.lineWidth = 2; x.strokeRect(20 + cuts[s] * cw, 40, (cuts[s + 1] - cuts[s]) * cw, P[1] * ch); }
+  x.fillStyle = '#3A3F52';
+  for (let r = 0; r < P[1]; r++) for (let c = 0; c < P[0]; c++) { x.beginPath(); x.arc(20 + c * cw + cw / 2, 40 + r * ch + ch / 2, 8, 0, 7); x.fill(); }
+  x.font = 'bold 18px sans-serif'; x.fillText(name, 20, 26); x.font = '16px sans-serif'; x.fillText(expr(), 20, 40 + P[1] * ch + 36);
+  const a = document.createElement('a'); a.download = `${name}_${P[0]}x${P[1]}.png`; a.href = cv.toDataURL('image/png'); a.click();
+};
+function gallery() {
+  ggal.innerHTML = '';
+  load().forEach(it => {
+    const d = document.createElement('div'); d.style.cssText = 'background:#F4F6F8;border-radius:8px;padding:6px;text-align:center;font-size:13px';
+    const s = document.createElementNS(SVGNS, 'svg'); d.appendChild(s); drawArray(s, it.p[0], it.p[1], it.splits, null, 300);
+    const t = document.createElement('div'); t.textContent = it.name; d.appendChild(t); ggal.appendChild(d);
+  });
+  if (!ggal.children.length) ggal.innerHTML = '<span class="muted small">아직 저장된 방법이 없어요.</span>';
+}
+gteacher.onclick = () => { gtpanel.hidden = !gtpanel.hidden; };
+gopen2.onclick = () => { open2 = true; probs(); gopen2.textContent = '2단계 열림'; gopen2.disabled = true; };
+gwipe.onclick = () => { store([]); gallery(); };
+probs(); drawGood(); gallery();
+
+</script>
+</body></html>

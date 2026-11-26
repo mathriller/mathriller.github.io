@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원리 6 · 판정 대신 결과를 보여 주는 피드백을 주라</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag C">C 교수학적 충실성</span></header>
+<main>
+<h1><span class="num">원리 6</span>판정 대신 결과를 보여 주는 피드백을 주라</h1>
+<p class="lead">'정답/오답' 판정 대신, 학생 행동의 결과를 보여 주는 피드백을 설계한다</p>
+<div class="tabs" role="tablist">
+  <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
+  <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
+</div>
+<section class="view" id="bad">
+
+<div class="try"><b>이렇게 해 보세요</b> · 칸을 눌러 정육면체의 전개도를 만들고 제출하세요. 일부러 틀려 보세요. 왜 틀렸는지 알 수 있나요?</div>
+<div class="panel">
+  <div id="bgrid"></div>
+  <div class="row" style="margin-top:10px"><button class="btn orange" id="bsub">제출</button><button class="btn ghost" id="bclr">지우기</button></div>
+  <div class="feedback" id="bfb" style="font-size:22px"></div>
+</div>
+</section>
+<section class="view" id="good" hidden>
+
+<div class="try"><b>살펴볼 점</b> · 칸을 눌러 전개도를 만들고 '접어 보기'를 누르세요. 앱은 판정하지 않고 접힌 모습을 보여 줍니다. · 3D 그림을 끌면 돌려 볼 수 있습니다.</div>
+<div class="panel">
+  <div class="row" style="align-items:flex-start;gap:16px">
+    <div><div id="ggrid"></div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="gfold">접어 보기</button><button class="btn ghost" id="gclr">지우기</button></div>
+      <div class="row" style="margin-top:8px"><span class="small muted">접는 정도</span><input type="range" id="gang" min="0" max="90" value="0" style="width:150px"></div>
+    </div>
+    <div id="gscene" style="flex:1;min-width:280px;height:340px;perspective:900px;position:relative;touch-action:none;cursor:grab;background:#fff;border-radius:12px;overflow:hidden"></div>
+  </div>
+  <div class="feedback" id="gfb"></div>
+</div>
+</section>
+<details class="think"><summary>점검 질문</summary><p>틀린 시도에 앱은 판정하는가, 결과를 보여 주는가? 피드백이 다음 생각을 여는가, 닫는가?</p></details>
+<footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
+</main>
+<script src="common.js"></script>
+<script>
+
+const N = 5, LAB = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차'];
+function makeGrid(host, color, onChange) {
+  const st = { order: [] };
+  host.style.cssText = `display:grid;grid-template-columns:repeat(${N},48px);gap:3px;user-select:none`;
+  const cells = [];
+  for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+    const d = document.createElement('div');
+    d.style.cssText = 'width:48px;height:48px;border:1.5px dashed #C5D1D7;border-radius:4px;display:grid;place-items:center;font-weight:700;cursor:pointer;background:#fff';
+    d.onclick = () => {
+      const k = r + ',' + c, i = st.order.indexOf(k);
+      if (i >= 0) st.order.splice(i, 1); else st.order.push(k);
+      onChange();
+    };
+    host.appendChild(d); cells.push({ d, k: r + ',' + c });
+  }
+  st.paint = (hl = new Set(), off = new Set()) => cells.forEach(({ d, k }) => {
+    const i = st.order.indexOf(k);
+    d.textContent = i >= 0 ? (LAB[i] || i + 1) : '';
+    d.style.background = i < 0 ? '#fff' : hl.has(k) ? '#F6C9BC' : off.has(k) ? '#eee' : color;
+    d.style.border = i < 0 ? '1.5px dashed #C5D1D7' : hl.has(k) ? '2.5px solid #D16349' : '1.5px solid #646B86';
+    d.style.color = '#3A3F52';
+  });
+  st.clear = () => { st.order = []; onChange(); };
+  return st;
+}
+// fold analysis: BFS tree from first cell; each face gets a frame (u,v,n); outward normal = -n
+const add = (a, b) => a.map((x, i) => x + b[i]), neg = a => a.map(x => -x);
+const DIRS = { R: [0, 1], L: [0, -1], D: [1, 0], U: [-1, 0] };
+function analyse(order) {
+  if (!order.length) return null;
+  const set = new Set(order), root = order[0], seen = new Map();
+  seen.set(root, { parent: null, dir: null, u: [1, 0, 0], v: [0, 1, 0], n: [0, 0, 1] });
+  const q = [root], tree = [];
+  while (q.length) {
+    const k = q.shift(), f = seen.get(k), [r, c] = k.split(',').map(Number);
+    for (const dir of ['R', 'D', 'L', 'U']) {
+      const nk = (r + DIRS[dir][0]) + ',' + (c + DIRS[dir][1]);
+      if (!set.has(nk) || seen.has(nk)) continue;
+      let g;
+      if (dir === 'R') g = { u: f.n, v: f.v, n: neg(f.u) };
+      if (dir === 'L') g = { u: neg(f.n), v: f.v, n: f.u };
+      if (dir === 'D') g = { u: f.u, v: f.n, n: neg(f.v) };
+      if (dir === 'U') g = { u: f.u, v: neg(f.n), n: f.v };
+      seen.set(nk, { parent: k, dir, ...g }); tree.push(nk); q.push(nk);
+    }
+  }
+  const byNormal = {};
+  seen.forEach((f, k) => { const key = neg(f.n).join(); (byNormal[key] = byNormal[key] || []).push(k); });
+  const overlaps = Object.values(byNormal).filter(a => a.length > 1);
+  const detached = order.filter(k => !seen.has(k));
+  return { root, seen, tree, overlaps, distinct: Object.keys(byNormal).length, detached };
+}
+// ---------- X
+const B = makeGrid(bgrid, '#E9A896', () => { B.paint(); bfb.textContent = ''; });
+bsub.onclick = () => {
+  const a = analyse(B.order);
+  const ok = a && B.order.length === 6 && !a.detached.length && a.distinct === 6;
+  bfb.textContent = ok ? '🎉 정답입니다! +10점' : '❌ 틀렸어요! 다시 해 보세요 😢';
+};
+bclr.onclick = () => B.clear();
+B.paint();
+
+// ---------- O: real CSS-3D folding of the student's net
+const G = makeGrid(ggrid, '#8CADAE', () => { gang.value = 0; build(); describe(false); });
+const F = 70; let rx = 58, rz = -25, faces = {}, A = null;
+function build() {
+  A = analyse(G.order); gscene.innerHTML = ''; faces = {};
+  const hl = new Set();
+  if (A) A.overlaps.forEach(g => g.forEach(k => hl.add(k)));
+  G.paint(hl, new Set(A ? A.detached : []));
+  if (!A) return;
+  const world = document.createElement('div');
+  world.style.cssText = `position:absolute;left:50%;top:55%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(${rx}deg) rotateZ(${rz}deg)`;
+  gscene.appendChild(world);
+  const mk = (k) => {
+    const d = document.createElement('div'), i = G.order.indexOf(k);
+    d.style.cssText = `position:absolute;width:${F}px;height:${F}px;transform-style:preserve-3d;display:grid;place-items:center;font-weight:700;font-size:20px;color:#3A3F52;` +
+      `background:${hl.has(k) ? 'rgba(246,201,188,.92)' : 'rgba(140,173,174,.88)'};border:2px solid ${hl.has(k) ? '#D16349' : '#646B86'};box-sizing:border-box;backface-visibility:visible`;
+    d.textContent = LAB[i] || i + 1; faces[k] = d; return d;
+  };
+  const rootEl = mk(A.root); rootEl.style.left = -F / 2 + 'px'; rootEl.style.top = -F / 2 + 'px'; world.appendChild(rootEl);
+  A.tree.forEach(k => {
+    const f = A.seen.get(k), d = mk(k), p = faces[f.parent];
+    const pos = { R: [F, 0, 'left center'], L: [-F, 0, 'right center'], D: [0, F, 'center top'], U: [0, -F, 'center bottom'] }[f.dir];
+    d.style.left = pos[0] + 'px'; d.style.top = pos[1] + 'px'; d.style.transformOrigin = pos[2]; d.dataset.dir = f.dir;
+    p.appendChild(d);
+  });
+  setAngle(+gang.value);
+  world.dataset.w = 1;
+}
+function setAngle(a) {
+  Object.values(faces).forEach(d => {
+    const t = { R: `rotateY(${-a}deg)`, L: `rotateY(${a}deg)`, D: `rotateX(${a}deg)`, U: `rotateX(${-a}deg)` }[d.dataset.dir];
+    if (t) d.style.transform = t;
+  });
+}
+function describe(folded) {
+  if (!A) { gfb.textContent = '칸을 눌러 전개도를 만들어 보세요.'; return; }
+  if (!folded) { gfb.textContent = `${G.order.length}개의 면을 골랐어요. '접어 보기'를 눌러 보세요.`; return; }
+  const msgs = [];
+  A.overlaps.forEach(g => msgs.push(`<b style="color:#D16349">${g.map(k => LAB[G.order.indexOf(k)]).join('·')} 면</b>이 같은 자리로 접혀 겹쳐요.`));
+  if (A.detached.length) msgs.push('떨어져 있는 면은 함께 접히지 않아요.');
+  const empty = 6 - A.distinct;
+  if (empty > 0) msgs.push(`정육면체에서 면이 비는 자리가 <b>${empty}곳</b> 있어요.`);
+  if (!msgs.length) msgs.push('여섯 면이 모두 서로 다른 자리로 접혔어요. 그림을 돌려서 확인해 보세요.');
+  else msgs.push('어느 면을 어디로 옮기면 좋을까요?');
+  gfb.innerHTML = msgs.join('<br>');
+}
+gang.oninput = () => { setAngle(+gang.value); if (+gang.value === 90) describe(true); };
+gfold.onclick = () => {
+  let a = +gang.value; const t = setInterval(() => { a = Math.min(90, a + 3); gang.value = a; setAngle(a); if (a >= 90) { clearInterval(t); describe(true); } }, 25);
+};
+gclr.onclick = () => G.clear();
+let rot = null;
+gscene.addEventListener('pointerdown', e => { rot = { x: e.clientX, y: e.clientY, rx, rz }; gscene.setPointerCapture(e.pointerId); });
+gscene.addEventListener('pointermove', e => {
+  if (!rot) return; rz = rot.rz + (e.clientX - rot.x) * .5; rx = Math.max(0, Math.min(85, rot.rx - (e.clientY - rot.y) * .4));
+  const w = gscene.firstChild; if (w) w.style.transform = `rotateX(${rx}deg) rotateZ(${rz}deg)`;
+});
+gscene.addEventListener('pointerup', () => rot = null);
+// a starter net: the 2x3 block (does not fold into a cube)
+G.order = ['1,2', '2,1', '2,2', '2,3', '3,1', '3,2']; build(); describe(false);
+
+</script>
+</body></html>

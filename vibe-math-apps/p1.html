@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원리 1 · 수학적 정확성과 구조를 보존하라</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag A">A 수학적 충실성</span></header>
+<main>
+<h1><span class="num">원리 1</span>수학적 정확성과 구조를 보존하라</h1>
+<p class="lead">앱 속 수학은 정확하고, 수학적 구조를 그대로 담아야 한다</p>
+<div class="tabs" role="tablist">
+  <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
+  <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
+</div>
+<section class="view" id="bad">
+
+<div class="try"><b>이렇게 해 보세요</b> · 분모를 8이나 12로 바꿔 칸의 크기를 비교해 보세요. · 분자를 분모보다 크게 해 보세요. · 아래에서 1/10 + 2/10을 계산해 보세요.</div>
+<div class="panel">
+  <div class="row"><span>분자</span><span id="bm"></span><span>분모</span><span id="bn"></span></div>
+  <div id="bbar" style="display:flex;width:100%;max-width:520px;height:56px;margin:16px 0;border:2px solid #D16349;background:#fff"></div>
+  <div class="row"><b id="blab" style="font-size:28px"></b><span class="muted">소수로 나타내면 <b id="bdec"></b></span></div>
+</div>
+<div class="panel">
+  <b>분모가 같은 분수의 덧셈</b>
+  <div class="row" style="margin-top:8px"><span id="ba"></span><span>/</span><b id="bn2l"></b><span>+</span><span id="bb"></span><span>/</span><b id="bn2r"></b><span class="muted">분모</span><span id="bn2"></span></div>
+  <div class="feedback" id="bsum"></div>
+</div>
+</section>
+<section class="view" id="good" hidden>
+
+<div class="try"><b>살펴볼 점</b> · 분모를 바꿔도 칸은 언제나 똑같은 크기입니다. · 분자가 분모보다 커지면 막대가 하나 더 생깁니다. · 덧셈 결과를 분수 그대로 보여 줍니다.</div>
+<div class="panel">
+  <div class="row"><span>분자</span><span id="gm"></span><span>분모</span><span id="gn"></span></div>
+  <svg id="gbar" viewBox="0 0 540 70" style="margin:12px 0"></svg>
+  <div class="row"><b id="glab" style="font-size:28px"></b><span class="muted" id="gnote"></span></div>
+</div>
+<div class="panel">
+  <b>분모가 같은 분수의 덧셈</b>
+  <div class="row" style="margin-top:8px"><span id="ga"></span><span>/</span><b id="gn2l"></b><span>+</span><span id="gb"></span><span>/</span><b id="gn2r"></b><span class="muted">분모</span><span id="gn2"></span></div>
+  <svg id="gsumbar" viewBox="0 0 540 70" style="margin:12px 0"></svg>
+  <div class="feedback" id="gsum"></div>
+</div>
+</section>
+<details class="think"><summary>점검 질문</summary><p>0, 1, 1보다 큰 분수, 큰 분모 같은 경계 사례에서도 표상과 계산이 정확한가? 용어·기호가 교과서 표기와 같은가?</p></details>
+<footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
+</main>
+<script src="common.js"></script>
+<script>
+
+// ---------- X: typical generated code (percent widths rounded, floats everywhere)
+const bm = stepper('bm', 3, 0, 24, drawBad), bn = stepper('bn', 4, 2, 12, drawBad);
+function drawBad() {
+  const n = bn.v, m = bm.v, bar = document.getElementById('bbar');
+  bar.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div');
+    if (i < n - 1) d.style.width = (100 / n).toFixed(0) + '%'; else d.style.flex = '1';
+    d.style.background = i < m ? '#E9A896' : '#fff';
+    if (i < n - 1) d.style.borderRight = '2px solid #D16349';
+    bar.appendChild(d);
+  }
+  document.getElementById('blab').textContent = m + '/' + n;
+  document.getElementById('bdec').textContent = String(m / n);
+}
+const ba = stepper('ba', 1, 0, 20, drawBadSum), bb = stepper('bb', 2, 0, 20, drawBadSum), bn2 = stepper('bn2', 10, 2, 12, drawBadSum);
+function drawBadSum() {
+  const n = bn2.v; bn2l.textContent = n; bn2r.textContent = n;
+  bsum.textContent = '= ' + String(ba.v / n + bb.v / n);
+}
+drawBad(); drawBadSum();
+
+// ---------- O: exact equal parts, integer fraction arithmetic
+const gm = stepper('gm', 3, 0, 24, drawGood), gn = stepper('gn', 4, 2, 12, drawGood);
+function bars(svg, n, parts) { // parts: [{count, color}], drawn consecutively across as many wholes as needed
+  svg.innerHTML = '';
+  const total = parts.reduce((s, p) => s + p.count, 0);
+  const wholes = Math.max(1, Math.ceil(total / n));
+  const W = 500, gap = 10, bw = (W - gap * (wholes - 1)) / wholes, h = 44;
+  svg.setAttribute('viewBox', `0 0 ${W + 40} ${h + 26}`);
+  let k = 0; const colorAt = [];
+  parts.forEach(p => { for (let i = 0; i < p.count; i++) colorAt.push(p.color); });
+  for (let w = 0; w < wholes; w++) {
+    const x0 = 20 + w * (bw + gap);
+    for (let i = 0; i < n; i++, k++) {
+      el('rect', { x: x0 + i * bw / n, y: 6, width: bw / n, height: h, fill: colorAt[k] || '#fff', stroke: '#646B86', 'stroke-width': 2 }, svg);
+    }
+    el('text', { x: x0 + bw / 2, y: h + 24, 'text-anchor': 'middle', 'font-size': 13, fill: '#6E7585' }, svg).textContent = '1';
+  }
+}
+function fracText(m, n) {
+  const w = Math.floor(m / n), r = m % n;
+  if (m > n && r) return `${m}/${n} = ${w}과 ${r}/${n}`;
+  if (m >= n && !r) return `${m}/${n} = ${w}`;
+  return `${m}/${n}`;
+}
+function drawGood() {
+  const n = gn.v, m = gm.v;
+  bars(document.getElementById('gbar'), n, [{ count: m, color: '#8CADAE' }]);
+  glab.textContent = m + '/' + n;
+  gnote.textContent = m > n ? fracText(m, n).split('= ')[1] + ' (막대 ' + Math.ceil(m / n) + '개)' : (n === 10 ? '소수로 0.' + m : '');
+}
+const ga = stepper('ga', 1, 0, 20, drawGoodSum), gb = stepper('gb', 2, 0, 20, drawGoodSum), gn2 = stepper('gn2', 10, 2, 12, drawGoodSum);
+function drawGoodSum() {
+  const n = gn2.v; gn2l.textContent = n; gn2r.textContent = n;
+  bars(document.getElementById('gsumbar'), n, [{ count: ga.v, color: '#8CADAE' }, { count: gb.v, color: '#646B86' }]);
+  gsum.innerHTML = `${ga.v}/${n} + ${gb.v}/${n} = <b>${fracText(ga.v + gb.v, n)}</b> <span class="muted small">(${n}분의 1이 ${ga.v}개와 ${gb.v}개, 모두 ${ga.v + gb.v}개)</span>`;
+}
+drawGood(); drawGoodSum();
+
+</script>
+</body></html>

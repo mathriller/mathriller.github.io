@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원리 3 · 표상을 연결하되, 필요한 표상만 골라 담아라</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag B">B 인지적 충실성</span></header>
+<main>
+<h1><span class="num">원리 3</span>표상을 연결하되, 필요한 표상만 골라 담아라</h1>
+<p class="lead">표상은 서로 연결되어야 하고, 학습 목표에 필요한 것만 담는다</p>
+<div class="tabs" role="tablist">
+  <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
+  <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
+</div>
+<section class="view" id="bad">
+
+<div class="try"><b>이렇게 해 보세요</b> · '자동 재생'을 켜 보세요. 어디를 봐야 하나요? 막대의 어느 부분이 수직선의 어느 점과 같은지 보이나요?</div>
+<div class="panel">
+  <div class="row"><span>분자</span><span id="bm"></span><span>분모</span><span id="bn"></span><button class="btn orange" id="bplay">자동 재생</button></div>
+  <div id="breps" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:12px"></div>
+</div>
+</section>
+<section class="view" id="good" hidden>
+
+<div class="try"><b>살펴볼 점</b> · 막대와 수직선 두 표상만, 같은 길이로 위아래에 맞췄습니다. · '예상해 보기'를 켜고 수직선을 눌러 점을 먼저 찍어 본 뒤 확인하세요.</div>
+<div class="panel">
+  <div class="row"><span>분자</span><span id="gm"></span><span>분모</span><span id="gn"></span></div>
+  <div class="row" style="margin-top:8px"><button class="btn ghost" id="glink">연결선 끄기</button><button class="btn ghost" id="gguess">예상해 보기</button><button class="btn slate" id="greveal" hidden>확인</button></div>
+  <svg id="gsvg" viewBox="0 0 560 200" style="margin-top:12px;touch-action:manipulation"></svg>
+  <div class="feedback" id="gfb"></div>
+</div>
+</section>
+<details class="think"><summary>점검 질문</summary><p>이 표상들이 학습 목표에 꼭 필요한가? 학생이 표상 사이의 대응을 스스로 볼 기회가 있는가?</p></details>
+<footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
+</main>
+<script src="common.js"></script>
+<script>
+
+// ---------- X: six representations, all moving at once
+const bm = stepper('bm', 3, 0, 10, drawBad), bn = stepper('bn', 4, 2, 10, v => { bm.setMax(v); drawBad(); });
+function box(title, inner) { return `<div style="background:#fff;border:1.5px solid #D16349;border-radius:8px;padding:6px;font-size:11px;text-align:center"><div style="color:#D16349;font-weight:700">${title}</div>${inner}</div>`; }
+function drawBad() {
+  const m = bm.v, n = bn.v, f = m / n;
+  const a = f * 2 * Math.PI, x = 40 + 34 * Math.sin(a), y = 40 - 34 * Math.cos(a), large = f > .5 ? 1 : 0;
+  const pie = f >= 1 ? '<circle cx="40" cy="40" r="34" fill="#F2B880"/>' : `<path d="M40 40 L40 6 A34 34 0 ${large} 1 ${x} ${y} Z" fill="#F2B880"/>`;
+  let grid = ''; const k = Math.round(f * 100);
+  for (let i = 0; i < 100; i++) grid += `<rect x="${(i % 10) * 7}" y="${Math.floor(i / 10) * 7}" width="6" height="6" fill="${i < k ? '#9C7BB5' : '#eee'}"/>`;
+  let bar = ''; for (let i = 0; i < n; i++) bar += `<rect x="${i * 100 / n}" y="0" width="${100 / n}" height="20" fill="${i < m ? '#6FA8DC' : '#fff'}" stroke="#333" stroke-width=".5"/>`;
+  breps.innerHTML =
+    box('원 그림', `<svg viewBox="0 0 80 80" width="70"><circle cx="40" cy="40" r="34" fill="#eee"/>${pie}</svg>`) +
+    box('막대', `<svg viewBox="0 0 100 20" width="110">${bar}</svg>`) +
+    box('수직선', `<svg viewBox="0 0 110 30" width="110"><line x1="5" y1="15" x2="105" y2="15" stroke="#333"/><circle cx="${5 + f * 100}" cy="15" r="4" fill="#E06666"/></svg>`) +
+    box('소수', `<div style="font-size:20px">${f.toFixed(3)}</div>`) +
+    box('백분율', `<div style="font-size:20px">${(f * 100).toFixed(1)}%</div>`) +
+    box('100칸 모눈', `<svg viewBox="0 0 70 70" width="60">${grid}</svg>`);
+}
+let timer = null;
+bplay.onclick = () => {
+  if (timer) { clearInterval(timer); timer = null; bplay.textContent = '자동 재생'; return; }
+  bplay.textContent = '멈춤';
+  timer = setInterval(() => { const n = rnd(2, 10); bn.set(n, true); bm.setMax(n); bm.set(rnd(0, n), true); drawBad(); }, 1200);
+};
+drawBad();
+
+// ---------- O: bar and number line, aligned; link toggle; predict-then-check
+const gm = stepper('gm', 3, 0, 10, () => { resetGuess(); drawGood(); }), gn = stepper('gn', 4, 2, 10, v => { gm.setMax(v); resetGuess(); drawGood(); });
+let showLink = true, guessMode = false, guess = null, revealed = false;
+const X0 = 40, X1 = 520, W = X1 - X0;
+function drawGood() {
+  const m = gm.v, n = gn.v, svg = gsvg; svg.innerHTML = '';
+  for (let i = 0; i < n; i++) el('rect', { x: X0 + i * W / n, y: 20, width: W / n, height: 46, fill: i < m ? '#8CADAE' : '#fff', stroke: '#646B86', 'stroke-width': 2 }, svg);
+  const ly = 140;
+  el('line', { x1: X0, x2: X1, y1: ly, y2: ly, stroke: '#646B86', 'stroke-width': 2.5 }, svg);
+  for (let i = 0; i <= n; i++) el('line', { x1: X0 + i * W / n, x2: X0 + i * W / n, y1: ly - 10, y2: ly + 10, stroke: '#646B86', 'stroke-width': 2 }, svg);
+  [['0', X0], ['1', X1]].forEach(([t, x]) => { el('text', { x, y: ly + 34, 'text-anchor': 'middle', 'font-size': 18, fill: '#3A3F52' }, svg).textContent = t; });
+  const px = X0 + W * m / n, hidden = guessMode && !revealed;
+  if (showLink && !hidden) el('line', { x1: px, x2: px, y1: 66, y2: ly - 8, stroke: '#5F8F90', 'stroke-width': 2.5, 'stroke-dasharray': '6 5' }, svg);
+  if (!hidden) {
+    el('circle', { cx: px, cy: ly, r: 9, fill: '#5F8F90' }, svg);
+    el('text', { x: px + (m === n ? -14 : 14), y: ly - 16, 'text-anchor': m === n ? 'end' : 'start', 'font-size': 18, 'font-weight': 700, fill: '#5F8F90' }, svg).textContent = `${m}/${n}`;
+  }
+  if (guess !== null) el('circle', { cx: guess, cy: ly, r: 9, fill: 'none', stroke: '#D16349', 'stroke-width': 3 }, svg);
+  if (guessMode) el('rect', { x: X0 - 20, y: ly - 30, width: W + 40, height: 60, fill: 'transparent', style: 'cursor:pointer' }, svg);
+}
+function resetGuess() { guess = null; revealed = false; greveal.hidden = !guessMode; gfb.textContent = guessMode ? `수직선에서 ${gm.v}/${gn.v}이 있을 곳을 눌러 보세요.` : ''; }
+glink.onclick = () => { showLink = !showLink; glink.textContent = showLink ? '연결선 끄기' : '연결선 켜기'; drawGood(); };
+gguess.onclick = () => { guessMode = !guessMode; gguess.textContent = guessMode ? '예상 끄기' : '예상해 보기'; resetGuess(); drawGood(); };
+gsvg.addEventListener('pointerdown', e => {
+  if (!guessMode || revealed) return;
+  const r = gsvg.getBoundingClientRect(), x = (e.clientX - r.left) * 560 / r.width, y = (e.clientY - r.top) * 200 / r.height;
+  if (y < 100) return;
+  guess = Math.max(X0, Math.min(X1, x)); drawGood(); gfb.textContent = '점을 찍었어요. 확인을 눌러 막대와 비교해 보세요.';
+});
+greveal.onclick = () => {
+  if (guess === null) { gfb.textContent = '먼저 수직선을 눌러 점을 찍어 보세요.'; return; }
+  revealed = true; drawGood();
+  const cells = Math.abs(guess - (X0 + W * gm.v / gn.v)) / (W / gn.v);
+  gfb.textContent = cells < 0.15 ? `예상한 점(빨간 원)이 막대의 끝과 거의 같은 자리예요.` : `예상한 점(빨간 원)은 막대의 끝에서 한 칸의 약 ${cells.toFixed(1)}배만큼 떨어져 있어요. 막대의 칸과 수직선의 눈금을 비교해 보세요.`;
+};
+drawGood();
+
+</script>
+</body></html>

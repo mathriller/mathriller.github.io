@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원리 2 · 학습 목표에 맞게 블랙박스의 범위를 정하라</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag B">B 인지적 충실성</span></header>
+<main>
+<h1><span class="num">원리 2</span>학습 목표에 맞게 블랙박스의 범위를 정하라</h1>
+<p class="lead">학생이 해야 할 사고는 남기고, 이미 익힌 절차만 도구에 맡긴다</p>
+<div class="tabs" role="tablist">
+  <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
+  <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
+</div>
+<section class="view" id="bad">
+
+<div class="try"><b>이렇게 해 보세요</b> · '모형 놓기'를 누르고 지켜보세요. 학생이 할 일이 남아 있나요?</div>
+<div class="panel">
+  <div class="row"><b id="bq" style="font-size:26px"></b></div>
+  <svg id="bmat" viewBox="0 0 520 250" style="margin:10px 0"></svg>
+  <div class="row"><button class="btn orange" id="bgo">모형 놓기</button><button class="btn ghost" id="bnew">새 문제</button></div>
+  <div class="feedback" id="bfb"></div>
+</div>
+</section>
+<section class="view" id="good" hidden>
+
+<div class="try"><b>살펴볼 점</b> · 낱개가 10개 넘게 모이면 '묶기'가 켜집니다. 묶는 것은 학생이 합니다. · 답은 학생이 먼저 쓰고, 앱은 모형과 비교해 줍니다.</div>
+<div class="panel">
+  <div class="row"><b id="gq" style="font-size:26px"></b></div>
+  <svg id="gmat" viewBox="0 0 520 250" style="margin:10px 0"></svg>
+  <div class="row"><button class="btn" id="gbundle">낱개 10개 묶기</button><button class="btn ghost" id="gunbundle">십 모형 1개 풀기</button><button class="btn ghost" id="gnew">새 문제</button></div>
+  <div class="row" style="margin-top:12px"><span id="gq2" style="font-size:20px"></span><input type="number" id="gans" inputmode="numeric"><button class="btn slate" id="gcheck">확인</button></div>
+  <div class="feedback" id="gfb"></div>
+</div>
+</section>
+<details class="think"><summary>점검 질문</summary><p>이 차시에서 학생이 직접 해야 할 생각은 무엇인가? 앱은 그 생각을 대신하는가, 드러나게 하는가?</p></details>
+<footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
+</main>
+<script src="common.js"></script>
+<script>
+
+function newProblem() {
+  let a, b;
+  do { a = rnd(11, 68); b = rnd(11, 68); } while ((a % 10) + (b % 10) < 10 || a + b > 99);
+  return { a, b };
+}
+function drawMat(svg, tens, ones, colorT, colorO, stroke) {
+  svg.innerHTML = '';
+  el('rect', { x: 0, y: 0, width: 255, height: 250, fill: '#fff', stroke: '#C5D1D7' }, svg);
+  el('rect', { x: 265, y: 0, width: 255, height: 250, fill: '#fff', stroke: '#C5D1D7' }, svg);
+  el('text', { x: 127, y: 22, 'text-anchor': 'middle', 'font-size': 16, fill: '#6E7585' }, svg).textContent = '십 모형';
+  el('text', { x: 392, y: 22, 'text-anchor': 'middle', 'font-size': 16, fill: '#6E7585' }, svg).textContent = '낱개 모형';
+  for (let i = 0; i < tens; i++) {
+    const x = 16 + i * 26;
+    el('rect', { x, y: 40, width: 18, height: 190, fill: colorT, stroke }, svg);
+    for (let j = 1; j < 10; j++) el('line', { x1: x, x2: x + 18, y1: 40 + j * 19, y2: 40 + j * 19, stroke, 'stroke-width': .6 }, svg);
+  }
+  for (let i = 0; i < ones; i++) {
+    const r = Math.floor(i / 6), c = i % 6;
+    el('rect', { x: 290 + c * 36, y: 44 + r * 36, width: 22, height: 22, fill: colorO, stroke }, svg);
+  }
+}
+// ---------- X: the app does the regrouping and the answer
+let B = newProblem(), bT, bO;
+function badReset() {
+  bT = Math.floor(B.a / 10) + Math.floor(B.b / 10); bO = B.a % 10 + B.b % 10;
+  bq.textContent = `${B.a} + ${B.b} = ?`; bfb.textContent = '';
+  drawMat(bmat, 0, 0, '#E9A896', '#E9A896', '#D16349');
+}
+bgo.onclick = () => {
+  drawMat(bmat, bT, bO, '#E9A896', '#E9A896', '#D16349');
+  bfb.textContent = '모형을 놓았어요...';
+  setTimeout(() => {
+    const t = bT + Math.floor(bO / 10), o = bO % 10;
+    drawMat(bmat, t, o, '#E9A896', '#E9A896', '#D16349');
+    bq.innerHTML = `${B.a} + ${B.b} = <span style="color:#D16349">${B.a + B.b}</span>`;
+    bfb.innerHTML = '자동 변환 완료! 낱개 10개 → 십 모형 1개<br>정답은 <b>' + (B.a + B.b) + '</b>입니다 ✅';
+  }, 900);
+};
+bnew.onclick = () => { B = newProblem(); badReset(); };
+badReset();
+
+// ---------- O: student regroups, student answers, app compares with the blocks
+let G = { a: 27, b: 15 }, gT, gO;
+function goodReset() {
+  gT = Math.floor(G.a / 10) + Math.floor(G.b / 10); gO = G.a % 10 + G.b % 10;
+  gq.textContent = `${G.a} + ${G.b}`; gq2.textContent = `${G.a} + ${G.b} =`; gans.value = ''; gfb.textContent = '두 수만큼 모형을 놓았어요. 낱개를 보세요.';
+  goodDraw();
+}
+function goodDraw() {
+  drawMat(gmat, gT, gO, '#8CADAE', '#8CADAE', '#646B86');
+  gbundle.disabled = gO < 10; gunbundle.disabled = gT < 1;
+}
+gbundle.onclick = () => { gO -= 10; gT += 1; goodDraw(); gfb.textContent = '낱개 10개를 십 모형 1개로 묶었어요.'; };
+gunbundle.onclick = () => { gT -= 1; gO += 10; goodDraw(); gfb.textContent = '십 모형 1개를 낱개 10개로 풀었어요.'; };
+gnew.onclick = () => { G = newProblem(); goodReset(); };
+gcheck.onclick = () => {
+  const v = parseInt(gans.value, 10);
+  if (isNaN(v)) { gfb.textContent = '먼저 답을 써 보세요.'; return; }
+  const onMat = `지금 판 위에는 십 모형 ${gT}개, 낱개 ${gO}개가 있어요.`;
+  if (gO >= 10) { gfb.innerHTML = onMat + '<br>낱개가 10개 넘게 있네요. 묶을 수 있을까요?'; return; }
+  const mat = gT * 10 + gO;
+  gfb.innerHTML = v === mat ? onMat + `<br>모형이 나타내는 수와 네가 쓴 수 <b>${v}</b>가 같아요.`
+    : onMat + `<br>네가 쓴 수는 <b>${v}</b>이에요. 모형을 다시 세어 보고 비교해 볼까요?`;
+};
+goodReset();
+
+</script>
+</body></html>

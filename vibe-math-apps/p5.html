@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원리 5 · 변이와 불변을 탐구할 공간을 만들어라</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag C">C 교수학적 충실성</span></header>
+<main>
+<h1><span class="num">원리 5</span>변이와 불변을 탐구할 공간을 만들어라</h1>
+<p class="lead">값을 바꿔 보며 무엇이 변하고 무엇이 변하지 않는지 탐구하게 한다</p>
+<div class="tabs" role="tablist">
+  <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
+  <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
+</div>
+<section class="view" id="bad">
+
+<div class="try"><b>이렇게 해 보세요</b> · 문제를 몇 개 풀어 보세요. 공식 연습 말고 무엇을 생각하게 되나요?</div>
+<div class="panel">
+  <div class="muted" id="bprog"></div>
+  <div style="font-size:20px;margin:8px 0" id="bqq"></div>
+  <div class="row"><input type="number" id="bans" inputmode="numeric"><span>cm²</span><button class="btn orange" id="bsub">제출</button></div>
+  <div class="feedback" id="bfb"></div>
+</div>
+</section>
+<section class="view" id="good" hidden>
+
+<div class="try"><b>살펴볼 점</b> · 꼭짓점(초록 원)을 끌어 직사각형을 바꿔 보세요. 둘레는 그대로입니다. · '기록하기'로 만든 직사각형을 모아 보세요.</div>
+<div class="panel">
+  <div class="row"><span>둘레</span><span id="gp"></span><span class="muted small">(4 cm씩 바뀝니다)</span></div>
+  <svg id="gsvg" viewBox="0 0 400 400" style="width:min(88vw,400px);margin:10px auto;touch-action:none"></svg>
+  <div class="row" style="justify-content:center;font-size:18px"><span>가로 <b id="gw"></b> cm</span><span>세로 <b id="gh"></b> cm</span><span>둘레 <b id="gper"></b> cm</span><span style="color:#5F8F90">넓이 <b id="garea"></b> cm²</span></div>
+  <div class="row" style="justify-content:center;margin-top:10px"><button class="btn" id="grec">기록하기</button><button class="btn ghost" id="gclr">기록 지우기</button></div>
+</div>
+<div class="panel"><b>생각해 볼 질문</b><ol style="margin:6px 0 0;padding-left:20px"><li>둘레가 같으면 넓이도 같을까?</li><li>넓이가 가장 큰 직사각형은 어떤 모양일까?</li><li>둘레를 바꾸어도 같은 규칙이 성립할까?</li></ol></div>
+<div class="panel"><b>기록</b><table class="rec"><thead><tr><th>둘레</th><th>가로</th><th>세로</th><th>넓이</th></tr></thead><tbody id="gtb"></tbody></table>
+<svg id="gchart" viewBox="0 0 400 200" style="margin-top:10px;max-width:420px"></svg></div>
+</section>
+<details class="think"><summary>점검 질문</summary><p>학생이 스스로 값을 바꿔 볼 수 있는가? 정해진 경로 말고 열린 질문으로 나아갈 여지가 있는가?</p></details>
+<footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
+</main>
+<script src="common.js"></script>
+<script>
+
+// ---------- X: drill quiz
+let k = 0, sc = 0, Q;
+function nextQ() {
+  if (k === 10) { bprog.textContent = ''; bqq.textContent = `끝! 점수 ${sc}점 🎉`; bsub.textContent = '다시 하기'; return; }
+  Q = { w: rnd(2, 9), h: rnd(2, 9) }; k++;
+  bprog.textContent = `문제 ${k} / 10 · 점수 ${sc}`; bqq.textContent = `가로 ${Q.w} cm, 세로 ${Q.h} cm인 직사각형의 넓이는?`; bans.value = '';
+}
+bsub.onclick = () => {
+  if (k === 10 && bsub.textContent === '다시 하기') { k = 0; sc = 0; bsub.textContent = '제출'; bfb.textContent = ''; nextQ(); return; }
+  const v = +bans.value;
+  if (v === Q.w * Q.h) { sc += 10; bfb.textContent = '정답! +10점'; } else bfb.textContent = `오답! 정답은 ${Q.w * Q.h} cm²`;
+  nextQ();
+};
+nextQ();
+
+// ---------- O: perimeter fixed, drag the corner
+const C = 28, O = 20;
+const gp = stepper('gp', 20, 3, 6, v => {});
+// stepper shows 3..6 internally -> map to 12..24
+let P = 20, w = 6, recs = [];
+const gpSpan = document.querySelector('#gp span');
+function setP(np) { P = np; gpSpan.textContent = P + ' cm'; const half = P / 2; w = Math.min(w, half - 1); drawGood(); }
+document.querySelectorAll('#gp button')[0].onclick = () => { if (P > 12) setP(P - 4); };
+document.querySelectorAll('#gp button')[1].onclick = () => { if (P < 24) setP(P + 4); };
+let drag = false;
+function drawGood() {
+  const svg = gsvg, half = P / 2, h = half - w; svg.innerHTML = '';
+  for (let i = 0; i <= 13; i++) {
+    el('line', { x1: O + i * C, x2: O + i * C, y1: O, y2: O + 13 * C, stroke: '#E3E8EB' }, svg);
+    el('line', { y1: O + i * C, y2: O + i * C, x1: O, x2: O + 13 * C, stroke: '#E3E8EB' }, svg);
+  }
+  for (let i = 1; i < half; i++) el('circle', { cx: O + i * C, cy: O + (half - i) * C, r: 4, fill: '#C5D1D7' }, svg);
+  el('rect', { x: O, y: O, width: w * C, height: h * C, fill: '#8CADAE', 'fill-opacity': .55, stroke: '#646B86', 'stroke-width': 3 }, svg);
+  el('circle', { cx: O + w * C, cy: O + h * C, r: 14, fill: '#5F8F90', style: 'cursor:grab' }, svg);
+  gw.textContent = w; gh.textContent = h; gper.textContent = 2 * (w + h); garea.textContent = w * h;
+}
+function pick(e) {
+  const r = gsvg.getBoundingClientRect(), x = (e.clientX - r.left) * 400 / r.width - O, y = (e.clientY - r.top) * 400 / r.height - O, half = P / 2;
+  // project onto the line w + h = half
+  const nw = Math.round(((x - y) / C + half) / 2);
+  w = Math.max(1, Math.min(half - 1, nw)); drawGood();
+}
+gsvg.addEventListener('pointerdown', e => { drag = true; gsvg.setPointerCapture(e.pointerId); pick(e); });
+gsvg.addEventListener('pointermove', e => { if (drag) pick(e); });
+gsvg.addEventListener('pointerup', () => drag = false);
+grec.onclick = () => {
+  const h = P / 2 - w;
+  if (!recs.some(r => r.p === P && r.w === w)) recs.push({ p: P, w, h, a: w * h });
+  recs.sort((a, b) => a.p - b.p || a.w - b.w); drawRecs();
+};
+gclr.onclick = () => { recs = []; drawRecs(); };
+function drawRecs() {
+  gtb.innerHTML = recs.map(r => `<tr><td>${r.p}</td><td>${r.w}</td><td>${r.h}</td><td><b>${r.a}</b></td></tr>`).join('');
+  const svg = gchart; svg.innerHTML = '';
+  el('line', { x1: 40, y1: 170, x2: 390, y2: 170, stroke: '#646B86' }, svg); el('line', { x1: 40, y1: 10, x2: 40, y2: 170, stroke: '#646B86' }, svg);
+  el('text', { x: 215, y: 195, 'text-anchor': 'middle', 'font-size': 13, fill: '#6E7585' }, svg).textContent = '가로 (cm)';
+  el('text', { x: 12, y: 90, 'font-size': 13, fill: '#6E7585', transform: 'rotate(-90 12 90)', 'text-anchor': 'middle' }, svg).textContent = '넓이 (cm²)';
+  const cols = { 12: '#C9B458', 16: '#8C7B70', 20: '#5F8F90', 24: '#D16349' };
+  recs.forEach(r => el('circle', { cx: 40 + r.w * 30, cy: 170 - r.a * 4, r: 6, fill: cols[r.p] }, svg));
+  for (let i = 1; i <= 11; i++) el('text', { x: 40 + i * 30, y: 184, 'text-anchor': 'middle', 'font-size': 11, fill: '#6E7585' }, svg).textContent = i;
+}
+setP(20); drawRecs();
+
+</script>
+</body></html>

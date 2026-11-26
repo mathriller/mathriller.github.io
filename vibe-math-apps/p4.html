@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원리 4 · 발달 수준에 맞게 화면을 설계하라</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag B">B 인지적 충실성</span></header>
+<main>
+<h1><span class="num">원리 4</span>발달 수준에 맞게 화면을 설계하라</h1>
+<p class="lead">대상 학년에 맞게 화면은 단순하게, 조작은 직접적으로 만든다</p>
+<div class="tabs" role="tablist">
+  <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
+  <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
+</div>
+<section class="view" id="bad">
+
+<div class="try"><b>이렇게 해 보세요</b> · 2학년이 되었다고 생각하고 휴대폰으로 해 보세요. · 분 슬라이더를 움직일 때 짧은바늘을 보세요.</div>
+<div class="panel" style="font-size:11px">
+  <div class="row" style="justify-content:space-between"><span style="font-size:11px">목표 시각에 맞게 시·분·초 슬라이더와 오전/오후를 설정한 후 확인 버튼을 눌러 점수를 획득하세요. 연속 정답 시 콤보 보너스!</span>
+  <span style="background:#D16349;color:#fff;border-radius:999px;padding:3px 10px;font-weight:700" id="bscore">★ 0점 · 콤보 x0</span></div>
+  <div class="row" style="margin-top:8px;align-items:flex-start">
+    <svg id="bclock" viewBox="0 0 120 120" width="110"></svg>
+    <div style="display:grid;grid-template-columns:auto 120px auto;gap:2px 6px;align-items:center">
+      <span>시</span><input type="range" id="bh" min="1" max="12" value="12"><span id="bhv"></span>
+      <span>분</span><input type="range" id="bmin" min="0" max="59" value="0"><span id="bmv"></span>
+      <span>초</span><input type="range" id="bs" min="0" max="59" value="0"><span id="bsv"></span>
+      <span>구분</span><select id="bampm" style="font-size:11px"><option>오전</option><option>오후</option></select><span></span>
+    </div>
+  </div>
+  <div style="margin-top:6px">목표: <b id="btarget"></b> <button id="bcheck" style="font-size:11px">확인</button></div>
+  <div id="bfb" style="font-size:22px;min-height:30px"></div>
+</div>
+</section>
+<section class="view" id="good" hidden>
+
+<div class="try"><b>살펴볼 점</b> · 긴바늘을 손가락으로 직접 돌립니다. 긴바늘을 돌리면 짧은바늘도 함께 움직입니다. · 한 화면에 과제 하나, 지시문은 한 문장입니다.</div>
+<div class="panel" style="text-align:center">
+  <div style="font-size:22px;font-weight:700;margin-bottom:6px">긴바늘을 돌려 <span id="gtarget" style="color:#5F8F90"></span><span>을 만들어 보세요</span></div>
+  <svg id="gclock" viewBox="0 0 300 300" style="width:min(86vw,340px);margin:0 auto;touch-action:none;cursor:grab"></svg>
+  <div class="row" style="justify-content:center;margin-top:10px"><button class="btn big" id="gcheck">확인하기</button><button class="btn big ghost" id="gnew">다른 시각</button></div>
+  <div class="feedback" id="gfb" style="font-size:19px"></div>
+</div>
+</section>
+<details class="think"><summary>점검 질문</summary><p>터치 대상의 크기, 지시문 길이, 한 화면의 컨트롤 수가 대상 학년에 맞는가? 화면 요소가 모두 수학에 주의를 모으는가?</p></details>
+<footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
+</main>
+<script src="common.js"></script>
+<script>
+
+function face(svg, R, c, opts) {
+  svg.innerHTML = '';
+  el('circle', { cx: c, cy: c, r: R, fill: '#fff', stroke: opts.stroke, 'stroke-width': opts.sw }, svg);
+  for (let i = 0; i < 60; i++) {
+    const a = i * 6 * Math.PI / 180, r1 = i % 5 ? R - R * .05 : R - R * .1;
+    el('line', { x1: c + r1 * Math.sin(a), y1: c - r1 * Math.cos(a), x2: c + R * .97 * Math.sin(a), y2: c - R * .97 * Math.cos(a), stroke: '#9aa', 'stroke-width': i % 5 ? 1 : 2 }, svg);
+  }
+  for (let h = 1; h <= 12; h++) {
+    const a = h * 30 * Math.PI / 180, r = R * .76;
+    el('text', { x: c + r * Math.sin(a), y: c - r * Math.cos(a) + opts.fs * .35, 'text-anchor': 'middle', 'font-size': opts.fs, fill: '#3A3F52' }, svg).textContent = h;
+  }
+}
+function hand(svg, c, deg, len, w, color) {
+  const a = deg * Math.PI / 180;
+  return el('line', { x1: c, y1: c, x2: c + len * Math.sin(a), y2: c - len * Math.cos(a), stroke: color, 'stroke-width': w, 'stroke-linecap': 'round' }, svg);
+}
+// ---------- X
+let score = 0, combo = 0, BT;
+function badTarget() { BT = { ap: rnd(0, 1) ? '오후' : '오전', h: rnd(1, 12), m: rnd(0, 11) * 5, s: 0 }; btarget.textContent = `${BT.ap} ${BT.h}시 ${BT.m}분 ${BT.s}초`; }
+function drawBad() {
+  const h = +bh.value, m = +bmin.value, s = +bs.value;
+  bhv.textContent = h; bmv.textContent = m; bsv.textContent = s;
+  face(bclock, 54, 60, { stroke: '#D16349', sw: 1.5, fs: 9 });
+  hand(bclock, 60, h * 30, 26, 3, '#3A3F52');      // generated code: hour hand ignores minutes
+  hand(bclock, 60, m * 6, 40, 2, '#3A3F52');
+  hand(bclock, 60, s * 6, 44, 1, '#D16349');
+}
+[bh, bmin, bs].forEach(i => i.oninput = drawBad);
+bcheck.onclick = () => {
+  const ok = +bh.value === BT.h && +bmin.value === BT.m && +bs.value === BT.s && bampm.value === BT.ap;
+  if (ok) { combo++; score += 100 * combo; bfb.textContent = '🎉🎉 정답! +' + 100 * combo + '점 🔥콤보🔥'; badTarget(); }
+  else { combo = 0; score = Math.max(0, score - 20); bfb.textContent = '❌ 오답! -20점 😢'; }
+  bscore.textContent = `★ ${score}점 · 콤보 x${combo}`;
+};
+badTarget(); drawBad();
+
+// ---------- O: drag the minute hand; hour hand is geared to it
+let total = 0, GT, dragging = false;
+function goodTarget() {
+  const opts = [0, 30, 30, 15, 45, 10, 20, 40, 50];
+  do { GT = { h: rnd(1, 12), m: opts[rnd(0, opts.length - 1)] }; } while (GT.h === 12 && GT.m === 0);
+  gtarget.textContent = GT.m ? `${GT.h}시 ${GT.m}분` : `${GT.h}시`;
+  gtarget.nextElementSibling.textContent = GT.m ? '을 만들어 보세요' : '를 만들어 보세요';
+}
+function hm() { const t = ((total % 720) + 720) % 720; let h = Math.floor(t / 60); return { h: h === 0 ? 12 : h, m: t % 60 }; }
+function drawGood() {
+  face(gclock, 140, 150, { stroke: '#646B86', sw: 4, fs: 26 });
+  const t = ((total % 720) + 720) % 720;
+  hand(gclock, 150, t / 2, 70, 10, '#3A3F52');
+  hand(gclock, 150, (t % 60) * 6, 110, 6, '#5F8F90');
+  const a = (t % 60) * 6 * Math.PI / 180;
+  el('circle', { cx: 150 + 110 * Math.sin(a), cy: 150 - 110 * Math.cos(a), r: 18, fill: '#5F8F90', opacity: .25 }, gclock);
+  el('circle', { cx: 150, cy: 150, r: 8, fill: '#3A3F52' }, gclock);
+}
+function angleMin(e) {
+  const r = gclock.getBoundingClientRect(), x = (e.clientX - r.left) * 300 / r.width - 150, y = (e.clientY - r.top) * 300 / r.height - 150;
+  let deg = Math.atan2(x, -y) * 180 / Math.PI; if (deg < 0) deg += 360;
+  return Math.round(deg / 6) % 60;
+}
+gclock.addEventListener('pointerdown', e => { dragging = true; gclock.setPointerCapture(e.pointerId); move(e); });
+gclock.addEventListener('pointermove', e => { if (dragging) move(e); });
+gclock.addEventListener('pointerup', () => dragging = false);
+function move(e) {
+  const nm = angleMin(e), cur = ((total % 60) + 60) % 60;
+  let d = nm - cur; if (d > 30) d -= 60; if (d < -30) d += 60;
+  total += d; drawGood(); gfb.textContent = '';
+}
+gcheck.onclick = () => {
+  const { h, m } = hm(), now = m ? `${h}시 ${m}분` : `${h}시`;
+  const bat = k => [1, 3, 6, 7, 8, 10, 11].includes(k); // 받침 있는 수 읽기(일, 삼, 육, 칠, 팔, 십, 십일)
+  const iy = s => /분$/.test(s) ? s + '이에요' : s + '예요', eul = s => /분$/.test(s) ? s + '을' : s + '를';
+  if (h === GT.h && m === GT.m) gfb.innerHTML = m ? `${eul(now)} 만들었어요. 짧은바늘은 ${h}${bat(h) ? '과' : '와'} ${h % 12 + 1} 사이에 있어요. 왜 그럴까요?` : `${eul(now)} 만들었어요. 짧은바늘이 ${h}${bat(h) ? '을' : '를'} 똑바로 가리키고 있어요.`;
+  else gfb.innerHTML = `지금 시계는 <b>${iy(now)}</b>. 만들려는 시각은 <b>${iy(gtarget.textContent)}</b>.`;
+};
+gnew.onclick = () => { goodTarget(); gfb.textContent = ''; };
+goodTarget(); drawGood();
+
+</script>
+</body></html>
