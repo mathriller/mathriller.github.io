@@ -1,135 +1,323 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>원리 7 · 교사가 수업 안에서 조율할 수 있게 하라</title><link rel="stylesheet" href="style.css"></head>
+<title>원리 7 · 교사의 수업 실행과 평가를 지원하라</title><link rel="stylesheet" href="style.css"></head>
 <body>
 <header class="top"><a href="./" class="back">← 7가지 설계 원리</a><span class="tag D">D 수업 정합성</span></header>
 <main>
-<h1><span class="num">원리 7</span>교사가 수업 안에서 조율할 수 있게 하라</h1>
-<p class="lead">학생의 흔적이 남고 공유되며, 교사가 단계를 조율할 수 있게 만든다</p>
+<h1><span class="num">원리 7</span>교사의 수업 실행과 평가를 지원하라</h1>
+<p class="lead">과정이 기록·공유되어 교사가 수업과 평가에 쓸 수 있게 한다</p>
 <div class="tabs" role="tablist">
   <button class="tab bad" data-v="bad"><span class="ox">X</span>AI 기본값 앱</button>
   <button class="tab good" data-v="good"><span class="ox">O</span>다듬은 앱</button>
 </div>
 <section class="view" id="bad">
 
-<div class="try"><b>이렇게 해 보세요</b> · 문제를 풀고 다음으로 넘어가 보세요. 수업 후 교사가 학생들의 생각을 모아 볼 수 있을까요?</div>
+<div class="try"><b>이렇게 해 보세요</b> · 원리 6에서 본 앱입니다. 전개도를 만들어 접어 보세요. 활동이 끝나면 무엇이 남나요? 교사는 학생이 어떻게 생각했는지 알 수 있을까요?</div>
 <div class="panel">
-  <svg id="barr" viewBox="0 0 520 170"></svg>
-  <div class="row" style="margin-top:10px"><span id="bq" style="font-size:22px"></span><input type="number" id="bans" inputmode="numeric"><button class="btn orange" id="bsub">제출</button></div>
-  <div class="feedback" id="bfb"></div>
+  <div class="row" style="align-items:flex-start;gap:16px">
+    <div><div id="bgrid"></div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="bfold">접어 보기</button><button class="btn ghost" id="bclr">지우기</button></div>
+      <div class="row" style="margin-top:8px"><span class="small muted">접는 정도</span><input type="range" id="bang" min="0" max="90" value="0" style="width:150px"></div>
+    </div>
+    <div id="bscene" style="flex:1;min-width:280px;height:340px;perspective:900px;position:relative;touch-action:none;cursor:grab;background:#fff;border-radius:12px;overflow:hidden"></div>
+  </div>
 </div>
 </section>
 <section class="view" id="good" hidden>
 
-<div class="try"><b>살펴볼 점</b> · 배열 사이의 틈을 눌러 나누어 보세요. · '내 방법 저장'은 그림 파일로 내려받고 아래 모아 보기에도 남깁니다(패들렛 등에 올려 공유). · 교사 모드에서 2단계를 엽니다.</div>
+<div class="try">전개도를 만들어 접어 보고, 그림으로 저장하거나 제출하세요.</div>
 <div class="panel">
-  <div class="row" style="justify-content:space-between"><b id="gstep">1단계 · 12×4를 여러 가지 방법으로 나누어 계산해 보세요</b>
-    <button class="btn ghost" id="gteacher">교사 모드</button></div>
-  <div id="gtpanel" class="panel" hidden style="background:#F4F6F8;margin-top:8px">
-    <b>교사 모드</b> <span class="muted small">학생 화면을 보며 단계를 조율합니다</span>
-    <div class="row" style="margin-top:6px"><button class="btn slate" id="gopen2">2단계 열기 (16×3, 23×4)</button><button class="btn ghost" id="gwipe">모아 보기 지우기</button></div>
+  <div class="row" style="align-items:flex-start;gap:16px">
+    <div><div id="ggrid"></div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="gfold">접어 보기</button><button class="btn ghost" id="gclr">지우기</button></div>
+      <div class="row" style="margin-top:8px"><span class="small muted">접는 정도</span><input type="range" id="gang" min="0" max="90" value="0" style="width:150px"></div>
+    </div>
+    <div id="gscene" style="flex:1;min-width:280px;height:340px;perspective:900px;position:relative;touch-action:none;cursor:grab;background:#fff;border-radius:12px;overflow:hidden"></div>
   </div>
-  <div class="row" style="margin-top:6px" id="gprobs"></div>
-  <svg id="garr" viewBox="0 0 560 200" style="margin-top:8px;touch-action:manipulation"></svg>
-  <div class="feedback" id="gexpr"></div>
-  <div class="row" style="margin-top:10px"><input type="text" id="gname" placeholder="이름" style="width:120px"><button class="btn" id="gsave">내 방법 저장</button><button class="btn ghost" id="greset">나누기 지우기</button></div>
+  <div class="row" style="margin-top:12px"><input type="text" id="gname" placeholder="이름" style="width:120px"><button class="btn ghost" id="gsave">그림으로 저장</button><button class="btn slate" id="gsubmit">제출</button></div>
+  <div id="gmsg" style="margin-top:10px;font-size:15px"></div>
 </div>
-<div class="panel"><b>모아 보기</b> <span class="muted small">이 기기에 저장된 방법들 — 전체 토의에서 비교해 보세요</span><div id="ggal" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:8px"></div></div>
+<div class="row" style="justify-content:flex-end"><button class="btn ghost" id="gteacher">교사 모드</button></div>
+<div id="tpanel" class="panel" hidden>
+  <b>교사 모드 · 제출함</b> <span class="muted small">학생의 제출 링크를 열면 이 기기의 제출함에 모입니다</span>
+  <div id="tlist" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:10px"></div>
+  <div id="treplay" hidden style="margin-top:14px;border-top:1px solid #C5D1D7;padding-top:12px">
+    <b id="rtitle" style="font-size:18px"></b>
+    <div class="row" style="align-items:flex-start;gap:16px;margin-top:8px">
+      <div id="rgrid"></div>
+      <div style="flex:1;min-width:240px">
+        <div class="row"><button class="btn" id="rplay">▶ 재생</button><button class="btn ghost" id="rprev">◀</button><button class="btn ghost" id="rnext">▶|</button></div>
+        <input type="range" id="rpos" min="0" value="0" style="width:100%;margin-top:10px">
+        <div id="rinfo" class="small" style="margin-top:6px"></div>
+        <ol id="rlog" class="small" style="max-height:190px;overflow:auto;padding-left:22px;margin-top:6px"></ol>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="fs" hidden style="position:fixed;inset:0;background:#fff;z-index:50;padding:24px;overflow:auto">
+  <div class="row" style="justify-content:space-between"><b id="fstitle" style="font-size:30px"></b><button class="btn ghost" id="fsclose">닫기 ✕</button></div>
+  <div class="row" style="gap:40px;align-items:center;justify-content:center;margin-top:24px">
+    <div id="fsgrid"></div><div id="fsscene" style="width:min(48vw,560px);height:480px;position:relative;perspective:1200px"></div>
+  </div>
+</div>
 </section>
-<details class="think"><summary>점검 질문</summary><p>앱이 토의할 거리(시도 기록, 비교할 화면)를 남기는가? 지도안의 발문과 활동 흐름에 앱 기능이 맞물리는가?</p></details>
+<details class="think"><summary>점검 질문</summary><p>학생의 조작 과정과 결과가 남고 공유되는가? 교사가 그것으로 과정중심평가를 하고, 전체 토의에 띄워 쓸 수 있는가?</p></details>
 <footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
 </main>
 <script src="common.js"></script>
 <script>
 
-function drawArray(svg, a, b, splits, color, W = 520) {
-  svg.innerHTML = '';
-  const cw = Math.min(40, (W - 40) / a), ch = 34, x0 = 20, y0 = 20;
-  svg.setAttribute('viewBox', `0 0 ${W + 40} ${y0 + b * ch + 60}`);
-  const cuts = [0, ...splits.slice().sort((p, q) => p - q), a];
-  const shades = ['#8CADAE', '#C5D1D7', '#B7C9A8', '#E8D9A8'];
-  for (let s = 0; s < cuts.length - 1; s++) {
-    const w = cuts[s + 1] - cuts[s];
-    el('rect', { x: x0 + cuts[s] * cw, y: y0, width: w * cw, height: b * ch, fill: color || shades[s % 4], 'fill-opacity': .45, stroke: '#646B86', 'stroke-width': 2 }, svg);
-    if (!color) el('text', { x: x0 + (cuts[s] + w / 2) * cw, y: y0 + b * ch + 26, 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 700, fill: '#3A3F52' }, svg).textContent = `${w}×${b}`;
+const N = 5, LAB = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타'];
+function makeGrid(host, color, onChange, onToggle) {
+  const st = { order: [] };
+  host.style.cssText = `display:grid;grid-template-columns:repeat(${N},48px);gap:3px;user-select:none`;
+  const cells = [];
+  for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+    const d = document.createElement('div');
+    d.style.cssText = 'width:48px;height:48px;border:1.5px dashed #C5D1D7;border-radius:4px;display:grid;place-items:center;font-weight:700;cursor:pointer;background:#fff';
+    d.onclick = () => {
+      const k = r + ',' + c, i = st.order.indexOf(k);
+      if (i >= 0) st.order.splice(i, 1); else st.order.push(k);
+      onToggle && onToggle(k, i < 0);
+      onChange();
+    };
+    host.appendChild(d); cells.push({ d, k: r + ',' + c });
   }
-  for (let r = 0; r < b; r++) for (let c = 0; c < a; c++) el('circle', { cx: x0 + c * cw + cw / 2, cy: y0 + r * ch + ch / 2, r: Math.min(9, cw / 3), fill: '#3A3F52' }, svg);
-  return { cw, x0, y0, ch };
+  st.paint = (hl = new Set(), off = new Set()) => cells.forEach(({ d, k }) => {
+    const i = st.order.indexOf(k);
+    d.textContent = i >= 0 ? (LAB[i] || i + 1) : '';
+    d.style.background = i < 0 ? '#fff' : hl.has(k) ? '#F6C9BC' : off.has(k) ? '#eee' : color;
+    d.style.border = i < 0 ? '1.5px dashed #C5D1D7' : hl.has(k) ? '2.5px solid #D16349' : '1.5px solid #646B86';
+    d.style.color = '#3A3F52';
+  });
+  st.clear = () => { st.order = []; onChange(); };
+  return st;
 }
-// ---------- X
-let BP;
-function badNext() { BP = { a: rnd(11, 25), b: rnd(2, 5) }; drawArray(barr, BP.a, BP.b, [], '#E9A896'); bq.textContent = `${BP.a} × ${BP.b} =`; bans.value = ''; }
-bsub.onclick = () => {
-  if (+bans.value === BP.a * BP.b) { bfb.textContent = '완료! 다음 문제 ▶'; setTimeout(() => { bfb.textContent = ''; badNext(); }, 900); }
-  else bfb.textContent = '다시 해 보세요.';
-};
-badNext();
+const vadd = (a, b) => a.map((x, i) => x + b[i]), neg = a => a.map(x => -x);
+const DIRS = { R: [0, 1], L: [0, -1], D: [1, 0], U: [-1, 0] };
+function analyse(order) {
+  if (!order.length) return null;
+  const set = new Set(order), root = order[0], seen = new Map();
+  seen.set(root, { parent: null, dir: null, u: [1, 0, 0], v: [0, 1, 0], n: [0, 0, 1] });
+  const q = [root], tree = [];
+  while (q.length) {
+    const k = q.shift(), f = seen.get(k), [r, c] = k.split(',').map(Number);
+    for (const dir of ['R', 'D', 'L', 'U']) {
+      const nk = (r + DIRS[dir][0]) + ',' + (c + DIRS[dir][1]);
+      if (!set.has(nk) || seen.has(nk)) continue;
+      let g;
+      if (dir === 'R') g = { u: f.n, v: f.v, n: neg(f.u) };
+      if (dir === 'L') g = { u: neg(f.n), v: f.v, n: f.u };
+      if (dir === 'D') g = { u: f.u, v: f.n, n: neg(f.v) };
+      if (dir === 'U') g = { u: f.u, v: neg(f.n), n: f.v };
+      seen.set(nk, { parent: k, dir, ...g }); tree.push(nk); q.push(nk);
+    }
+  }
+  const byNormal = {};
+  seen.forEach((f, k) => { const key = neg(f.n).join(); (byNormal[key] = byNormal[key] || []).push(k); });
+  const overlaps = Object.values(byNormal).filter(a => a.length > 1);
+  const detached = order.filter(k => !seen.has(k));
+  return { root, seen, tree, overlaps, distinct: Object.keys(byNormal).length, detached };
+}
+// draw the net as nested CSS-3D faces; returns the face map
+function draw3D(scene, order, A, hl, rx, rz, F) {
+  scene.innerHTML = ''; const faces = {};
+  if (!A) return faces;
+  const world = document.createElement('div');
+  world.style.cssText = `position:absolute;left:50%;top:55%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(${rx}deg) rotateZ(${rz}deg)`;
+  scene.appendChild(world);
+  const mk = k => {
+    const d = document.createElement('div'), i = order.indexOf(k);
+    d.style.cssText = `position:absolute;width:${F}px;height:${F}px;transform-style:preserve-3d;display:grid;place-items:center;font-weight:700;font-size:${F * .28}px;color:#3A3F52;` +
+      `background:${hl.has(k) ? 'rgba(246,201,188,.92)' : 'rgba(140,173,174,.88)'};border:2px solid ${hl.has(k) ? '#D16349' : '#646B86'};box-sizing:border-box;backface-visibility:visible`;
+    d.textContent = LAB[i] || i + 1; faces[k] = d; return d;
+  };
+  const rootEl = mk(A.root); rootEl.style.left = -F / 2 + 'px'; rootEl.style.top = -F / 2 + 'px'; world.appendChild(rootEl);
+  A.tree.forEach(k => {
+    const f = A.seen.get(k), d = mk(k), p = faces[f.parent];
+    const pos = { R: [F, 0, 'left center'], L: [-F, 0, 'right center'], D: [0, F, 'center top'], U: [0, -F, 'center bottom'] }[f.dir];
+    d.style.left = pos[0] + 'px'; d.style.top = pos[1] + 'px'; d.style.transformOrigin = pos[2]; d.dataset.dir = f.dir;
+    p.appendChild(d);
+  });
+  return faces;
+}
+function setFaces(faces, a) {
+  Object.values(faces).forEach(d => {
+    const t = { R: `rotateY(${-a}deg)`, L: `rotateY(${a}deg)`, D: `rotateX(${a}deg)`, U: `rotateX(${-a}deg)` }[d.dataset.dir];
+    if (t) d.style.transform = t;
+  });
+}
+function overlapSet(A) { const hl = new Set(); if (A) A.overlaps.forEach(g => g.forEach(k => hl.add(k))); return hl; }
+// a complete "build a net and fold it" widget
+function makeFolder(o) {
+  let folded = false, A = null, rx = 58, rz = -25, faces = {};
+  const G = makeGrid(o.grid, o.color, () => { o.slider.value = 0; folded = false; build(); }, (k, added) => o.log && o.log(added ? 'add' : 'del', k));
+  function build() {
+    A = analyse(G.order); const hl = folded ? overlapSet(A) : new Set();
+    G.paint(hl, new Set(A ? A.detached : []));
+    faces = draw3D(o.scene, G.order, A, hl, rx, rz, o.F || 70); setFaces(faces, +o.slider.value);
+  }
+  o.slider.oninput = () => { setFaces(faces, +o.slider.value); if (+o.slider.value === 90 && !folded) { folded = true; build(); } };
+  o.foldBtn.onclick = () => {
+    o.log && o.log('fold');
+    let a = +o.slider.value; const t = setInterval(() => { a = Math.min(90, a + 3); o.slider.value = a; setFaces(faces, a); if (a >= 90) { clearInterval(t); folded = true; build(); } }, 25);
+  };
+  o.clrBtn.onclick = () => { o.log && o.log('clear'); G.clear(); };
+  let rot = null;
+  o.scene.addEventListener('pointerdown', e => { rot = { x: e.clientX, y: e.clientY, rx, rz }; o.scene.setPointerCapture(e.pointerId); });
+  o.scene.addEventListener('pointermove', e => {
+    if (!rot) return; rz = rot.rz + (e.clientX - rot.x) * .5; rx = Math.max(0, Math.min(85, rot.rx - (e.clientY - rot.y) * .4));
+    const w = o.scene.firstChild; if (w) w.style.transform = `rotateX(${rx}deg) rotateZ(${rz}deg)`;
+  });
+  o.scene.addEventListener('pointerup', () => rot = null);
+  return { G, build, setOrder(ord) { G.order = ord.slice(); folded = false; o.slider.value = 0; build(); } };
+}
 
-// ---------- O
-const PROBS = [[12, 4], [16, 3], [23, 4]];
-let open2 = false, P = [12, 4], splits = [], geo;
-function key() { return 'vibe-p7-gallery'; }
-function load() { try { return JSON.parse(localStorage.getItem(key()) || '[]'); } catch (e) { return []; } }
-function store(g) { try { localStorage.setItem(key(), JSON.stringify(g)); } catch (e) {} }
-function probs() {
-  gprobs.innerHTML = '';
-  PROBS.forEach(([a, b], i) => {
-    const btn = document.createElement('button'); btn.className = 'btn ' + (P[0] === a && P[1] === b ? 'slate' : 'ghost');
-    const locked = i > 0 && !open2; btn.disabled = locked; btn.textContent = (locked ? '🔒 ' : '') + `${a}×${b}`;
-    btn.onclick = () => { P = [a, b]; splits = []; gstep.textContent = (i ? '2단계 · ' : '1단계 · ') + `${a}×${b}를 여러 가지 방법으로 나누어 계산해 보세요`; probs(); drawGood(); };
-    gprobs.appendChild(btn);
-  });
-}
-function expr() {
-  const cuts = [0, ...splits.slice().sort((p, q) => p - q), P[0]], parts = [];
-  for (let s = 0; s < cuts.length - 1; s++) parts.push(cuts[s + 1] - cuts[s]);
-  const b = P[1];
-  return parts.length === 1 ? `${P[0]}×${b} = ?  배열 사이의 틈을 눌러 나누어 보세요.` :
-    `${parts.map(p => `${p}×${b}`).join(' + ')} = ${parts.map(p => p * b).join(' + ')} = ${P[0] * b}`;
-}
-function drawGood() {
-  geo = drawArray(garr, P[0], P[1], splits, null, 520);
-  for (let c = 1; c < P[0]; c++) {
-    const x = geo.x0 + c * geo.cw;
-    el('line', { x1: x, x2: x, y1: geo.y0 - 8, y2: geo.y0 + P[1] * geo.ch + 8, stroke: splits.includes(c) ? '#D16349' : '#C5D1D7', 'stroke-width': splits.includes(c) ? 4 : 1.5, 'stroke-dasharray': splits.includes(c) ? '' : '4 4' }, garr);
+const START = ['1,2', '2,1', '2,2', '2,3', '3,1', '3,2'];
+// ---------- X: the folding app from principle 6 — nothing is kept
+makeFolder({ grid: bgrid, scene: bscene, slider: bang, foldBtn: bfold, clrBtn: bclr, color: '#8CADAE' }).setOrder(START);
+
+// ---------- O: the same app + saving, submitting with a process log, teacher replay and full-screen sharing
+let log = [], t0 = Date.now();
+const GF = makeFolder({ grid: ggrid, scene: gscene, slider: gang, foldBtn: gfold, clrBtn: gclr, color: '#8CADAE',
+  log: (a, k) => log.push([Date.now() - t0, a, k || '']) });
+GF.setOrder(START);
+
+const KEY = 'vibe-p7-subs';
+function loadSubs() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } }
+function saveSubs(a) { try { localStorage.setItem(KEY, JSON.stringify(a)); } catch (e) {} }
+const enc = o => btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+const dec = s => JSON.parse(decodeURIComponent(escape(atob(s))));
+const mmss = ms => { const s = Math.round(ms / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+
+function paintStatic(host, order, hl, size) {
+  host.innerHTML = ''; host.style.cssText = `display:grid;grid-template-columns:repeat(${N},${size}px);gap:${Math.max(2, size / 16)}px`;
+  for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+    const k = r + ',' + c, i = order.indexOf(k), d = document.createElement('div');
+    d.style.cssText = `width:${size}px;height:${size}px;border-radius:4px;display:grid;place-items:center;font-weight:700;font-size:${size * .4}px;color:#3A3F52;box-sizing:border-box;` +
+      (i < 0 ? 'border:1px dashed #DDE3E7;background:#fff' : hl.has(k) ? 'background:#F6C9BC;border:2px solid #D16349' : 'background:#8CADAE;border:1.5px solid #646B86');
+    if (i >= 0) d.textContent = LAB[i] || i + 1;
+    host.appendChild(d);
   }
-  gexpr.textContent = expr();
 }
-garr.addEventListener('pointerdown', e => {
-  const r = garr.getBoundingClientRect(), vb = garr.viewBox.baseVal, x = (e.clientX - r.left) * vb.width / r.width;
-  const c = Math.round((x - geo.x0) / geo.cw);
-  if (c <= 0 || c >= P[0] || Math.abs(x - (geo.x0 + c * geo.cw)) > geo.cw * .4) return;
-  const i = splits.indexOf(c); if (i >= 0) splits.splice(i, 1); else splits.push(c); drawGood();
-});
-greset.onclick = () => { splits = []; drawGood(); };
+function verdict(order) {
+  const A = analyse(order);
+  if (!A) return '면 없음';
+  if (order.length === 6 && !A.detached.length && A.distinct === 6) return '여섯 면이 모두 다른 자리로 접힘';
+  return A.overlaps.length ? '겹치는 면 있음' : '빈 면 있음';
+}
+function statsOf(sub) {
+  const c = a => sub.log.filter(e => e[1] === a).length;
+  return { moves: c('add') + c('del'), folds: c('fold'), clears: c('clear'), dur: sub.log.length ? sub.log[sub.log.length - 1][0] : 0 };
+}
+
+// student side
 gsave.onclick = () => {
-  const name = gname.value.trim() || '이름 없음', item = { name, p: P.slice(), splits: splits.slice(), t: Date.now() };
-  const g = load(); g.push(item); store(g); gallery();
-  // PNG download for sharing (e.g., Padlet)
-  const cv = document.createElement('canvas'), cw = 36, ch = 32, W = P[0] * cw + 40, H = P[1] * ch + 110;
-  cv.width = W; cv.height = H; const x = cv.getContext('2d');
-  x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
-  const cuts = [0, ...splits.slice().sort((a, b) => a - b), P[0]], sh = ['#C6D8D8', '#E3E9EC', '#D9E3D0', '#F1E9D1'];
-  for (let s = 0; s < cuts.length - 1; s++) { x.fillStyle = sh[s % 4]; x.fillRect(20 + cuts[s] * cw, 40, (cuts[s + 1] - cuts[s]) * cw, P[1] * ch); x.strokeStyle = '#646B86'; x.lineWidth = 2; x.strokeRect(20 + cuts[s] * cw, 40, (cuts[s + 1] - cuts[s]) * cw, P[1] * ch); }
-  x.fillStyle = '#3A3F52';
-  for (let r = 0; r < P[1]; r++) for (let c = 0; c < P[0]; c++) { x.beginPath(); x.arc(20 + c * cw + cw / 2, 40 + r * ch + ch / 2, 8, 0, 7); x.fill(); }
-  x.font = 'bold 18px sans-serif'; x.fillText(name, 20, 26); x.font = '16px sans-serif'; x.fillText(expr(), 20, 40 + P[1] * ch + 36);
-  const a = document.createElement('a'); a.download = `${name}_${P[0]}x${P[1]}.png`; a.href = cv.toDataURL('image/png'); a.click();
+  const order = GF.G.order, hl = overlapSet(analyse(order)), name = gname.value.trim() || '이름 없음', S = 64, cv = document.createElement('canvas');
+  cv.width = N * S + 40; cv.height = N * S + 80; const x = cv.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0, 0, cv.width, cv.height); x.fillStyle = '#3A3F52'; x.font = 'bold 22px sans-serif'; x.fillText(name + '의 전개도', 20, 34);
+  for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+    const k = r + ',' + c, i = order.indexOf(k); if (i < 0) continue;
+    x.fillStyle = hl.has(k) ? '#F6C9BC' : '#8CADAE'; x.fillRect(20 + c * S, 56 + r * S, S - 3, S - 3);
+    x.strokeStyle = hl.has(k) ? '#D16349' : '#646B86'; x.lineWidth = 2; x.strokeRect(20 + c * S, 56 + r * S, S - 3, S - 3);
+    x.fillStyle = '#3A3F52'; x.font = 'bold 24px sans-serif'; x.textAlign = 'center'; x.fillText(LAB[i] || i + 1, 20 + c * S + S / 2, 56 + r * S + S / 2 + 8); x.textAlign = 'left';
+  }
+  const a = document.createElement('a'); a.download = `${name}_전개도.png`; a.href = cv.toDataURL('image/png'); a.click();
+  gmsg.textContent = '그림을 저장했어요. 패들렛 등에 올려 친구들과 나눠 보세요.';
 };
-function gallery() {
-  ggal.innerHTML = '';
-  load().forEach(it => {
-    const d = document.createElement('div'); d.style.cssText = 'background:#F4F6F8;border-radius:8px;padding:6px;text-align:center;font-size:13px';
-    const s = document.createElementNS(SVGNS, 'svg'); d.appendChild(s); drawArray(s, it.p[0], it.p[1], it.splits, null, 300);
-    const t = document.createElement('div'); t.textContent = it.name; d.appendChild(t); ggal.appendChild(d);
+gsubmit.onclick = () => {
+  const sub = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: gname.value.trim() || '이름 없음',
+    start: START, log, final: GF.G.order.slice(), at: Date.now() };
+  const all = loadSubs(); all.push(sub); saveSubs(all); renderList();
+  const link = location.origin + location.pathname + '?v=good#sub=' + enc(sub);
+  gmsg.innerHTML = '제출했어요. 아래 제출 링크를 패들렛 등에 올리면 선생님이 열어 볼 수 있어요.<br><input type="text" readonly style="width:100%;font-size:12px;margin-top:6px" value="' + link + '">';
+  try { navigator.clipboard.writeText(link); } catch (e) {}
+};
+
+// teacher side
+function renderList() {
+  const subs = loadSubs().slice().reverse(); tlist.innerHTML = '';
+  subs.forEach(sub => {
+    const st = statsOf(sub), card = document.createElement('div');
+    card.style.cssText = 'background:#F4F6F8;border-radius:12px;padding:12px';
+    card.innerHTML = `<div class="row" style="justify-content:space-between"><b>${sub.name}</b>${sub.demo ? '<span class="small muted">예시</span>' : ''}</div>
+      <div class="row" style="gap:10px;margin-top:6px;align-items:flex-start"><div class="thumb"></div>
+      <div class="small">조작 ${st.moves}회<br>접어 보기 ${st.folds}회<br>지우기 ${st.clears}회<br>걸린 시간 ${mmss(st.dur)}</div></div>
+      <div class="small" style="margin-top:6px"><b>최종</b> ${verdict(sub.final)}</div>
+      <div class="row" style="margin-top:8px;gap:6px"><button class="btn" style="padding:8px 12px;font-size:14px">과정 재생</button><button class="btn ghost" style="padding:8px 12px;font-size:14px">전체 화면</button></div>`;
+    paintStatic(card.querySelector('.thumb'), sub.final, overlapSet(analyse(sub.final)), 16);
+    const [bp, bf] = card.querySelectorAll('button'); bp.onclick = () => openReplay(sub); bf.onclick = () => openFull(sub);
+    tlist.appendChild(card);
   });
-  if (!ggal.children.length) ggal.innerHTML = '<span class="muted small">아직 저장된 방법이 없어요.</span>';
+  if (!subs.length) tlist.innerHTML = '<span class="muted small">아직 제출이 없어요.</span>';
 }
-gteacher.onclick = () => { gtpanel.hidden = !gtpanel.hidden; };
-gopen2.onclick = () => { open2 = true; probs(); gopen2.textContent = '2단계 열림'; gopen2.disabled = true; };
-gwipe.onclick = () => { store([]); gallery(); };
-probs(); drawGood(); gallery();
+const LABEL = { add: '면 놓기', del: '면 빼기', fold: '접어 보기', clear: '모두 지우기' };
+let R = null, timer = null;
+function openReplay(sub) {
+  // states[i] = net after i events; folded flag shows the overlap colours a student actually saw
+  const states = [{ order: sub.start.slice(), folded: false }];
+  sub.log.forEach(([t, a, k]) => {
+    const prev = states[states.length - 1], o = prev.order.slice();
+    if (a === 'add') o.push(k); if (a === 'del') o.splice(o.indexOf(k), 1); if (a === 'clear') o.length = 0;
+    states.push({ order: o, folded: a === 'fold' });
+  });
+  R = { sub, states }; treplay.hidden = false; rtitle.textContent = sub.name + ' · 조작 과정';
+  const st = statsOf(sub);
+  rinfo.innerHTML = `조작 ${st.moves}회 · 접어 보기 ${st.folds}회 · 지우기 ${st.clears}회 · 걸린 시간 ${mmss(st.dur)}<br><b>최종</b> ${verdict(sub.final)}`;
+  rlog.innerHTML = sub.log.map(([t, a, k]) => {
+    const pos = k ? ` (${+k.split(',')[0] + 1}행 ${+k.split(',')[1] + 1}열)` : '';
+    return `<li>${mmss(t)} ${LABEL[a]}${pos}</li>`;
+  }).join('');
+  rpos.max = states.length - 1; show(0); treplay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function show(i) {
+  if (!R) return; rpos.value = i; const s = R.states[i];
+  paintStatic(rgrid, s.order, s.folded ? overlapSet(analyse(s.order)) : new Set(), 40);
+  [...rlog.children].forEach((li, j) => li.style.cssText = j === i - 1 ? 'background:#EAF2F2;font-weight:700' : '');
+}
+rpos.oninput = () => show(+rpos.value);
+rprev.onclick = () => show(Math.max(0, +rpos.value - 1));
+rnext.onclick = () => show(Math.min(+rpos.max, +rpos.value + 1));
+rplay.onclick = () => {
+  if (timer) { clearInterval(timer); timer = null; rplay.textContent = '▶ 재생'; return; }
+  if (+rpos.value >= +rpos.max) show(0);
+  rplay.textContent = '❚❚ 멈춤';
+  timer = setInterval(() => { if (+rpos.value >= +rpos.max) { clearInterval(timer); timer = null; rplay.textContent = '▶ 재생'; return; } show(+rpos.value + 1); }, 700);
+};
+function openFull(sub) {
+  fs.hidden = false; fstitle.textContent = sub.name + '의 전개도';
+  const A = analyse(sub.final), hl = overlapSet(A);
+  paintStatic(fsgrid, sub.final, hl, 64);
+  setFaces(draw3D(fsscene, sub.final, A, hl, 58, -25, 110), 90);
+  try { fs.requestFullscreen && fs.requestFullscreen(); } catch (e) {}
+}
+fsclose.onclick = () => { fs.hidden = true; try { document.fullscreenElement && document.exitFullscreen(); } catch (e) {} };
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) fs.hidden = true; });
+gteacher.onclick = () => { tpanel.hidden = !tpanel.hidden; renderList(); };
+
+// example submissions for demonstration
+if (!loadSubs().length) {
+  const S = (t) => t * 1000;
+  saveSubs([
+    { id: 'demoA', demo: true, name: '예시 학생 A', start: START, final: ['1,2', '2,1', '2,2', '2,3', '3,2', '4,2'], at: 0,
+      log: [[S(9), 'fold', ''], [S(25), 'del', '3,1'], [S(31), 'add', '4,2'], [S(38), 'fold', '']] },
+    { id: 'demoB', demo: true, name: '예시 학생 B', start: START, final: ['1,1', '2,1', '2,2', '2,3', '2,4', '3,4'], at: 0,
+      log: [[S(5), 'clear', ''], [S(12), 'add', '1,1'], [S(15), 'add', '2,1'], [S(18), 'add', '2,2'], [S(21), 'add', '2,3'], [S(24), 'add', '2,4'], [S(30), 'add', '3,4'], [S(40), 'fold', '']] },
+    { id: 'demoC', demo: true, name: '예시 학생 C', start: START, final: ['1,1', '1,2', '2,2', '2,3', '3,3', '3,4'], at: 0,
+      log: [[S(4), 'clear', ''], [S(9), 'add', '1,1'], [S(11), 'add', '1,2'], [S(13), 'add', '1,3'], [S(15), 'add', '2,1'], [S(17), 'add', '2,2'], [S(19), 'add', '2,3'], [S(26), 'fold', ''],
+        [S(41), 'clear', ''], [S(50), 'add', '1,1'], [S(53), 'add', '1,2'], [S(56), 'add', '2,2'], [S(59), 'add', '2,3'], [S(63), 'add', '3,3'], [S(66), 'add', '3,4'], [S(75), 'fold', '']] },
+  ]);
+}
+// a submission link opened by the teacher
+const m = location.hash.match(/sub=([^&]+)/);
+if (m) {
+  try {
+    const sub = dec(m[1]), all = loadSubs();
+    if (!all.some(s => s.id === sub.id)) { all.push(sub); saveSubs(all); }
+    tpanel.hidden = false; renderList(); openReplay(sub);
+  } catch (e) { gmsg.textContent = '제출 링크를 읽지 못했어요.'; }
+}
 
 </script>
 </body></html>

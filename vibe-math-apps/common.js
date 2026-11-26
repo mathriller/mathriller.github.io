@@ -4,7 +4,7 @@
   function show(v) {
     tabs.forEach(t => t.classList.toggle('active', t.dataset.v === v));
     document.querySelectorAll('.view').forEach(s => (s.hidden = s.id !== v));
-    try { history.replaceState(null, '', '?v=' + v); } catch (e) {}
+    try { history.replaceState(null, '', '?v=' + v + location.hash); } catch (e) {}
     window.dispatchEvent(new CustomEvent('viewchange', { detail: v }));
   }
   tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.v)));

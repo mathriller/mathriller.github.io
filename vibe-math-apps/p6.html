@@ -39,8 +39,8 @@
 <script src="common.js"></script>
 <script>
 
-const N = 5, LAB = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차'];
-function makeGrid(host, color, onChange) {
+const N = 5, LAB = ['가', '나', '다', '라', '마', '바', '사', '아', '자', '차', '카', '타'];
+function makeGrid(host, color, onChange, onToggle) {
   const st = { order: [] };
   host.style.cssText = `display:grid;grid-template-columns:repeat(${N},48px);gap:3px;user-select:none`;
   const cells = [];
@@ -50,6 +50,7 @@ function makeGrid(host, color, onChange) {
     d.onclick = () => {
       const k = r + ',' + c, i = st.order.indexOf(k);
       if (i >= 0) st.order.splice(i, 1); else st.order.push(k);
+      onToggle && onToggle(k, i < 0);
       onChange();
     };
     host.appendChild(d); cells.push({ d, k: r + ',' + c });
@@ -64,8 +65,7 @@ function makeGrid(host, color, onChange) {
   st.clear = () => { st.order = []; onChange(); };
   return st;
 }
-// fold analysis: BFS tree from first cell; each face gets a frame (u,v,n); outward normal = -n
-const add = (a, b) => a.map((x, i) => x + b[i]), neg = a => a.map(x => -x);
+const vadd = (a, b) => a.map((x, i) => x + b[i]), neg = a => a.map(x => -x);
 const DIRS = { R: [0, 1], L: [0, -1], D: [1, 0], U: [-1, 0] };
 function analyse(order) {
   if (!order.length) return null;
@@ -91,32 +91,16 @@ function analyse(order) {
   const detached = order.filter(k => !seen.has(k));
   return { root, seen, tree, overlaps, distinct: Object.keys(byNormal).length, detached };
 }
-// ---------- X
-const B = makeGrid(bgrid, '#E9A896', () => { B.paint(); bfb.textContent = ''; });
-bsub.onclick = () => {
-  const a = analyse(B.order);
-  const ok = a && B.order.length === 6 && !a.detached.length && a.distinct === 6;
-  bfb.textContent = ok ? '🎉 정답입니다! +10점' : '❌ 틀렸어요! 다시 해 보세요 😢';
-};
-bclr.onclick = () => B.clear();
-B.paint();
-
-// ---------- O: real CSS-3D folding of the student's net
-let folded = false;
-const G = makeGrid(ggrid, '#8CADAE', () => { gang.value = 0; folded = false; build(); });
-const F = 70; let rx = 58, rz = -25, faces = {}, A = null;
-function build() {
-  A = analyse(G.order); gscene.innerHTML = ''; faces = {};
-  const hl = new Set();
-  if (A && folded) A.overlaps.forEach(g => g.forEach(k => hl.add(k)));
-  G.paint(hl, new Set(A ? A.detached : []));
-  if (!A) return;
+// draw the net as nested CSS-3D faces; returns the face map
+function draw3D(scene, order, A, hl, rx, rz, F) {
+  scene.innerHTML = ''; const faces = {};
+  if (!A) return faces;
   const world = document.createElement('div');
   world.style.cssText = `position:absolute;left:50%;top:55%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(${rx}deg) rotateZ(${rz}deg)`;
-  gscene.appendChild(world);
-  const mk = (k) => {
-    const d = document.createElement('div'), i = G.order.indexOf(k);
-    d.style.cssText = `position:absolute;width:${F}px;height:${F}px;transform-style:preserve-3d;display:grid;place-items:center;font-weight:700;font-size:20px;color:#3A3F52;` +
+  scene.appendChild(world);
+  const mk = k => {
+    const d = document.createElement('div'), i = order.indexOf(k);
+    d.style.cssText = `position:absolute;width:${F}px;height:${F}px;transform-style:preserve-3d;display:grid;place-items:center;font-weight:700;font-size:${F * .28}px;color:#3A3F52;` +
       `background:${hl.has(k) ? 'rgba(246,201,188,.92)' : 'rgba(140,173,174,.88)'};border:2px solid ${hl.has(k) ? '#D16349' : '#646B86'};box-sizing:border-box;backface-visibility:visible`;
     d.textContent = LAB[i] || i + 1; faces[k] = d; return d;
   };
@@ -127,29 +111,52 @@ function build() {
     d.style.left = pos[0] + 'px'; d.style.top = pos[1] + 'px'; d.style.transformOrigin = pos[2]; d.dataset.dir = f.dir;
     p.appendChild(d);
   });
-  setAngle(+gang.value);
-  world.dataset.w = 1;
+  return faces;
 }
-function setAngle(a) {
+function setFaces(faces, a) {
   Object.values(faces).forEach(d => {
     const t = { R: `rotateY(${-a}deg)`, L: `rotateY(${a}deg)`, D: `rotateX(${a}deg)`, U: `rotateX(${-a}deg)` }[d.dataset.dir];
     if (t) d.style.transform = t;
   });
 }
-gang.oninput = () => { setAngle(+gang.value); if (+gang.value === 90 && !folded) { folded = true; build(); setAngle(90); } };
-gfold.onclick = () => {
-  let a = +gang.value; const t = setInterval(() => { a = Math.min(90, a + 3); gang.value = a; setAngle(a); if (a >= 90) { clearInterval(t); folded = true; build(); setAngle(90); gang.value = 90; } }, 25);
+function overlapSet(A) { const hl = new Set(); if (A) A.overlaps.forEach(g => g.forEach(k => hl.add(k))); return hl; }
+// a complete "build a net and fold it" widget
+function makeFolder(o) {
+  let folded = false, A = null, rx = 58, rz = -25, faces = {};
+  const G = makeGrid(o.grid, o.color, () => { o.slider.value = 0; folded = false; build(); }, (k, added) => o.log && o.log(added ? 'add' : 'del', k));
+  function build() {
+    A = analyse(G.order); const hl = folded ? overlapSet(A) : new Set();
+    G.paint(hl, new Set(A ? A.detached : []));
+    faces = draw3D(o.scene, G.order, A, hl, rx, rz, o.F || 70); setFaces(faces, +o.slider.value);
+  }
+  o.slider.oninput = () => { setFaces(faces, +o.slider.value); if (+o.slider.value === 90 && !folded) { folded = true; build(); } };
+  o.foldBtn.onclick = () => {
+    o.log && o.log('fold');
+    let a = +o.slider.value; const t = setInterval(() => { a = Math.min(90, a + 3); o.slider.value = a; setFaces(faces, a); if (a >= 90) { clearInterval(t); folded = true; build(); } }, 25);
+  };
+  o.clrBtn.onclick = () => { o.log && o.log('clear'); G.clear(); };
+  let rot = null;
+  o.scene.addEventListener('pointerdown', e => { rot = { x: e.clientX, y: e.clientY, rx, rz }; o.scene.setPointerCapture(e.pointerId); });
+  o.scene.addEventListener('pointermove', e => {
+    if (!rot) return; rz = rot.rz + (e.clientX - rot.x) * .5; rx = Math.max(0, Math.min(85, rot.rx - (e.clientY - rot.y) * .4));
+    const w = o.scene.firstChild; if (w) w.style.transform = `rotateX(${rx}deg) rotateZ(${rz}deg)`;
+  });
+  o.scene.addEventListener('pointerup', () => rot = null);
+  return { G, build, setOrder(ord) { G.order = ord.slice(); folded = false; o.slider.value = 0; build(); } };
+}
+
+// ---------- X
+const B = makeGrid(bgrid, '#E9A896', () => { B.paint(); bfb.textContent = ''; });
+bsub.onclick = () => {
+  const a = analyse(B.order);
+  const ok = a && B.order.length === 6 && !a.detached.length && a.distinct === 6;
+  bfb.textContent = ok ? '🎉 정답입니다! +10점' : '❌ 틀렸어요! 다시 해 보세요 😢';
 };
-gclr.onclick = () => G.clear();
-let rot = null;
-gscene.addEventListener('pointerdown', e => { rot = { x: e.clientX, y: e.clientY, rx, rz }; gscene.setPointerCapture(e.pointerId); });
-gscene.addEventListener('pointermove', e => {
-  if (!rot) return; rz = rot.rz + (e.clientX - rot.x) * .5; rx = Math.max(0, Math.min(85, rot.rx - (e.clientY - rot.y) * .4));
-  const w = gscene.firstChild; if (w) w.style.transform = `rotateX(${rx}deg) rotateZ(${rz}deg)`;
-});
-gscene.addEventListener('pointerup', () => rot = null);
-// a starter net: the 2x3 block (does not fold into a cube)
-G.order = ['1,2', '2,1', '2,2', '2,3', '3,1', '3,2']; build();
+bclr.onclick = () => B.clear();
+B.paint();
+// ---------- O: real CSS-3D folding; overlapping faces turn pink after folding
+const GF = makeFolder({ grid: ggrid, scene: gscene, slider: gang, foldBtn: gfold, clrBtn: gclr, color: '#8CADAE' });
+GF.setOrder(['1,2', '2,1', '2,2', '2,3', '3,1', '3,2']);
 
 </script>
 </body></html>
