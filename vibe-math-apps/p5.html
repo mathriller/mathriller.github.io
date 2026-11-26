@@ -23,18 +23,16 @@
 </section>
 <section class="view" id="good" hidden>
 
-<div class="try">꼭짓점을 끌어 직사각형을 만들어 보세요. 무엇을 고정할지 직접 골라 볼 수도 있어요.</div>
+<div class="try">꼭짓점을 끌어 직사각형을 만들고, 아래 질문에 맞는 직사각형을 기록해 보세요.</div>
 <div class="panel">
-  <div class="row" id="gmode" style="gap:6px"><button class="btn slate" data-m="free">자유롭게</button><button class="btn ghost" data-m="per">둘레 고정</button><button class="btn ghost" data-m="area">넓이 고정</button></div>
-  <svg id="gsvg" viewBox="0 0 380 380" style="width:min(88vw,400px);margin:10px auto;touch-action:none"></svg>
+  <svg id="gsvg" viewBox="0 0 380 380" style="width:min(88vw,400px);margin:0 auto;touch-action:none"></svg>
   <div class="row" style="justify-content:center;font-size:18px"><span>가로 <b id="gw"></b> cm</span><span>세로 <b id="gh"></b> cm</span><span>둘레 <b id="gper"></b> cm</span><span style="color:#5F8F90">넓이 <b id="garea"></b> cm²</span></div>
   <div class="row" style="justify-content:center;margin-top:10px"><button class="btn" id="grec">기록하기</button><button class="btn ghost" id="gclr">기록 지우기</button></div>
 </div>
-<div class="panel"><b>생각해 볼 질문</b><ul style="margin:6px 0 0;padding-left:20px"><li>둘레가 같으면 넓이도 같을까?</li><li>넓이가 같으면 둘레도 같을까?</li><li>둘레가 20 cm일 때 가장 넓은 직사각형은? 다른 둘레에서도 그럴까?</li><li>내가 궁금한 것을 만들어 확인해 보자.</li></ul></div>
-<div class="panel"><b>기록</b><table class="rec"><thead><tr><th>가로</th><th>세로</th><th>둘레</th><th>넓이</th></tr></thead><tbody id="gtb"></tbody></table>
-<svg id="gchart" viewBox="0 0 400 220" style="margin-top:10px;max-width:420px"></svg></div>
+<div class="panel"><b>생각해 볼 질문</b><ul style="margin:6px 0 0;padding-left:20px"><li>둘레가 20 cm인 직사각형을 여러 개 만들어 보자. 넓이도 모두 같을까?</li><li>넓이가 24 cm²인 직사각형을 여러 개 만들어 보자. 둘레는?</li><li>무엇을 발견했나요? 다른 수로도 확인해 보자.</li></ul></div>
+<div class="panel"><b>기록</b><table class="rec"><thead><tr><th>가로</th><th>세로</th><th>둘레</th><th>넓이</th></tr></thead><tbody id="gtb"></tbody></table></div>
 </section>
-<details class="think"><summary>점검 질문</summary><p>학생이 스스로 무엇을 바꾸고 무엇을 고정할지 정할 수 있는가? 누구나 시작할 수 있고 더 깊이 나아갈 수 있는가? 그 속에서 수학적 구조가 드러나는가?</p></details>
+<details class="think"><summary>점검 질문</summary><p>학생이 스스로 조건에 맞는 예를 만들며 무엇을 바꾸고 무엇을 같게 둘지 생각하는가? 누구나 시작할 수 있고 더 깊이 나아갈 수 있는가? 앱이 그 생각을 대신하지는 않는가?</p></details>
 <footer>서울교육대학교 수학교육과 · 바이브 코딩 수학 앱 설계 원리 예시 · 두 탭을 오가며 차이를 찾아보세요.</footer>
 </main>
 <script src="common.js"></script>
@@ -55,59 +53,34 @@ bsub.onclick = () => {
 };
 nextQ();
 
-// ---------- O: free construction; the student chooses what to hold fixed
+// ---------- O: free construction; keeping something the same is the student's job
 const C = 28, O = 20, MAX = 12;
-let w = 6, h = 4, mode = 'free', keep = null, recs = [], drag = false;
-function allowed() {
-  const pts = [];
-  if (mode === 'per') for (let x = 1; x <= MAX; x++) { const y = keep - x; if (y >= 1 && y <= MAX) pts.push([x, y]); }
-  if (mode === 'area') for (let x = 1; x <= MAX; x++) if (keep % x === 0 && keep / x <= MAX) pts.push([x, keep / x]);
-  return pts;
-}
+let w = 6, h = 4, recs = [], drag = false;
 function drawGood() {
   const svg = gsvg; svg.innerHTML = '';
   for (let i = 0; i <= MAX; i++) {
     el('line', { x1: O + i * C, x2: O + i * C, y1: O, y2: O + MAX * C, stroke: '#E3E8EB' }, svg);
     el('line', { y1: O + i * C, y2: O + i * C, x1: O, x2: O + MAX * C, stroke: '#E3E8EB' }, svg);
   }
-  allowed().forEach(([x, y]) => el('circle', { cx: O + x * C, cy: O + y * C, r: 4.5, fill: '#C5D1D7' }, svg));
   el('rect', { x: O, y: O, width: w * C, height: h * C, fill: '#8CADAE', 'fill-opacity': .55, stroke: '#646B86', 'stroke-width': 3 }, svg);
   el('circle', { cx: O + w * C, cy: O + h * C, r: 14, fill: '#5F8F90', style: 'cursor:grab' }, svg);
   gw.textContent = w; gh.textContent = h; gper.textContent = 2 * (w + h); garea.textContent = w * h;
 }
 function pick(e) {
   const r = gsvg.getBoundingClientRect(), x = (e.clientX - r.left) * 380 / r.width - O, y = (e.clientY - r.top) * 380 / r.height - O;
-  if (mode === 'free') { w = Math.max(1, Math.min(MAX, Math.round(x / C))); h = Math.max(1, Math.min(MAX, Math.round(y / C))); }
-  else {
-    let best = null, bd = 1e9;
-    allowed().forEach(([px, py]) => { const d = (px * C - x) ** 2 + (py * C - y) ** 2; if (d < bd) { bd = d; best = [px, py]; } });
-    if (best) [w, h] = best;
-  }
+  w = Math.max(1, Math.min(MAX, Math.round(x / C))); h = Math.max(1, Math.min(MAX, Math.round(y / C)));
   drawGood();
 }
 gsvg.addEventListener('pointerdown', e => { drag = true; gsvg.setPointerCapture(e.pointerId); pick(e); });
 gsvg.addEventListener('pointermove', e => { if (drag) pick(e); });
 gsvg.addEventListener('pointerup', () => drag = false);
-gmode.querySelectorAll('button').forEach(btn => btn.onclick = () => {
-  mode = btn.dataset.m; keep = mode === 'per' ? w + h : mode === 'area' ? w * h : null;
-  gmode.querySelectorAll('button').forEach(b => b.className = 'btn ' + (b === btn ? 'slate' : 'ghost'));
-  drawGood();
-});
 grec.onclick = () => {
   if (!recs.some(r => r.w === w && r.h === h)) recs.push({ w, h, p: 2 * (w + h), a: w * h });
-  recs.sort((a, b) => a.p - b.p || a.a - b.a); drawRecs();
+  drawRecs();
 };
 gclr.onclick = () => { recs = []; drawRecs(); };
 function drawRecs() {
   gtb.innerHTML = recs.map(r => `<tr><td>${r.w}</td><td>${r.h}</td><td>${r.p}</td><td><b>${r.a}</b></td></tr>`).join('');
-  const svg = gchart; svg.innerHTML = '';
-  const X = p => 40 + (p - 4) * 7.3, Y = a => 185 - a * 1.15;
-  el('line', { x1: 40, y1: 185, x2: 390, y2: 185, stroke: '#646B86' }, svg); el('line', { x1: 40, y1: 10, x2: 40, y2: 185, stroke: '#646B86' }, svg);
-  el('text', { x: 215, y: 214, 'text-anchor': 'middle', 'font-size': 13, fill: '#6E7585' }, svg).textContent = '둘레 (cm)';
-  el('text', { x: 12, y: 100, 'font-size': 13, fill: '#6E7585', transform: 'rotate(-90 12 100)', 'text-anchor': 'middle' }, svg).textContent = '넓이 (cm²)';
-  for (let p = 10; p <= 50; p += 10) el('text', { x: X(p), y: 200, 'text-anchor': 'middle', 'font-size': 11, fill: '#6E7585' }, svg).textContent = p;
-  for (let a = 50; a <= 150; a += 50) el('text', { x: 34, y: Y(a) + 4, 'text-anchor': 'end', 'font-size': 11, fill: '#6E7585' }, svg).textContent = a;
-  recs.forEach(r => el('circle', { cx: X(r.p), cy: Y(r.a), r: 6, fill: '#5F8F90', 'fill-opacity': .8 }, svg));
 }
 drawGood(); drawRecs();
 
