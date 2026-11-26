@@ -13,13 +13,15 @@
 </div>
 <section class="view" id="bad">
 
-<div class="try"><b>이렇게 해 보세요</b> · 문제를 몇 개 풀어 보세요. 공식 연습 말고 무엇을 생각하게 되나요?</div>
+<div class="try"><b>이렇게 해 보세요</b> · 슬라이더를 움직여 보세요. 학생이 스스로 만들거나 발견할 것이 남아 있나요?</div>
 <div class="panel">
-  <div class="muted" id="bprog"></div>
-  <div style="font-size:20px;margin:8px 0" id="bqq"></div>
-  <div class="row"><input type="number" id="bans" inputmode="numeric"><span>cm²</span><button class="btn orange" id="bsub">제출</button></div>
-  <div class="feedback" id="bfb"></div>
+  <b style="font-size:18px">둘레가 20 cm인 직사각형 탐구</b>
+  <div class="row" style="margin-top:8px"><span>가로</span><input type="range" id="bsl" min="1" max="9" value="6" style="flex:1;max-width:260px"><span class="muted small">세로는 자동으로 맞춰져요</span></div>
+  <svg id="bsvg" viewBox="0 0 300 300" style="width:min(70vw,300px);margin:10px auto"></svg>
+  <div class="row" style="justify-content:center;font-size:18px"><span>가로 <b id="bw"></b> cm</span><span>세로 <b id="bh"></b> cm</span><span>넓이 <b id="ba"></b> cm²</span></div>
 </div>
+<div class="panel"><b>모든 경우</b><table class="rec"><thead><tr><th>가로</th><th>세로</th><th>둘레</th><th>넓이</th></tr></thead><tbody id="btb"></tbody></table></div>
+<div class="panel" style="background:#FFF4D6;font-size:18px;font-weight:700">💡 발견! 둘레가 같을 때 정사각형의 넓이가 가장 큽니다.</div>
 </section>
 <section class="view" id="good" hidden>
 
@@ -38,20 +40,21 @@
 <script src="common.js"></script>
 <script>
 
-// ---------- X: drill quiz
-let k = 0, sc = 0, Q;
-function nextQ() {
-  if (k === 10) { bprog.textContent = ''; bqq.textContent = `끝! 점수 ${sc}점 🎉`; bsub.textContent = '다시 하기'; return; }
-  Q = { w: rnd(2, 9), h: rnd(2, 9) }; k++;
-  bprog.textContent = `문제 ${k} / 10 · 점수 ${sc}`; bqq.textContent = `가로 ${Q.w} cm, 세로 ${Q.h} cm인 직사각형의 넓이는?`; bans.value = '';
+// ---------- X: there is manipulation, but the constraint, all the cases and the conclusion are handed over
+function drawBad() {
+  const w = +bsl.value, h = 10 - w, C = 26, O = 20, svg = bsvg; svg.innerHTML = '';
+  for (let i = 0; i <= 10; i++) {
+    el('line', { x1: O + i * C, x2: O + i * C, y1: O, y2: O + 10 * C, stroke: '#F1DCD5' }, svg);
+    el('line', { y1: O + i * C, y2: O + i * C, x1: O, x2: O + 10 * C, stroke: '#F1DCD5' }, svg);
+  }
+  el('rect', { x: O, y: O, width: w * C, height: h * C, fill: '#E9A896', 'fill-opacity': .7, stroke: '#D16349', 'stroke-width': 3 }, svg);
+  bw.textContent = w; bh.textContent = h; ba.textContent = w * h;
+  btb.innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(x => {
+    const y = 10 - x, cur = x === w, best = x === 5;
+    return `<tr style="${cur ? 'background:#FBEFEB;font-weight:700' : ''}"><td>${x}</td><td>${y}</td><td>20</td><td>${x * y}${best ? ' ⭐ 최대' : ''}</td></tr>`;
+  }).join('');
 }
-bsub.onclick = () => {
-  if (k === 10 && bsub.textContent === '다시 하기') { k = 0; sc = 0; bsub.textContent = '제출'; bfb.textContent = ''; nextQ(); return; }
-  const v = +bans.value;
-  if (v === Q.w * Q.h) { sc += 10; bfb.textContent = '정답! +10점'; } else bfb.textContent = `오답! 정답은 ${Q.w * Q.h} cm²`;
-  nextQ();
-};
-nextQ();
+bsl.oninput = drawBad; drawBad();
 
 // ---------- O: free construction; keeping something the same is the student's job
 const C = 28, O = 20, MAX = 12;
