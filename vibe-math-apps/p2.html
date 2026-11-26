@@ -13,7 +13,7 @@
 </div>
 <section class="view" id="bad">
 
-<div class="try"><b>이렇게 해 보세요</b> · 위의 두 수 모형을 아래 판으로 끌어 옮겨 보세요. · 일의 자리 낱개가 10개가 되는 순간 무슨 일이 일어나나요? 학생이 할 생각이 남아 있나요?</div>
+<div class="try"><b>이렇게 해 보세요</b> · 위의 수 모형을 아래 판으로 끌어 옮겨 보세요. 일 모형이 10개가 되면 어떻게 되나요?</div>
 <div class="panel">
   <div class="row"><b id="bq" style="font-size:26px"></b><button class="btn ghost" id="bnew">새 문제</button></div>
   <svg id="bsvg" viewBox="0 0 560 520" style="margin-top:8px;touch-action:none"></svg>
@@ -22,11 +22,10 @@
 </section>
 <section class="view" id="good" hidden>
 
-<div class="try"><b>살펴볼 점</b> · 모형을 아래 판으로 끌어 옮기세요. · 일의 자리에서 낱개를 눌러 <b>10개를 직접 고르고</b> '묶기'를 누른 뒤, 묶은 십 모형을 알맞은 자리로 <b>직접 옮겨</b> 보세요. · 모형을 가지런히 놓는 일(비본질적 처리)은 앱이 합니다.</div>
+<div class="try">일 모형 10개를 선택하면 십 모형 1개로 바꿀 수 있어요.</div>
 <div class="panel">
   <div class="row"><b id="gq" style="font-size:26px"></b><button class="btn ghost" id="gnew">새 문제</button></div>
   <svg id="gsvg" viewBox="0 0 560 520" style="margin-top:8px;touch-action:none"></svg>
-  <div class="row" style="margin-top:10px"><button class="btn" id="gbundle" disabled>묶기</button><span id="gsel" class="muted">일의 자리에서 낱개를 눌러 고르세요</span></div>
   <div class="row" style="margin-top:12px"><span id="gq2" style="font-size:20px"></span><input type="number" id="gans" inputmode="numeric"><button class="btn slate" id="gcheck">확인</button></div>
   <div class="feedback" id="gfb"></div>
 </div>
@@ -83,6 +82,7 @@ function board(svg, pal, hooks) {
         for (let j = 1; j < 10; j++) el('line', { x1: 0, x2: 18, y1: j * 12, y2: j * 12, stroke: pal.stroke, 'stroke-width': .6 }, g);
       } else el('rect', { x: 0, y: 0, width: 22, height: 22, fill, stroke, 'stroke-width': sw }, g);
     });
+    hooks.overlay && hooks.overlay(svg, st, pos);
   };
   function pt(e) { const r = svg.getBoundingClientRect(); return [(e.clientX - r.left) * 560 / r.width, (e.clientY - r.top) * 520 / r.height]; }
   svg.addEventListener('pointerdown', e => {
@@ -116,7 +116,7 @@ const BX = board(bsvg, { a: '#E9A896', b: '#F2C4B6', mix: '#E9A896', stroke: '#D
       setTimeout(() => {
         let k = 0; BX.blocks = BX.blocks.filter(b => !(b.loc === 'O' && b.type === 'one' && k++ < 10));
         BX.add('ten', 'T', 'mix', true); BX.render();
-        bfb.innerHTML = '✨ 자동 묶음! 낱개 10개를 십 모형으로 바꿔 십의 자리로 옮겼어요.';
+        bfb.innerHTML = '✨ 자동 묶음! 일 모형 10개를 십 모형으로 바꿔 십의 자리로 옮겼어요.';
         done();
       }, 300);
     } else done();
@@ -130,36 +130,45 @@ function badReset(p) { BX.reset(p.a, p.b); bq.textContent = `${p.a} + ${p.b} = ?
 bnew.onclick = () => badReset(newProblem());
 badReset({ a: 27, b: 15 });
 
-// ---------- O: the student chooses ten ones, bundles them, and moves the ten; the app only tidies
+// ---------- O: the student chooses ten ones; a popup offers the exchange; the student moves the ten. The app only tidies
 const GX = board(gsvg, { a: '#8CADAE', b: '#B8BFD6', mix: '#9DB8A0', stroke: '#646B86' }, {
   tap(b) {
     if (b.type !== 'one' || b.loc !== 'O') return;
     if (GX.sel.has(b.id)) GX.sel.delete(b.id); else GX.sel.add(b.id);
-    selUI();
   },
-  drop() { selUI(); gfb.textContent = ''; }
+  drop() { gfb.textContent = ''; },
+  overlay(svg, st) {
+    if (st.sel.size !== 10) return;
+    let maxY = 0, minX = 1e9, maxX = 0;
+    svg.querySelectorAll('g[data-id]').forEach(g => {
+      if (!st.sel.has(+g.dataset.id)) return;
+      const m = g.getAttribute('transform').match(/translate\(([-\d.]+),([-\d.]+)\)/);
+      maxY = Math.max(maxY, +m[2] + 22); minX = Math.min(minX, +m[1]); maxX = Math.max(maxX, +m[1] + 22);
+    });
+    const w = 210, h = 46, cx = (minX + maxX) / 2, x = Math.max(296, Math.min(544 - w, cx - w / 2)), y = maxY + 16;
+    const pop = el('g', { style: 'cursor:pointer', id: 'gpop' }, svg);
+    el('rect', { x: x + 2, y: y + 3, width: w, height: h, rx: 12, fill: '#000', opacity: .15 }, pop);
+    el('path', { d: `M${cx - 9} ${y} L${cx} ${y - 10} L${cx + 9} ${y} Z`, fill: '#5F8F90' }, pop);
+    el('rect', { x, y, width: w, height: h, rx: 12, fill: '#5F8F90' }, pop);
+    el('text', { x: x + w / 2, y: y + 29, 'text-anchor': 'middle', 'font-size': 17, 'font-weight': 700, fill: '#fff' }, pop).textContent = '십 모형 1개로 바꾸기';
+    pop.addEventListener('pointerdown', e => e.stopPropagation());
+    pop.addEventListener('click', bundle);
+  }
 });
-function selUI() {
-  const n = GX.sel.size; gbundle.disabled = n !== 10;
-  gsel.textContent = n ? `고른 낱개 ${n}개` : '일의 자리에서 낱개를 눌러 고르세요';
-}
-gbundle.onclick = () => {
+function bundle() {
   GX.blocks = GX.blocks.filter(b => !GX.sel.has(b.id)); GX.sel.clear();
-  GX.add('ten', 'O', 'mix', true); GX.render(); selUI();
-  gfb.textContent = '낱개 10개를 십 모형 1개로 묶었어요. (주황 테두리)';
-};
+  GX.add('ten', 'O', 'mix', true); GX.render();
+}
 gcheck.onclick = () => {
   const v = parseInt(gans.value, 10);
   if (isNaN(v)) { gfb.textContent = '먼저 답을 써 보세요.'; return; }
-  if (!sourcesEmpty(GX)) { gfb.textContent = '아직 판으로 옮기지 않은 모형이 있어요.'; return; }
+  if (!sourcesEmpty(GX)) { gfb.textContent = '아직 옮기지 않은 모형이 있어요.'; return; }
   const tT = GX.count('T', 'ten'), oO = GX.count('O', 'one'), tO = GX.count('O', 'ten'), oT = GX.count('T', 'one');
-  const desc = `지금 판에는 십의 자리에 십 모형 ${tT}개${oT ? `, 낱개 ${oT}개` : ''}, 일의 자리에 ${tO ? `십 모형 ${tO}개, ` : ''}낱개 ${oO}개가 있어요.`;
-  if (oO >= 10) { gfb.innerHTML = desc + '<br>일의 자리 낱개가 10개 넘게 있네요. 어떻게 할 수 있을까요?'; return; }
-  if (tO || oT) { gfb.innerHTML = desc + '<br>각 모형이 알맞은 자리에 있는지 살펴볼까요?'; return; }
-  const mat = tT * 10 + oO;
-  gfb.innerHTML = desc + (v === mat ? `<br>판의 모형이 나타내는 수와 네가 쓴 수 <b>${v}</b>가 같아요.` : `<br>네가 쓴 수는 <b>${v}</b>이에요. 판의 모형과 비교해 볼까요?`);
+  if (oO >= 10) { gfb.textContent = `일의 자리에 일 모형이 ${oO}개 있어요.`; return; }
+  if (tO || oT) { gfb.textContent = '모형이 알맞은 자리에 있나요?'; return; }
+  gfb.innerHTML = v === tT * 10 + oO ? '판의 모형이 나타내는 수와 쓴 수가 같아요.' : '판의 모형이 나타내는 수와 쓴 수를 비교해 보세요.';
 };
-function goodReset(p) { GX.reset(p.a, p.b); gq.textContent = `${p.a} + ${p.b}`; gq2.textContent = `${p.a} + ${p.b} =`; gans.value = ''; gfb.textContent = ''; selUI(); }
+function goodReset(p) { GX.reset(p.a, p.b); gq.textContent = `${p.a} + ${p.b}`; gq2.textContent = `${p.a} + ${p.b} =`; gans.value = ''; gfb.textContent = ''; }
 gnew.onclick = () => goodReset(newProblem());
 goodReset({ a: 27, b: 15 });
 
